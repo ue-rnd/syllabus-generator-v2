@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             'last_login_at' => now(),
             'last_login_ip' => request()->ip(),
             'email' => 'rnd_admin@ue.edu.ph',
+            'password' => bcrypt('password'),
         ]);
 
         // Assign superadmin role to the super admin user

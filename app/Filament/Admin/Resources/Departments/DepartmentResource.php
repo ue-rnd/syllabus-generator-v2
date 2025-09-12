@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Departments;
 
+use App\Filament\Admin\Clusters\Academic;
 use App\Filament\Admin\Resources\Departments\Pages\CreateDepartment;
 use App\Filament\Admin\Resources\Departments\Pages\EditDepartment;
 use App\Filament\Admin\Resources\Departments\Pages\ListDepartments;
@@ -23,7 +24,11 @@ class DepartmentResource extends Resource
 {
     protected static ?string $model = Department::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $cluster = Academic::class;
+
+    protected static ?int $navigationSort = 20;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingLibrary;
 
     protected static ?string $recordTitleAttribute = 'name';
 

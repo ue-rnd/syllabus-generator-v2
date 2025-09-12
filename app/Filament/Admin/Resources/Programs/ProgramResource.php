@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Programs;
 
+use App\Filament\Admin\Clusters\Academic;
 use App\Filament\Admin\Resources\Programs\Pages\CreateProgram;
 use App\Filament\Admin\Resources\Programs\Pages\EditProgram;
 use App\Filament\Admin\Resources\Programs\Pages\ListPrograms;
@@ -22,7 +23,11 @@ class ProgramResource extends Resource
 {
     protected static ?string $model = Program::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $cluster = Academic::class;
+
+    protected static ?int $navigationSort = 30;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::BookOpen;
 
     protected static ?string $recordTitleAttribute = 'name';
 

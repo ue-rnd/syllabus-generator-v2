@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Colleges;
 
+use App\Filament\Admin\Clusters\Academic;
 use App\Filament\Admin\Resources\Colleges\Pages\CreateCollege;
 use App\Filament\Admin\Resources\Colleges\Pages\EditCollege;
 use App\Filament\Admin\Resources\Colleges\Pages\ListColleges;
@@ -23,7 +24,11 @@ class CollegeResource extends Resource
 {
     protected static ?string $model = College::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $cluster = Academic::class;
+
+    protected static ?int $navigationSort = 10;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingOffice;
 
     protected static ?string $recordTitleAttribute = 'name';
 

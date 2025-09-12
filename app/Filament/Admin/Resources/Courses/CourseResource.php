@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Courses;
 
+use App\Filament\Admin\Clusters\Academic;
 use App\Filament\Admin\Resources\Courses\Pages\CreateCourse;
 use App\Filament\Admin\Resources\Courses\Pages\EditCourse;
 use App\Filament\Admin\Resources\Courses\Pages\ListCourses;
@@ -22,7 +23,11 @@ class CourseResource extends Resource
 {
     protected static ?string $model = Course::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $cluster = Academic::class;
+
+    protected static ?int $navigationSort = 40;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::WrenchScrewdriver;
 
     protected static ?string $recordTitleAttribute = 'name';
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Roles;
 
+use App\Filament\Admin\Clusters\UserManagement;
 use App\Filament\Admin\Resources\Roles\Pages\CreateRole;
 use App\Filament\Admin\Resources\Roles\Pages\EditRole;
 use App\Filament\Admin\Resources\Roles\Pages\ListRoles;
@@ -17,6 +18,10 @@ use Filament\Tables\Table;
 class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
+
+    protected static ?string $cluster = UserManagement::class;
+
+    protected static ?int $navigationSort = 20;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

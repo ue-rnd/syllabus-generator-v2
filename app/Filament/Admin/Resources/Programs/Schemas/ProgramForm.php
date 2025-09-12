@@ -18,6 +18,8 @@ class ProgramForm
             ->components([
                 TextInput::make('name')
                     ->required(),
+                TextInput::make('code')
+                    ->required(),
                 Select::make('level')
                     ->required()
                     ->options([
@@ -28,19 +30,17 @@ class ProgramForm
                     ])
                     ->default('ASSOCIATE')
                     ->searchable(),
-                TextInput::make('code')
-                    ->required(),
+                Select::make('department_id')
+                    ->label('Department')
+                    ->relationship('department', 'name')
+                    ->required()
+                    ->searchable(),
                 Textarea::make('description')
                     ->columnSpanFull(),
                 Textarea::make('outcomes')
                     ->columnSpanFull(),
                 Textarea::make('objectives')
                     ->columnSpanFull(),
-                Select::make('department_id')
-                    ->label('Department')
-                    ->relationship('department', 'name')
-                    ->required()
-                    ->searchable(),
                 Select::make('courses')
                     ->label('Courses')
                     ->relationship('courses', 'name')
@@ -48,12 +48,16 @@ class ProgramForm
                     ->searchable()
                     ->preload()
                     ->columnSpanFull(),
-                Toggle::make('is_active')
-                    ->required(),
                 TextInput::make('sort_order')
+                    ->label('Sort Order')
                     ->required()
                     ->numeric()
-                    ->default(0),
+                    ->default(0)
+                    ->columnSpanFull(),
+                Toggle::make('is_active')
+                    ->label('Is Active?')
+                    ->required()
+                    ->columnSpanFull(),
             ]);
     }
 }

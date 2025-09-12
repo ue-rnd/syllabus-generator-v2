@@ -21,15 +21,15 @@ class CourseForm
                     ->required(),
                 TextInput::make('code')
                     ->required(),
-                Textarea::make('description')
-                    ->columnSpanFull(),
-                Textarea::make('outcomes')
-                    ->columnSpanFull(),
                 Select::make('college_id')
                     ->label('College')
                     ->relationship('college', 'name')
                     ->required()
                     ->searchable(),
+                Textarea::make('description')
+                    ->columnSpanFull(),
+                Textarea::make('outcomes')
+                    ->columnSpanFull(),
                 Select::make('programs')
                     ->label('Programs')
                     ->relationship('programs', 'name')
@@ -37,19 +37,16 @@ class CourseForm
                     ->searchable()
                     ->preload()
                     ->columnSpanFull(),
-                FileUpload::make('logo_path')
-                    ->label('Logo')
-                    ->image()
-                    ->directory('images/logos')
-                    ->imageEditor()
-                    ->imageEditorAspectRatios(['1:1'])
-                    ->maxSize(2048),
-                Toggle::make('is_active')
-                    ->required(),
                 TextInput::make('sort_order')
+                    ->label('Sort Order')
                     ->required()
                     ->numeric()
-                    ->default(0),
+                    ->default(0)
+                    ->columnSpanFull(),
+                Toggle::make('is_active')
+                    ->label('Is Active?')
+                    ->required()
+                    ->columnSpanFull(),
             ]);
     }
 }
