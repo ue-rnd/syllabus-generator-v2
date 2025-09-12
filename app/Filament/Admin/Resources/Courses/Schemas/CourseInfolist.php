@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources\Courses\Schemas;
 use App\Models\Course;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Schemas\Schema;
 
 class CourseInfolist
@@ -21,13 +22,21 @@ class CourseInfolist
                 TextEntry::make('outcomes')
                     ->placeholder('-')
                     ->columnSpanFull(),
+                TextEntry::make('college.name')
+                    ->label('College'),
+                TextEntry::make('programs.name')
+                    ->label('Programs')
+                    ->badge()
+                    ->separator(',')
+                    ->placeholder('No programs assigned')
+                    ->columnSpanFull(),
+                ImageEntry::make('logo_path')
+                    ->label('Logo')
+                    ->placeholder('-')
+                    ->disk('public'),
                 IconEntry::make('is_active')
                     ->boolean(),
                 TextEntry::make('sort_order')
-                    ->numeric(),
-                TextEntry::make('logo_path')
-                    ->placeholder('-'),
-                TextEntry::make('college_id')
                     ->numeric(),
                 TextEntry::make('deleted_at')
                     ->dateTime()

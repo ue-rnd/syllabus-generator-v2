@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             RolePermissionSeeder::class,
+            CollegeSeeder::class,
+            DepartmentSeeder::class,
+            ProgramSeeder::class,
+            CourseSeeder::class,
         ]);
 
         $superAdmin = User::factory()->create([

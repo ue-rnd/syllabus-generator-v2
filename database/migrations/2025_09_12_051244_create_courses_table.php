@@ -24,7 +24,6 @@ return new class extends Migration
             // Status and Configuration
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
-            $table->string('logo_path')->nullable();
 
             // College
             $table->foreignId('college_id')->constrained('colleges', 'id')->onDelete('cascade');

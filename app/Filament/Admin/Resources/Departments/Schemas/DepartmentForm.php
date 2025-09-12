@@ -17,7 +17,8 @@ class DepartmentForm
                 TextInput::make('name')
                     ->required(),
                 Select::make('college_id')
-                    ->relationship(name: 'college', titleAttribute: 'name'),
+                    ->relationship(name: 'college', titleAttribute: 'name')
+                    ->searchable(),
                 Textarea::make('description')
                     ->columnSpanFull(),
                 Toggle::make('is_active')

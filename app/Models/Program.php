@@ -101,4 +101,12 @@ class Program extends Model
     {
         return $this->hasOneThrough(College::class, Department::class, 'id', 'id', 'department_id', 'college_id');
     }
+
+    /**
+     * Get the courses associated with this program.
+     */
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'course_program');
+    }
 }
