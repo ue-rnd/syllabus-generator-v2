@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Departments\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -15,17 +16,20 @@ class DepartmentForm
             ->components([
                 TextInput::make('name')
                     ->required(),
+                Select::make('college_id')
+                    ->relationship(name: 'college', titleAttribute: 'name'),
                 Textarea::make('description')
                     ->columnSpanFull(),
                 Toggle::make('is_active')
-                    ->required(),
+                    ->label('Is Active?')
+                    ->required()
+                    ->columnSpanFull(),
                 TextInput::make('sort_order')
+                    ->label('Sort Order')
                     ->required()
                     ->numeric()
-                    ->default(0),
-                TextInput::make('college_id')
-                    ->required()
-                    ->numeric(),
+                    ->default(0)
+                    ->columnSpanFull(),
             ]);
     }
 }
