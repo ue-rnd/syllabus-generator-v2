@@ -14,7 +14,8 @@ class ProgramInfolist
         return $schema
             ->components([
                 TextEntry::make('name'),
-                TextEntry::make('level'),
+                TextEntry::make('level')
+                    ->formatStateUsing(fn (string $state): string => \App\Models\Program::LEVELS[$state] ?? $state),
                 TextEntry::make('code'),
                 TextEntry::make('description')
                     ->placeholder('-')
@@ -25,11 +26,17 @@ class ProgramInfolist
                 TextEntry::make('objectives')
                     ->placeholder('-')
                     ->columnSpanFull(),
+                TextEntry::make('department.name')
+                    ->label('Department'),
+                TextEntry::make('courses.name')
+                    ->label('Courses')
+                    ->badge()
+                    ->separator(',')
+                    ->placeholder('No courses assigned')
+                    ->columnSpanFull(),
                 IconEntry::make('is_active')
                     ->boolean(),
                 TextEntry::make('sort_order')
-                    ->numeric(),
-                TextEntry::make('department_id')
                     ->numeric(),
                 TextEntry::make('deleted_at')
                     ->dateTime()

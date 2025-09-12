@@ -20,7 +20,6 @@ class Course extends Model
         'outcomes',
         'is_active',
         'sort_order',
-        'logo_path',
         'college_id',
     ];
 
@@ -57,20 +56,20 @@ class Course extends Model
     {
         return $this->is_active;
     }
-
-    /**
-     * Get the course's logo URL.
-     */
-    public function getLogoUrlAttribute()
-    {
-        return $this->logo_path ? asset('storage/' . $this->logo_path) : null;
-    }
-
+    
     /**
      * Get the college that owns this course.
      */
     public function college()
     {
         return $this->belongsTo(College::class);
+    }
+
+    /**
+     * Get the programs associated with this course.
+     */
+    public function programs()
+    {
+        return $this->belongsToMany(Program::class, 'course_program');
     }
 }

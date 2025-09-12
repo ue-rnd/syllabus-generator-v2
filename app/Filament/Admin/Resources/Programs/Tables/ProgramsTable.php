@@ -22,15 +22,21 @@ class ProgramsTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('level')
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(fn (string $state): string => \App\Models\Program::LEVELS[$state] ?? $state),
                 TextColumn::make('code')
                     ->searchable(),
+                TextColumn::make('department.name')
+                    ->label('Department')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('courses_count')
+                    ->label('Courses')
+                    ->counts('courses')
+                    ->sortable(),
                 IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('sort_order')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('department_id')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('deleted_at')
