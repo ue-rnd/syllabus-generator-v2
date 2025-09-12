@@ -3,12 +3,43 @@
 
     <x-settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+            <!-- Name Fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- First Name -->
+                <flux:input
+                    wire:model="firstname"
+                    :label="__('First Name')"
+                    type="text"
+                    required
+                    autofocus
+                    autocomplete="given-name"
+                    :placeholder="__('First name')"
+                />
+
+                <!-- Last Name -->
+                <flux:input
+                    wire:model="lastname"
+                    :label="__('Last Name')"
+                    type="text"
+                    required
+                    autocomplete="family-name"
+                    :placeholder="__('Last name')"
+                />
+            </div>
+
+            <!-- Middle Name -->
+            <flux:input
+                wire:model="middlename"
+                :label="__('Middle Name')"
+                type="text"
+                autocomplete="additional-name"
+                :placeholder="__('Middle name (optional)')"
+            />
 
             <div>
                 <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
 
-                @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail &&! auth()->user()->hasVerifiedEmail())
+                @if ($this->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail &&! $this->user()->hasVerifiedEmail())
                     <div>
                         <flux:text class="mt-4">
                             {{ __('Your email address is unverified.') }}

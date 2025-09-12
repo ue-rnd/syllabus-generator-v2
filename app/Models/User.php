@@ -4,14 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +26,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'lastname',
+        'firstname',
+        'middlename',
+        'position',
+        'is_active',
+        'last_login_at',
+        'last_login_ip',
     ];
+
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,6 +57,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'last_login_at' => 'datetime',
+            'deleted_at' => 'datetime',
         ];
     }
 
@@ -52,10 +68,109 @@ class User extends Authenticatable
      */
     public function initials(): string
     {
+        if ($this->firstname && $this->lastname) {
+            return Str::substr($this->firstname, 0, 1) . Str::substr($this->lastname, 0, 1);
+        }
+        
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    /**
+     * Get the user's full name
+     */
+    public function getFullNameAttribute(): string
+    {
+        if ($this->firstname && $this->lastname) {
+            $name = $this->firstname;
+            if ($this->middlename) {
+                $name .= ' ' . $this->middlename;
+            }
+            $name .= ' ' . $this->lastname;
+            return $name;
+        }
+        
+        return $this->name ?? '';
+    }
+
+    /**
+     * Get the user's name (computed attribute for Filament compatibility)
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->getFullNameAttribute();
+    }
+
+    /**
+     * Get the user's display name (first name + last name)
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        if ($this->firstname && $this->lastname) {
+            return $this->firstname . ' ' . $this->lastname;
+        }
+        
+        return $this->name;
+    }
+
+    /**
+     * Check if user is active
+     */
+    public function isActive(): bool
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * Check if user is a superadmin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole('superadmin');
+    }
+
+    /**
+     * Check if user is an admin (college dean)
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Check if user is faculty
+     */
+    public function isFaculty(): bool
+    {
+        return $this->hasRole('faculty');
+    }
+
+    /**
+     * Get user's primary role name
+     */
+    public function getPrimaryRoleAttribute(): string
+    {
+        $roles = $this->roles->pluck('name');
+        
+        // Priority order: superadmin > admin > faculty
+        if ($roles->contains('superadmin')) return 'superadmin';
+        if ($roles->contains('admin')) return 'admin';
+        if ($roles->contains('faculty')) return 'faculty';
+        
+        return $roles->first() ?? 'No Role';
+    }
+
+    /**
+     * Update last login information
+     */
+    public function updateLastLogin(string $ip = null): void
+    {
+        $this->update([
+            'last_login_at' => now(),
+            'last_login_ip' => $ip ?? request()->ip(),
+        ]);
     }
 }

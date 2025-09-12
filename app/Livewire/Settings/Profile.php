@@ -10,17 +10,30 @@ use Livewire\Component;
 
 class Profile extends Component
 {
-    public string $name = '';
+    public string $firstname = '';
+    public string $lastname = '';
+    public string $middlename = '';
 
     public string $email = '';
+
+    /**
+     * Get the authenticated user.
+     */
+    protected function user(): User
+    {
+        return Auth::user();
+    }
 
     /**
      * Mount the component.
      */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
-        $this->email = Auth::user()->email;
+        $user = $this->user();
+        $this->firstname = $user->firstname ?? '';
+        $this->lastname = $user->lastname ?? '';
+        $this->middlename = $user->middlename ?? '';
+        $this->email = $user->email;
     }
 
     /**
@@ -28,10 +41,12 @@ class Profile extends Component
      */
     public function updateProfileInformation(): void
     {
-        $user = Auth::user();
+        $user = $this->user();
 
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'middlename' => ['nullable', 'string', 'max:255'],
 
             'email' => [
                 'required',
@@ -42,6 +57,15 @@ class Profile extends Component
                 Rule::unique(User::class)->ignore($user->id),
             ],
         ]);
+
+        // Build full name from components
+        $name = $validated['firstname'];
+        if (!empty($validated['middlename'])) {
+            $name .= ' ' . $validated['middlename'];
+        }
+        $name .= ' ' . $validated['lastname'];
+        
+        $validated['name'] = $name;
 
         $user->fill($validated);
 
@@ -59,7 +83,7 @@ class Profile extends Component
      */
     public function resendVerificationNotification(): void
     {
-        $user = Auth::user();
+        $user = $this->user();
 
         if ($user->hasVerifiedEmail()) {
             $this->redirectIntended(default: route('dashboard', absolute: false));

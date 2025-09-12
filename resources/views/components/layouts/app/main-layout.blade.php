@@ -28,9 +28,9 @@
                             <div class="relative">
                                 <button class="flex items-center space-x-2 text-sm">
                                     <span class="h-8 w-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center">
-                                        {{ auth()->user()->initials() }}
+                                        {{ Auth::user()->initials() }}
                                     </span>
-                                    <span>{{ auth()->user()->name }}</span>
+                                    <span>{{ Auth::user()->name }}</span>
                                 </button>
                             </div>
                         @endauth
