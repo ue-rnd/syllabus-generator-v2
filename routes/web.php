@@ -21,4 +21,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
+
+Route::get('home', function() {
+    return view('livewire.client.dashboard.home');
+})->name('dashboard_home');
+
+Route::get('profile', function(){
+    return view('livewire.client.dashboard.profile');
+})->name('profile');
+
+Route::get('notifications', function(){
+    return view('livewire.client.dashboard.notifications');
+})->name('notifications');
+
+Route::get('bookmarks', function(){
+    return view('livewire.client.dashboard.bookmarks');
+})->name('bookmarks');
+
 require __DIR__.'/auth.php';
