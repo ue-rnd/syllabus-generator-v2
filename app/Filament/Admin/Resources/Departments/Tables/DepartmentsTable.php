@@ -20,24 +20,32 @@ class DepartmentsTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->sortable()
                     ->searchable(),
                 IconColumn::make('is_active')
+                    ->label('Status')
+                    ->sortable()
                     ->boolean(),
                 TextColumn::make('sort_order')
+                    ->label('Sort Order')
                     ->numeric()
-                    ->sortable(),
-                TextColumn::make('college_id')
-                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('college.name')
+                    ->label('College')
                     ->sortable(),
                 TextColumn::make('deleted_at')
+                    ->label('Deleted At')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
+                    ->label('Created At')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('Updated At')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

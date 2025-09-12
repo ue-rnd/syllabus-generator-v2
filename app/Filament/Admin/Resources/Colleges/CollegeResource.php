@@ -6,6 +6,7 @@ use App\Filament\Admin\Resources\Colleges\Pages\CreateCollege;
 use App\Filament\Admin\Resources\Colleges\Pages\EditCollege;
 use App\Filament\Admin\Resources\Colleges\Pages\ListColleges;
 use App\Filament\Admin\Resources\Colleges\Pages\ViewCollege;
+use App\Filament\Admin\Resources\Colleges\RelationManagers\DepartmentsRelationManager;
 use App\Filament\Admin\Resources\Colleges\Schemas\CollegeForm;
 use App\Filament\Admin\Resources\Colleges\Schemas\CollegeInfolist;
 use App\Filament\Admin\Resources\Colleges\Tables\CollegesTable;
@@ -44,7 +45,7 @@ class CollegeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            DepartmentsRelationManager::class,
         ];
     }
 

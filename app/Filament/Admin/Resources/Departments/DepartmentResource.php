@@ -6,6 +6,7 @@ use App\Filament\Admin\Resources\Departments\Pages\CreateDepartment;
 use App\Filament\Admin\Resources\Departments\Pages\EditDepartment;
 use App\Filament\Admin\Resources\Departments\Pages\ListDepartments;
 use App\Filament\Admin\Resources\Departments\Pages\ViewDepartment;
+use App\Filament\Admin\Resources\Departments\RelationManagers\CollegeRelationManager;
 use App\Filament\Admin\Resources\Departments\Schemas\DepartmentForm;
 use App\Filament\Admin\Resources\Departments\Schemas\DepartmentInfolist;
 use App\Filament\Admin\Resources\Departments\Tables\DepartmentsTable;
@@ -44,7 +45,7 @@ class DepartmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            
         ];
     }
 
