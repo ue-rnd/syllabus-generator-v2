@@ -23,8 +23,26 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $firstname = fake()->firstName();
+        $lastname = fake()->lastName();
+        $middlename = fake()->optional(0.3)->firstName(); // 30% chance of having a middle name
+        
+        // Build full name
+        $name = $firstname;
+        if ($middlename) {
+            $name .= ' ' . $middlename;
+        }
+        $name .= ' ' . $lastname;
+        
         return [
-            'name' => fake()->name(),
+            'name' => $name,
+            'lastname' => $lastname,
+            'firstname' => $firstname,
+            'middlename' => $middlename,
+            'position' => fake()->jobTitle(),
+            'is_active' => fake()->boolean(),
+            'last_login_at' => fake()->dateTime(),
+            'last_login_ip' => fake()->ipv4(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
