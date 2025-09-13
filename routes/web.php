@@ -25,6 +25,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('roles', RolePermissionManager::class)
         ->middleware('can:view roles')
         ->name('roles.index');
+
+    // PDF Routes
+    Route::get('syllabus/{syllabus}/pdf/view', [\App\Http\Controllers\SyllabusPdfController::class, 'view'])
+        ->middleware('auth')
+        ->name('syllabus.pdf.view');
+    Route::get('syllabus/{syllabus}/pdf/download', [\App\Http\Controllers\SyllabusPdfController::class, 'download'])
+        ->middleware('auth')
+        ->name('syllabus.pdf.download');
 });
 
 

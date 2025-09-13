@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\Users\Tables;
 
+use App\Constants\UserConstants;
 use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -35,6 +36,9 @@ class UsersTable
                     ->sortable(),
                 TextColumn::make('position')
                     ->label('Position')
+                    ->badge()
+                    ->color(fn ($state): string => is_string($state) ? UserConstants::getPositionColor($state) : 'gray')
+                    ->formatStateUsing(fn ($state): string => is_string($state) ? (UserConstants::getPositionOptions()[$state] ?? ucfirst(str_replace('_', ' ', $state))) : 'Not specified')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('roles.name')

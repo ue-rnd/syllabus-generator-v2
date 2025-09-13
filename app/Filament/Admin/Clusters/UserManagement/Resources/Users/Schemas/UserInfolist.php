@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\Users\Schemas;
 
+use App\Constants\UserConstants;
 use App\Models\User;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -19,6 +20,9 @@ class UserInfolist
                     ->label('Email Address'),
                 TextEntry::make('position')
                     ->label('Position/Title')
+                    ->badge()
+                    ->color(fn ($state): string => is_string($state) ? UserConstants::getPositionColor($state) : 'gray')
+                    ->formatStateUsing(fn ($state): string => is_string($state) ? (UserConstants::getPositionOptions()[$state] ?? ucfirst(str_replace('_', ' ', $state))) : 'Not specified')
                     ->placeholder('Not specified'),
                 TextEntry::make('roles.name')
                     ->label('Role')

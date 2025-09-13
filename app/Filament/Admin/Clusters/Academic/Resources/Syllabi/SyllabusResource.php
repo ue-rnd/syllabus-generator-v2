@@ -63,9 +63,28 @@ class SyllabusResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->with([
+                'course',
+                'principalPreparer',
+                'reviewer',
+                'recommendingApprover',
+                'approver'
+            ]);
+    }
+
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()
+            ->with([
+                'course',
+                'principalPreparer',
+                'reviewer',
+                'recommendingApprover',
+                'approver'
+            ])
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

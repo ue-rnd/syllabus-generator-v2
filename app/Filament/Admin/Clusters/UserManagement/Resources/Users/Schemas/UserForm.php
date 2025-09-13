@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\Users\Schemas;
 
+use App\Constants\UserConstants;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -24,9 +25,11 @@ class UserForm
                     ->label('Last Name')
                     ->required()
                     ->maxLength(255),
-                TextInput::make('position')
+                Select::make('position')
                     ->label('Position/Title')
-                    ->maxLength(255),
+                    ->options(UserConstants::getPositionOptions())
+                    ->searchable()
+                    ->placeholder('Select a position'),
                 TextInput::make('email')
                     ->label('Email Address')
                     ->email()

@@ -16,7 +16,7 @@ return new class extends Migration
 
             // Basic Information
             $table->string('name')->unique();
-            $table->enum('level', ['ASSOCIATE','BACHELOR', 'MASTERAL', 'DOCTORAL'])->default('ASSOCIATE');
+            $table->string('level')->nullable();
             $table->string('code', 10)->unique(); 
             $table->text('description')->nullable();
 

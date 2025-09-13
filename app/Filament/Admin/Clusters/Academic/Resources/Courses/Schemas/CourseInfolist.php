@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Clusters\Academic\Resources\Courses\Schemas;
 
 use App\Constants\SyllabusConstants;
+use App\Constants\CourseConstants;
 use App\Models\Course;
 use App\Models\Syllabus;
 use Filament\Infolists\Components\IconEntry;
@@ -26,7 +27,9 @@ class CourseInfolist
                             ->label('College'),
                         TextEntry::make('course_type')
                             ->label('Course Type')
-                            ->formatStateUsing(fn (string $state): string => SyllabusConstants::COURSE_TYPES[$state] ?? $state),
+                            ->badge()
+                            ->color(fn ($state): string => is_string($state) ? CourseConstants::getTypeColor($state) : 'gray')
+                            ->formatStateUsing(fn (string $state): string => CourseConstants::getTypeOptions()[$state] ?? ucfirst(str_replace('_', ' ', $state))),
                         TextEntry::make('description')
                             ->placeholder('-')
                             ->columnSpanFull(),
@@ -78,6 +81,8 @@ class CourseInfolist
                             ->schema([
                                 TextEntry::make('verb')
                                     ->label('Action Verb')
+                                    ->badge()
+                                    ->color(fn ($state): string => is_string($state) ? SyllabusConstants::getActionVerbColor($state) : 'gray')
                                     ->formatStateUsing(fn (string $state): string => ucfirst($state)),
                                 TextEntry::make('content')
                                     ->label('Outcome Description')

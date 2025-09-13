@@ -13,28 +13,136 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // This seeder is for additional role and permission management
-        // You can add custom roles and permissions here as needed
-        
-        // Example: Create a custom role for content managers
-        $contentManagerRole = Role::firstOrCreate(['name' => 'content-manager']);
-        
-        // Example: Create custom permissions for content management
-        $contentPermissions = [
-            'manage content',
-            'approve content',
-            'schedule content',
+        // Create permissions
+        $permissions = [
+            // Syllabus permissions
+            'create syllabi',
+            'edit syllabi',
+            'view syllabi',
+            'delete syllabi',
+            'submit syllabi for approval',
+            'approve syllabi as department chair',
+            'approve syllabi as associate dean',
+            'approve syllabi as dean',
+            'reject syllabi',
+            'export syllabi pdf',
+            
+            // College permissions
+            'create colleges',
+            'edit colleges',
+            'view colleges',
+            'delete colleges',
+            
+            // Department permissions
+            'create departments',
+            'edit departments',
+            'view departments',
+            'delete departments',
+            
+            // Program permissions
+            'create programs',
+            'edit programs',
+            'view programs',
+            'delete programs',
+            
+            // Course permissions
+            'create courses',
+            'edit courses',
+            'view courses',
+            'delete courses',
+            
+            // User management permissions
+            'create users',
+            'edit users',
+            'view users',
+            'delete users',
+            'assign roles',
+            'manage permissions',
         ];
 
-        foreach ($contentPermissions as $permission) {
+        foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Assign permissions to the content manager role
-        $contentManagerRole->givePermissionTo($contentPermissions);
-        
-        // Example: Create a guest role with minimal permissions
-        $guestRole = Role::firstOrCreate(['name' => 'guest']);
-        $guestRole->givePermissionTo(['view dashboard']);
+        // Create roles and assign permissions
+        $this->createSuperAdminRole();
+        $this->createDeanRole();
+        $this->createAssociateDeanRole();
+        $this->createDepartmentChairRole();
+        $this->createFacultyRole();
+    }
+
+    private function createSuperAdminRole(): void
+    {
+        $role = Role::firstOrCreate(['name' => 'superadmin']);
+        $role->syncPermissions(Permission::all());
+    }
+
+    private function createDeanRole(): void
+    {
+        $role = Role::firstOrCreate(['name' => 'dean']);
+        $role->syncPermissions([
+            'view syllabi',
+            'approve syllabi as dean',
+            'reject syllabi',
+            'export syllabi pdf',
+            'view colleges',
+            'view departments',
+            'view programs',
+            'view courses',
+            'view users',
+        ]);
+    }
+
+    private function createAssociateDeanRole(): void
+    {
+        $role = Role::firstOrCreate(['name' => 'associate_dean']);
+        $role->syncPermissions([
+            'view syllabi',
+            'approve syllabi as associate dean',
+            'reject syllabi',
+            'export syllabi pdf',
+            'view colleges',
+            'view departments',
+            'view programs',
+            'view courses',
+            'view users',
+        ]);
+    }
+
+    private function createDepartmentChairRole(): void
+    {
+        $role = Role::firstOrCreate(['name' => 'department_chair']);
+        $role->syncPermissions([
+            'create syllabi',
+            'edit syllabi',
+            'view syllabi',
+            'submit syllabi for approval',
+            'approve syllabi as department chair',
+            'reject syllabi',
+            'export syllabi pdf',
+            'create departments',
+            'edit departments',
+            'view departments',
+            'view programs',
+            'view courses',
+            'view users',
+        ]);
+    }
+
+    private function createFacultyRole(): void
+    {
+        $role = Role::firstOrCreate(['name' => 'faculty']);
+        $role->syncPermissions([
+            'create syllabi',
+            'edit syllabi',
+            'view syllabi',
+            'submit syllabi for approval',
+            'export syllabi pdf',
+            'view colleges',
+            'view departments',
+            'view programs',
+            'view courses',
+        ]);
     }
 }

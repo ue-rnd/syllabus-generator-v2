@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Clusters\Academic\Resources\Programs\Schemas;
 
+use App\Constants\ProgramConstants;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\RichEditor;
@@ -27,13 +28,8 @@ class ProgramForm
                             ->required(),
                         Select::make('level')
                             ->required()
-                            ->options([
-                                'ASSOCIATE' => 'Associate',
-                                'BACHELOR' => 'Bachelor',
-                                'MASTERAL' => 'Masteral',
-                                'DOCTORAL' => 'Doctoral',
-                            ])
-                            ->default('ASSOCIATE')
+                            ->options(ProgramConstants::getLevelOptions())
+                            ->default('associate')
                             ->searchable(),
                         Select::make('department_id')
                             ->label('Department')

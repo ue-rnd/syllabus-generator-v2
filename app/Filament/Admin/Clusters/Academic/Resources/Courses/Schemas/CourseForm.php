@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Clusters\Academic\Resources\Courses\Schemas;
 
 use App\Constants\SyllabusConstants;
+use App\Constants\CourseConstants;
 use App\Models\Course;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -67,7 +68,7 @@ class CourseForm
                     ->schema([
                         Select::make('course_type')
                             ->label('Course Type')
-                            ->options(SyllabusConstants::getCourseTypeOptions())
+                            ->options(CourseConstants::getTypeOptions())
                             ->searchable()
                             ->required(),
                         Select::make('prerequisite_courses')

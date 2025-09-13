@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Clusters\Academic\Resources\Programs\Schemas;
 
+use App\Constants\ProgramConstants;
 use App\Models\Program;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -20,7 +21,9 @@ class ProgramInfolist
                         TextEntry::make('name'),
                         TextEntry::make('code'),
                         TextEntry::make('level')
-                            ->formatStateUsing(fn (string $state): string => Program::LEVELS[$state] ?? $state),
+                            ->badge()
+                            ->color(fn ($state): string => is_string($state) ? ProgramConstants::getLevelColor($state) : 'gray')
+                            ->formatStateUsing(fn (string $state): string => ProgramConstants::getLevelOptions()[$state] ?? ucfirst(str_replace('_', ' ', $state))),
                         TextEntry::make('department.name')
                             ->label('Department'),
                         TextEntry::make('description')
