@@ -1,4 +1,4 @@
-@extends('components.layouts.app.main-layout')
+@extends('livewire.client.dashboard.base')
 @section('content')
     <div class="p-4 space-y-10">
         <div class="max-w-7xl border mx-auto bg-white rounded shadow">

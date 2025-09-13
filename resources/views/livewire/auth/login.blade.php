@@ -1,52 +1,34 @@
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Log in to your account')" :description="__('Enter your email and password below to log in')" />
-
-    <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
-
-    <form method="POST" wire:submit="login" class="flex flex-col gap-6">
-        <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email address')"
-            type="email"
-            required
-            autofocus
-            autocomplete="email"
-            placeholder="email@example.com"
-        />
-
-        <!-- Password -->
-        <div class="relative">
-            <flux:input
-                wire:model="password"
-                :label="__('Password')"
-                type="password"
-                required
-                autocomplete="current-password"
-                :placeholder="__('Password')"
-                viewable
-            />
-
-            @if (Route::has('password.request'))
-                <flux:link class="absolute end-0 top-0 text-sm" :href="route('password.request')" wire:navigate>
-                    {{ __('Forgot your password?') }}
-                </flux:link>
-            @endif
+@extends('components.layouts.app.main-layout')
+@section('body')
+    <div class="max-w-lg mx-auto my-20 space-y-4">
+        <div class="flex items-center space-x-4">
+            <img src="http://placehold.co/75x75" alt="UE Logo" class="">
+            <div class="block">
+                <h4 class="font-medium text-red-800 text-xl">University of the East</h4>
+                <p>Syllabus Generator</p>
+            </div>
         </div>
-
-        <!-- Remember Me -->
-        <flux:checkbox wire:model="remember" :label="__('Remember me')" />
-
-        <div class="flex items-center justify-end">
-            <flux:button variant="primary" type="submit" class="w-full">{{ __('Log in') }}</flux:button>
+        <div class="w-full bg-white p-4 shadow-sm border space-y-6 rounded">
+            <div>
+                <h4 class="text-2xl font-medium">Login</h4>
+                <p class="text-gray-600">Please enter your credentials to access your account.</p>
+            </div>
+            <form method="post" class="space-y-4">
+                <div>
+                    <label for="email" class="text-gray-600 font-medium">Email</label>
+                    <input type="email" name="email" id="email" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
+                </div>
+                <div>
+                    <label for="password" class="text-gray-600 font-medium">Password</label>
+                    <input type="password" name="password" id="password" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
+                </div>
+                <div>
+                    <button class="w-full bg-red-700 text-white py-2 rounded ease duration-200 hover:bg-red-800">Login</button>
+                </div>
+                <div class="text-center">
+                    <a href="{{ route('forgot_password') }}" class="text-red-700">Forgot your password?</a>
+                </div>
+            </form>
         </div>
-    </form>
-
-    @if (Route::has('register'))
-        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
-            <span>{{ __('Don\'t have an account?') }}</span>
-            <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
-        </div>
-    @endif
-</div>
+    </div>
+@endsection

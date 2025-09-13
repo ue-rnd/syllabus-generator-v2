@@ -1,4 +1,4 @@
-@extends('components.layouts.app.main-layout')
+@extends('livewire.client.dashboard.base')
 @section('content')
 <div class="p-4 space-y-10">
     <div class="grid grid-cols-2 gap-2 max-w-7xl mx-auto">

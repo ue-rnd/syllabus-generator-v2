@@ -7,8 +7,9 @@ use App\Livewire\RolePermissionManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('livewire.auth.login');
 })->name('home');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -43,5 +44,10 @@ Route::get('notifications', function(){
 Route::get('bookmarks', function(){
     return view('livewire.client.dashboard.bookmarks');
 })->name('bookmarks');
+
+
+Route::get("forgot_password", function() {
+    return view('livewire.auth.forgot-password');
+})->name('forgot_password');
 
 require __DIR__.'/auth.php';

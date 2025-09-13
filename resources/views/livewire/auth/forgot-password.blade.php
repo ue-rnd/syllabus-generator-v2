@@ -1,25 +1,27 @@
- <div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Forgot password')" :description="__('Enter your email to receive a password reset link')" />
-
-    <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
-
-    <form method="POST" wire:submit="sendPasswordResetLink" class="flex flex-col gap-6">
-        <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email Address')"
-            type="email"
-            required
-            autofocus
-            placeholder="email@example.com"
-        />
-
-        <flux:button variant="primary" type="submit" class="w-full">{{ __('Email password reset link') }}</flux:button>
-    </form>
-
-    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-400">
-        <span>{{ __('Or, return to') }}</span>
-        <flux:link :href="route('login')" wire:navigate>{{ __('log in') }}</flux:link>
+@extends('components.layouts.app.main-layout')
+@section('body')
+    <div class="max-w-lg mx-auto my-24 space-y-4">
+        <div class="flex items-center space-x-4">
+            <img src="http://placehold.co/75x75" alt="UE Logo" class="">
+            <div class="block">
+                <h4 class="font-medium text-red-800 text-xl">University of the East</h4>
+                <p>Syllabus Generator</p>
+            </div>
+        </div>
+        <div class="w-full bg-white p-6 shadow-sm border space-y-6 rounded">
+            <div>
+                <h4 class="text-2xl font-medium">Forgot Password</h4>
+                <p class="text-gray-600">Please enter your email address to reset your password.</p>
+            </div>
+            <form method="post" class="space-y-4">
+                <div>
+                    <label for="email" class="text-gray-600 font-medium">Email</label>
+                    <input type="email" name="email" id="email" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
+                </div>
+                <div>
+                    <button class="w-full bg-red-700 text-white py-2 rounded ease duration-200 hover:bg-red-800">Send Password Reset Link</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+@endsection
