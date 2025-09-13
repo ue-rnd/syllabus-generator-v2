@@ -29,8 +29,6 @@ class Program extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
-        'outcomes' => 'array',
-        'objectives' => 'array',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'department_id' => 'integer',

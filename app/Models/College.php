@@ -24,15 +24,18 @@ class College extends Model
         'is_active',
         'sort_order',
         'logo_path',
+        'dean_id',
+        'associate_dean_id',
     ];
 
     /**
      * The attributes that should be cast.
      */
     protected $casts = [
-        'objectives' => 'array',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
+        'dean_id' => 'integer',
+        'associate_dean_id' => 'integer',
     ];
 
     /**
@@ -89,5 +92,21 @@ class College extends Model
     public function programs()
     {
         return $this->hasManyThrough(Program::class, Department::class);
+    }
+
+    /**
+     * Get the dean of this college.
+     */
+    public function dean()
+    {
+        return $this->belongsTo(User::class, 'dean_id');
+    }
+
+    /**
+     * Get the associate dean of this college.
+     */
+    public function associateDean()
+    {
+        return $this->belongsTo(User::class, 'associate_dean_id');
     }
 }

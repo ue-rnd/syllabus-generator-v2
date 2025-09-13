@@ -17,6 +17,10 @@ class Course extends Model
         'name',
         'code',
         'description',
+        'credit_units_lecture',
+        'credit_units_laboratory',
+        'course_type',
+        'prerequisite_courses',
         'outcomes',
         'is_active',
         'sort_order',
@@ -27,10 +31,13 @@ class Course extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
+        'prerequisite_courses' => 'array',
         'outcomes' => 'array',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'college_id' => 'integer',
+        'credit_units_lecture' => 'decimal:1',
+        'credit_units_laboratory' => 'decimal:1',
     ];
 
     /**
@@ -71,5 +78,73 @@ class Course extends Model
     public function programs()
     {
         return $this->belongsToMany(Program::class, 'course_program');
+    }
+
+    /**
+     * Get all syllabi for this course.
+     */
+    public function syllabi()
+    {
+        return $this->hasMany(Syllabus::class);
+    }
+
+    /**
+     * Get the active (latest) syllabus for this course.
+     */
+    public function activeSyllabus()
+    {
+        return $this->hasOne(Syllabus::class)->latest('created_at');
+    }
+
+    /**
+     * Get the latest syllabus for this course.
+     */
+    public function latestSyllabus()
+    {
+        return $this->activeSyllabus();
+    }
+
+    /**
+     * Get prerequisite courses.
+     */
+    public function prerequisiteCourses()
+    {
+        if (empty($this->prerequisite_courses)) {
+            return collect();
+        }
+        
+        return Course::whereIn('id', $this->prerequisite_courses)->get();
+    }
+
+    /**
+     * Get courses that have this course as a prerequisite.
+     */
+    public function dependentCourses()
+    {
+        return Course::whereJsonContains('prerequisite_courses', $this->id)->get();
+    }
+
+    /**
+     * Get total credit units.
+     */
+    public function getTotalCreditUnitsAttribute()
+    {
+        return $this->credit_units_lecture + $this->credit_units_laboratory;
+    }
+
+    /**
+     * Check if course has prerequisites.
+     */
+    public function hasPrerequisites()
+    {
+        return !empty($this->prerequisite_courses);
+    }
+
+    /**
+     * Check if course has an active (latest) syllabus.
+     */
+    public function hasActiveSyllabus()
+    {
+        return $this->syllabi()->exists();
     }
 }

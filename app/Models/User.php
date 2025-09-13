@@ -93,7 +93,7 @@ class User extends Authenticatable
             return $name;
         }
         
-        return $this->name ?? '';
+        return $this->attributes['name'] ?? '';
     }
 
     /**
@@ -101,7 +101,12 @@ class User extends Authenticatable
      */
     public function getNameAttribute(): string
     {
-        return $this->getFullNameAttribute();
+        // If we have structured names, use them; otherwise use the raw name attribute
+        if ($this->firstname && $this->lastname) {
+            return $this->getFullNameAttribute();
+        }
+        
+        return $this->attributes['name'] ?? '';
     }
 
     /**
@@ -172,5 +177,29 @@ class User extends Authenticatable
             'last_login_at' => now(),
             'last_login_ip' => $ip ?? request()->ip(),
         ]);
+    }
+
+    /**
+     * Scope a query to search users by name (first, last, middle, or full name)
+     */
+    public function scopeSearchByName($query, $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('firstname', 'like', "%{$search}%")
+              ->orWhere('lastname', 'like', "%{$search}%")
+              ->orWhere('middlename', 'like', "%{$search}%")
+              ->orWhere('name', 'like', "%{$search}%")
+              ->orWhereRaw("CONCAT(firstname, ' ', lastname) LIKE ?", ["%{$search}%"])
+              ->orWhereRaw("CONCAT(firstname, ' ', middlename, ' ', lastname) LIKE ?", ["%{$search}%"])
+              ->orWhereRaw("CONCAT(lastname, ', ', firstname) LIKE ?", ["%{$search}%"]);
+        });
+    }
+
+    /**
+     * Scope a query to only include active users
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }
