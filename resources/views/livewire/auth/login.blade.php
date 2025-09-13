@@ -14,6 +14,7 @@
                 <p class="text-gray-600">Please enter your credentials to access your account.</p>
             </div>
             <form method="post" class="space-y-4">
+                @csrf
                 <div>
                     <label for="email" class="text-gray-600 font-medium">Email</label>
                     <input type="email" name="email" id="email" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
