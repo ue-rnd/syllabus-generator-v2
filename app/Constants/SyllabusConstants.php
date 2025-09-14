@@ -36,6 +36,12 @@ class SyllabusConstants
         'offsite_synchronous' => 'Offsite Synchronous'
     ];
 
+    public const APPROVAL_STATUSES = [
+        'submitted' => 'Submitted',
+        'approved' => 'Approved',
+        'rejected' => 'Rejected'
+    ];
+
     /**
      * Assessment types for weekly assessments
      */
@@ -179,6 +185,16 @@ class SyllabusConstants
         };
     }
 
+    public static function getApprovalStatusColor(string $status): string
+    {
+        return match ($status) {
+            'submitted' => 'warning',
+            'approved' => 'success',
+            'rejected' => 'danger',
+            default => 'gray',
+        };
+    }
+
     /**
      * Get role color for badges
      */
@@ -300,6 +316,11 @@ class SyllabusConstants
     public static function getActionVerbOptions(): array
     {
         return array_combine(self::ACTION_VERBS, array_map('ucfirst', self::ACTION_VERBS));
+    }
+
+    public static function getApprovalStatusOptions(): array
+    {
+        return array_combine(self::APPROVAL_STATUSES, array_map('ucfirst', self::APPROVAL_STATUSES));
     }
 
     /**

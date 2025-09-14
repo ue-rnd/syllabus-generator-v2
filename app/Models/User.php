@@ -29,13 +29,27 @@ class User extends Authenticatable
         'lastname',
         'firstname',
         'middlename',
+        'role',
         'position',
         'is_active',
         'last_login_at',
         'last_login_ip',
     ];
 
-    
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if ($user->firstname && $user->lastname) {
+                $user->name = trim($user->firstname . ' ' . $user->lastname);
+            }
+        });
+
+        static::updating(function ($user) {
+            if ($user->firstname && $user->lastname) {
+                $user->name = trim($user->firstname . ' ' . $user->lastname);
+            }
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -158,14 +172,16 @@ class User extends Authenticatable
      */
     public function getPrimaryRoleAttribute(): string
     {
-        $roles = $this->roles->pluck('name');
+        return $this->position;
+
+        // $roles = $this->roles->pluck('name');
         
-        // Priority order: superadmin > admin > faculty
-        if ($roles->contains('superadmin')) return 'superadmin';
-        if ($roles->contains('admin')) return 'admin';
-        if ($roles->contains('faculty')) return 'faculty';
+        // // Priority order: superadmin > admin > faculty
+        // if ($roles->contains('superadmin')) return 'superadmin';
+        // if ($roles->contains('admin')) return 'admin';
+        // if ($roles->contains('faculty')) return 'faculty';
         
-        return $roles->first() ?? 'No Role';
+        // return $roles->first() ?? 'No Role';
     }
 
     /**

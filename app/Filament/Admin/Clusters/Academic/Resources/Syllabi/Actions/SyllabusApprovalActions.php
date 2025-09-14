@@ -147,7 +147,7 @@ class SyllabusApprovalActions
                     ->send();
 
                 // Redirect to edit the new revision
-                redirect()->route('filament.admin.clusters.academic.resources.syllabi.edit', $revision);
+                redirect()->route('admin.academic.syllabi.edit', $revision);
             });
     }
 

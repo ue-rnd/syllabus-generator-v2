@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Clusters\Academic\Resources\Syllabi\Schemas;
 
 use App\Constants\SyllabusConstants;
+use App\Constants\UserConstants;
 use App\Models\Syllabus;
 use App\Models\User;
 use Filament\Infolists\Components\IconEntry;
@@ -51,12 +52,52 @@ class SyllabusInfolist
                             ->label('Dean Approval')
                             ->dateTime()
                             ->placeholder('-'),
+                        
+                        // TextEntry::make('version')
+                        //     ->label('Dean Approval')
+                        //     ->formatStateUsing(function ($record) {
+                        //         return $record;}),
+
+                        RepeatableEntry::make('approval_history')
+                            ->label('Approval History')
+                            ->schema([
+                                TextEntry::make('action')
+                                    ->badge()
+                                    ->formatStateUsing(function ($state) {
+                                        return SyllabusConstants::APPROVAL_STATUSES[$state];
+                                    })
+                                    ->color(function ($state) {
+                                        return SyllabusConstants::getApprovalStatusColor($state);
+                                    }),
+
+                                TextEntry::make('user_id')
+                                    ->label('Faculty Member')
+                                    ->formatStateUsing(function ($state): string {
+                                        if (!$state)
+                                            return 'N/A';
+
+                                        try {
+                                            $user = User::find($state);
+                                            return $user?->full_name ?? $user?->name ?? 'Unknown User';
+                                        } catch (\Exception $e) {
+                                            return 'User ID: ' . $state;
+                                        }
+                                    }),
+                                TextEntry::make('user_role')
+                                    ->label('User Role')
+                                    ->badge(),
+                                TextEntry::make('comments')
+                                    ->columnSpanFull(),
+                                TextEntry::make('timestamp')
+                                    ->label('Timestamp')
+                                    ->dateTime()
+                            ])
+                            ->placeholder('-')
+                            ->columns(3)
+                            ->columnSpanFull(),
 
                         TextEntry::make('rejection_comments')
                             ->label('Rejection Comments')
-                            ->formatStateUsing(function ($state): string {
-                                return is_string($state) ? $state : '';
-                            })
                             ->placeholder('-')
                             ->visible(fn($record): bool => !empty($record->rejection_comments))
                             ->columnSpanFull(),

@@ -35,11 +35,15 @@ class SyllabusForm
                             ->afterStateUpdated(function ($set, $get, $state) {
                                 if ($state) {
                                     $course = Course::find($state);
+
                                     if ($course && empty($get('name'))) {
                                         $set('name', $course->name . ' Syllabus ' . '(' . (new \DateTime())->format('Y-m-d') . ')');
+                                        $set('recommending_approval', $course->college->associate_dean_id);
+                                        $set('approved_by', $course->college->dean_id);
                                     }
                                 }
-                            }),
+                            })
+                            ,
 
                         TextInput::make('name')
                             ->required()
@@ -51,7 +55,8 @@ class SyllabusForm
                             ->default('draft')
                             ->required()
                             ->searchable()
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->disabled(),
 
                         Textarea::make('description')
                             ->columnSpanFull()
@@ -161,6 +166,7 @@ class SyllabusForm
                                         'strike',
                                         'undo',
                                     ])
+                                    ->required()
                                     ->columnSpanFull(),
 
                                 Repeater::make('learning_outcomes')
@@ -284,9 +290,20 @@ class SyllabusForm
                                             }
 
                                             $weekRange = $item['week_range'];
+
                                             $start = $weekRange['start'] ?? null;
                                             $end = $weekRange['end'] ?? $start;
                                             $isRange = $weekRange['is_range'] ?? false;
+
+                                            // Ensure $start and $end are numeric
+                                            if (!is_null($start) && !is_numeric($start)) {
+                                                $start = preg_replace('/[^\d.]/', '', (string)$start);
+                                            }
+                                            if (!is_null($end) && !is_numeric($end)) {
+                                                $end = preg_replace('/[^\d.]/', '', (string)$end);
+                                            }
+                                            $start = is_numeric($start) ? (int)$start : null;
+                                            $end = is_numeric($end) ? (int)$end : $start;
 
                                             if (!$start) {
                                                 $errors[] = "Item " . ($index + 1) . ": Week is required";
@@ -491,6 +508,9 @@ class SyllabusForm
                             ->relationship('reviewer', 'name')
                             ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
+                            ->default(function ($get) {
+
+                            })
                             ->preload()
                             ->columnSpanFull(),
 

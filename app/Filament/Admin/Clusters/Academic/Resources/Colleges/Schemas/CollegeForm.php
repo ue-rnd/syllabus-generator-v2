@@ -48,14 +48,16 @@ class CollegeForm
                             ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
-                            ->nullable(),
+                            ->nullable()
+                            ->required(),
                         Select::make('associate_dean_id')
                             ->label('Associate Dean')
                             ->relationship('associateDean', 'name')
                             ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
-                            ->nullable(),
+                            ->nullable()
+                            ->required(),
                     ])
                     ->columns(2)
                     ->columnSpanFull(),
