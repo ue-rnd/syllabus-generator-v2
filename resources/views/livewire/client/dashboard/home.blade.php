@@ -1,6 +1,6 @@
 @extends('livewire.client.dashboard.base')
 @section('content')
-<div class="p-4" x-data="{showAddModel: true}">
+<div class="p-4" x-data="{showAddModel: false}">
     <div class="space-y-10">
         <div class="grid grid-cols-2 gap-2 max-w-7xl mx-auto">
             <div class="space-y-4">
@@ -67,7 +67,7 @@
                 </button>
             </div>
             <div class="">
-                <div x-data="{ activeTab: 'subject' }">
+                <div x-data="{ activeTab: 'syllabus' }">
                     <div class="flex border-b">
                         <button @click="activeTab = 'syllabus'" :class="{'border-red-700 text-red-700': activeTab === 'syllabus'}" class="px-4 py-2 border-b-2">Add Syllabus</button>
                         <button @click="activeTab = 'subject'" :class="{'border-red-700 text-red-700': activeTab === 'subject'}" class="px-4 py-2 border-b-2">Add Subject</button>
