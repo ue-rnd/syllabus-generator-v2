@@ -31,5 +31,10 @@
                 </div>
             </form>
         </div>
+        @error('email')
+            <div class="bg-red-700 w-full p-4 rounded text-white">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 @endsection

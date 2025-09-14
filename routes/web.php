@@ -7,13 +7,9 @@ use App\Livewire\RolePermissionManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('livewire.auth.login');
+    return redirect()->route('login');
 })->name('home');
 
-
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -28,22 +24,25 @@ Route::middleware(['auth'])->group(function () {
         ->name('roles.index');
 });
 
+Route::middleware('auth')->group(function () {
 
-Route::get('home', function() {
-    return view('livewire.client.dashboard.home');
-})->name('dashboard_home');
+    Route::get('home', function() {
+        return view('livewire.client.dashboard.home');
+    })->name('dashboard');
 
-Route::get('profile', function(){
-    return view('livewire.client.dashboard.profile');
-})->name('profile');
+    Route::get('profile', function(){
+        return view('livewire.client.dashboard.profile');
+    })->name('profile');
 
-Route::get('notifications', function(){
-    return view('livewire.client.dashboard.notifications');
-})->name('notifications');
+    Route::get('notifications', function(){
+        return view('livewire.client.dashboard.notifications');
+    })->name('notifications');
 
-Route::get('bookmarks', function(){
-    return view('livewire.client.dashboard.bookmarks');
-})->name('bookmarks');
+    Route::get('bookmarks', function(){
+        return view('livewire.client.dashboard.bookmarks');
+    })->name('bookmarks');
+
+});
 
 
 Route::get("forgot_password", function() {
