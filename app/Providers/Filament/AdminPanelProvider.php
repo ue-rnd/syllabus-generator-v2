@@ -27,7 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Rose,
             ])
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
             ->discoverClusters(in: app_path('Filament/Admin/Clusters'), for: 'App\Filament\Admin\Clusters')
@@ -54,6 +54,10 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 'auth',
                 'role:superadmin',
-            ]);
+            ])
+            ->brandName('Sylgen')
+            ->brandLogo(asset('images/logo_ue.png'))
+            ->favicon(asset('images/logo_ue.png'))
+            ->viteTheme('resources/css/filament/admin/theme.css');
     }
 }

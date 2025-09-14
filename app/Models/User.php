@@ -29,13 +29,27 @@ class User extends Authenticatable
         'lastname',
         'firstname',
         'middlename',
+        'role',
         'position',
         'is_active',
         'last_login_at',
         'last_login_ip',
     ];
 
-    
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if ($user->firstname && $user->lastname) {
+                $user->name = trim($user->firstname . ' ' . $user->lastname);
+            }
+        });
+
+        static::updating(function ($user) {
+            if ($user->firstname && $user->lastname) {
+                $user->name = trim($user->firstname . ' ' . $user->lastname);
+            }
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -93,7 +107,7 @@ class User extends Authenticatable
             return $name;
         }
         
-        return $this->name ?? '';
+        return $this->attributes['name'] ?? '';
     }
 
     /**
@@ -101,7 +115,12 @@ class User extends Authenticatable
      */
     public function getNameAttribute(): string
     {
-        return $this->getFullNameAttribute();
+        // If we have structured names, use them; otherwise use the raw name attribute
+        if ($this->firstname && $this->lastname) {
+            return $this->getFullNameAttribute();
+        }
+        
+        return $this->attributes['name'] ?? '';
     }
 
     /**
@@ -153,14 +172,16 @@ class User extends Authenticatable
      */
     public function getPrimaryRoleAttribute(): string
     {
-        $roles = $this->roles->pluck('name');
+        return $this->position;
+
+        // $roles = $this->roles->pluck('name');
         
-        // Priority order: superadmin > admin > faculty
-        if ($roles->contains('superadmin')) return 'superadmin';
-        if ($roles->contains('admin')) return 'admin';
-        if ($roles->contains('faculty')) return 'faculty';
+        // // Priority order: superadmin > admin > faculty
+        // if ($roles->contains('superadmin')) return 'superadmin';
+        // if ($roles->contains('admin')) return 'admin';
+        // if ($roles->contains('faculty')) return 'faculty';
         
-        return $roles->first() ?? 'No Role';
+        // return $roles->first() ?? 'No Role';
     }
 
     /**
@@ -172,5 +193,29 @@ class User extends Authenticatable
             'last_login_at' => now(),
             'last_login_ip' => $ip ?? request()->ip(),
         ]);
+    }
+
+    /**
+     * Scope a query to search users by name (first, last, middle, or full name)
+     */
+    public function scopeSearchByName($query, $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('firstname', 'like', "%{$search}%")
+              ->orWhere('lastname', 'like', "%{$search}%")
+              ->orWhere('middlename', 'like', "%{$search}%")
+              ->orWhere('name', 'like', "%{$search}%")
+              ->orWhereRaw("CONCAT(firstname, ' ', lastname) LIKE ?", ["%{$search}%"])
+              ->orWhereRaw("CONCAT(firstname, ' ', middlename, ' ', lastname) LIKE ?", ["%{$search}%"])
+              ->orWhereRaw("CONCAT(lastname, ', ', firstname) LIKE ?", ["%{$search}%"]);
+        });
+    }
+
+    /**
+     * Scope a query to only include active users
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

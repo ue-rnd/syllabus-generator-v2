@@ -19,6 +19,7 @@ class Department extends Model
         'is_active',
         'sort_order',
         'college_id',
+        'department_chair_id',
     ];
 
     /**
@@ -28,6 +29,7 @@ class Department extends Model
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'college_id' => 'integer',
+        'department_chair_id' => 'integer',
     ];
 
     /**
@@ -68,5 +70,13 @@ class Department extends Model
     public function programs()
     {
         return $this->hasMany(Program::class);
+    }
+
+    /**
+     * Get the department chair.
+     */
+    public function departmentChair()
+    {
+        return $this->belongsTo(User::class, 'department_chair_id');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\ProgramConstants;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,21 +30,9 @@ class Program extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
-        'outcomes' => 'array',
-        'objectives' => 'array',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'department_id' => 'integer',
-    ];
-
-    /**
-     * The valid program levels.
-     */
-    public const LEVELS = [
-        'ASSOCIATE' => 'Associate',
-        'BACHELOR' => 'Bachelor',
-        'MASTERAL' => 'Masteral',
-        'DOCTORAL' => 'Doctoral',
     ];
 
     /**
@@ -83,7 +72,7 @@ class Program extends Model
      */
     public function getLevelNameAttribute()
     {
-        return self::LEVELS[$this->level] ?? $this->level;
+        return ProgramConstants::getLevelOptions()[$this->level] ?? $this->level;
     }
 
     /**
