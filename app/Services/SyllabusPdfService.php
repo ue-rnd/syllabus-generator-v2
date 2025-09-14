@@ -28,7 +28,7 @@ class SyllabusPdfService
             $data = $this->preparePdfData($syllabus);
 
             // Choose template based on flag
-            $template = $useNewTemplate ? 'pdf.syllabus-new' : 'pdf.syllabus';
+            $template = 'pdf.syllabus';
 
             // Create temporary directory for PDF generation
             $temporaryDirectory = (new TemporaryDirectory())->create();
@@ -261,18 +261,14 @@ class SyllabusPdfService
             // Process learning activities
             $learningActivities = collect($item['learning_activities'] ?? [])->map(function ($activity) {
                 return [
-                    'modality' => is_array($activity['modality'] ?? []) 
-                        ? implode(', ', $activity['modality']) 
-                        : ($activity['modality'] ?? ''),
+                    'modality' => $activity['modality'] ?? '',
                     'reference' => $activity['reference'] ?? '',
                     'description' => $activity['description'] ?? '',
                 ];
             })->toArray();
 
             // Process assessments
-            $assessments = is_array($item['assessments'] ?? []) 
-                ? implode(', ', $item['assessments']) 
-                : ($item['assessments'] ?? '');
+            $assessments = $item['assessments'];
 
             return [
                 'week_display' => $weekDisplay,

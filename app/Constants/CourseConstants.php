@@ -8,21 +8,9 @@ class CourseConstants
      * Course types
      */
     public const TYPES = [
-        'lecture' => 'Lecture',
-        'laboratory' => 'Laboratory',
-        'lecture_laboratory' => 'Lecture + Laboratory',
-        'seminar' => 'Seminar',
-        'workshop' => 'Workshop',
-        'practicum' => 'Practicum',
-        'internship' => 'Internship',
-        'thesis' => 'Thesis',
-        'dissertation' => 'Dissertation',
-        'independent_study' => 'Independent Study',
-        'research' => 'Research',
-        'capstone' => 'Capstone Project',
-        'fieldwork' => 'Fieldwork',
-        'clinical' => 'Clinical',
-        'studio' => 'Studio',
+        'pure_onsite' => 'Pure Onsite',
+        'pure_offsite' => 'Pure Offsite',
+        'hybrid' => 'Hybrid',
         'other' => 'Other',
     ];
 
@@ -70,14 +58,10 @@ class CourseConstants
     public static function getTypeColor(string $type): string
     {
         return match ($type) {
-            'lecture' => 'primary',
-            'laboratory' => 'warning',
-            'lecture_laboratory' => 'info',
-            'seminar', 'workshop' => 'purple',
-            'practicum', 'internship', 'fieldwork', 'clinical' => 'success',
-            'thesis', 'dissertation', 'research' => 'danger',
-            'independent_study', 'capstone' => 'orange',
-            'studio' => 'pink',
+            'pure_onsite' => 'primary',
+            'pure_offsite' => 'warning',
+            'hybrid' => 'info',
+            'other' => 'gray',
             default => 'gray',
         };
     }

@@ -1,3 +1,5 @@
+@php use App\Constants\SyllabusConstants; @endphp
+
 {{-- Course Syllabus Details Component --}}
 <div>
     <div>
@@ -40,7 +42,7 @@
                 <td colspan="3">
                     <div class="course-type-option">
                         <input type="checkbox" name="course-type"
-                            {{ ($course->course_type ?? '') === 'onsite' ? 'checked' : '' }} disabled />
+                            {{ ($course->course_type ?? '') === 'pure_onsite' ? 'checked' : '' }} disabled />
                         <p>
                             PURE ONSITE<br />
                             [Face-to-Face]
@@ -50,7 +52,7 @@
                 <td colspan="3">
                     <div class="course-type-option">
                         <input type="checkbox" name="course-type"
-                            {{ ($course->course_type ?? '') === 'offsite' ? 'checked' : '' }} disabled />
+                            {{ ($course->course_type ?? '') === 'pure_offsite' ? 'checked' : '' }} disabled />
                         <p>
                             PURE OFFSITE<br />
                             [Online Distance Learning]
@@ -70,7 +72,7 @@
                 <td colspan="3">
                     <div class="course-type-option">
                         <input type="checkbox" name="course-type"
-                            {{ ($course->course_type ?? '') === 'others' ? 'checked' : '' }} disabled />
+                            {{ ($course->course_type ?? '') === 'other' ? 'checked' : '' }} disabled />
                         <p>Others. Please specify.</p>
                     </div>
                 </td>
@@ -157,14 +159,7 @@
                             <ol>
                                 @foreach ($course_outcomes as $outcome)
                                     <li>
-                                        <span>{{ ucfirst($outcome['verb'] ?? '') }}</span>
-                                        @php
-                                            $content = $outcome['content'] ?? '';
-                                            // Remove wrapping <p> tags if they exist to keep content inline
-                                            $content = preg_replace('/^<p[^>]*>/', '', $content);
-                                            $content = preg_replace('/<\/p>$/', '', $content);
-                                        @endphp
-                                        {!! $content !!}
+                                        {!! SyllabusConstants::renderVerbAndContent($outcome['verb'], $outcome['content']) !!}
                                     </li>
                                 @endforeach
                             </ol>

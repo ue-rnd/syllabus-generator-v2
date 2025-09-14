@@ -331,6 +331,8 @@ class SyllabusConstants
 
         // Remove the first HTML tag from $content if present
         $contentStripped = preg_replace('/^<[^>]+>/', '', $content);
+        // Remove the last HTML tag from $contentStripped if present
+        $contentStripped = preg_replace('/<[^>]+>$/', '', $contentStripped);
 
         return "<p>{$verb} {$contentStripped}</p>";
     }
