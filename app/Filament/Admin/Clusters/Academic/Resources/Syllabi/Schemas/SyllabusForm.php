@@ -40,7 +40,7 @@ class SyllabusForm
                                     }
                                 }
                             }),
-                        
+
                         TextInput::make('name')
                             ->required()
                             ->maxLength(255),
@@ -52,7 +52,7 @@ class SyllabusForm
                             ->required()
                             ->searchable()
                             ->columnSpanFull(),
-                        
+
                         Textarea::make('description')
                             ->columnSpanFull()
                             ->rows(3),
@@ -72,7 +72,7 @@ class SyllabusForm
                                     ->searchable()
                                     ->required()
                                     ->placeholder('Select an action verb'),
-                                
+
                                 RichEditor::make('content')
                                     ->label('Outcome Description')
                                     ->placeholder('Complete the outcome statement...')
@@ -92,11 +92,7 @@ class SyllabusForm
                             ])
                             ->addActionLabel('Add Course Outcome')
                             ->collapsible()
-                            ->itemLabel(fn (array $state): ?string => 
-                                isset($state['verb']) && isset($state['content'])
-                                    ? ucfirst($state['verb']) . ' ' . \Str::limit(strip_tags(is_string($state['content']) ? $state['content'] : ''), 50)
-                                    : 'New Outcome'
-                            )
+                            ->hiddenLabel()
                             ->columnSpanFull(),
                     ])->columnSpanFull(),
 
@@ -113,7 +109,7 @@ class SyllabusForm
                                     ->default(3.0)
                                     ->required()
                                     ->suffix('hours'),
-                                
+
                                 TextInput::make('default_laboratory_hours')
                                     ->label('Default Laboratory Hours per Week')
                                     ->numeric()
@@ -122,7 +118,7 @@ class SyllabusForm
                                     ->required()
                                     ->suffix('hours'),
                             ])
-                    ->columns(2),
+                            ->columns(2),
                         Repeater::make('learning_matrix')
                             ->label('Items')
                             ->schema([
@@ -134,23 +130,39 @@ class SyllabusForm
                                             ->live()
                                             ->default(false)
                                             ->columnSpanFull(),
-                                        
+
                                         TextInput::make('week_range.start')
-                                            ->label(fn ($get) => $get('week_range.is_range') ? 'Week Start' : 'Week')
+                                            ->label(fn($get) => $get('week_range.is_range') ? 'Week Start' : 'Week')
                                             ->numeric()
                                             ->required()
                                             ->minValue(1)
                                             ->maxValue(20),
-                                        
+
                                         TextInput::make('week_range.end')
                                             ->label('Week End')
                                             ->numeric()
-                                            ->required(fn ($get) => $get('week_range.is_range'))
-                                            ->visible(fn ($get) => $get('week_range.is_range'))
-                                            ->minValue(fn ($get) => $get('week_range.start') ?? 1)
+                                            ->required(fn($get) => $get('week_range.is_range'))
+                                            ->visible(fn($get) => $get('week_range.is_range'))
+                                            ->minValue(fn($get) => $get('week_range.start') ?? 1)
                                             ->maxValue(20),
                                     ]),
-                                
+
+                                RichEditor::make('content')
+                                    ->label('Content')
+                                    ->placeholder('Add item content...')
+                                    ->toolbarButtons([
+                                        'blockquote',
+                                        'bold',
+                                        'bulletList',
+                                        'italic',
+                                        'link',
+                                        'orderedList',
+                                        'redo',
+                                        'strike',
+                                        'undo',
+                                    ])
+                                    ->columnSpanFull(),
+
                                 Repeater::make('learning_outcomes')
                                     ->label('Learning Outcomes for this Week/Range')
                                     ->schema([
@@ -160,7 +172,7 @@ class SyllabusForm
                                             ->searchable()
                                             ->required()
                                             ->placeholder('Select an action verb'),
-                                        
+
                                         RichEditor::make('content')
                                             ->label('Outcome Description')
                                             ->placeholder('Complete the outcome statement...')
@@ -180,24 +192,14 @@ class SyllabusForm
                                     ])
                                     ->addActionLabel('Add Learning Outcome')
                                     ->collapsible()
-                                    ->itemLabel(fn (array $state): ?string => 
-                                        isset($state['verb']) && isset($state['content'])
-                                            ? ucfirst($state['verb']) . ' ' . \Str::limit(strip_tags(is_string($state['content']) ? $state['content'] : ''), 40)
-                                            : 'New Outcome'
-                                    )
+                                    ->hiddenLabel()
                                     ->columnSpanFull(),
-                                
+
                                 Repeater::make('learning_activities')
                                     ->label('Learning Activities')
                                     ->schema([
-                                        Select::make('modality')
-                                            ->multiple()
-                                            ->options(SyllabusConstants::getLearningModalityOptions())
-                                            ->required(),
-                                        
-                                        RichEditor::make('reference')
-                                            ->label('Reference/Resource')
-                                            ->placeholder('Add reference or resource details...')
+                                        RichEditor::make('description')
+                                            ->label('Activity Description')
                                             ->toolbarButtons([
                                                 'blockquote',
                                                 'bold',
@@ -210,9 +212,15 @@ class SyllabusForm
                                                 'undo',
                                             ])
                                             ->columnSpanFull(),
-                                        
-                                        RichEditor::make('description')
-                                            ->label('Activity Description')
+
+                                        Select::make('modality')
+                                            ->multiple()
+                                            ->options(SyllabusConstants::getLearningModalityOptions())
+                                            ->required(),
+
+                                        RichEditor::make('reference')
+                                            ->label('Reference/Resource')
+                                            ->placeholder('Add reference or resource details...')
                                             ->toolbarButtons([
                                                 'blockquote',
                                                 'bold',
@@ -229,7 +237,7 @@ class SyllabusForm
                                     ->addActionLabel('Add Learning Activity')
                                     ->collapsible()
                                     ->columnSpanFull(),
-                                
+
                                 Select::make('assessments')
                                     ->label('Weekly Assessments')
                                     ->options(SyllabusConstants::getAssessmentTypeOptions())
@@ -244,20 +252,20 @@ class SyllabusForm
                                 if (!isset($state['week_range'])) {
                                     return 'New Week';
                                 }
-                                
+
                                 $weekRange = $state['week_range'];
                                 $start = $weekRange['start'] ?? null;
                                 $end = $weekRange['end'] ?? null;
                                 $isRange = $weekRange['is_range'] ?? false;
-                                
+
                                 if (!$start) {
                                     return 'New Week';
                                 }
-                                
+
                                 if ($isRange && $end && $end != $start) {
                                     return "Weeks {$start}-{$end}";
                                 }
-                                
+
                                 return "Week {$start}";
                             })
                             ->rules([
@@ -327,7 +335,7 @@ class SyllabusForm
                                 'undo',
                             ])
                             ->columnSpanFull(),
-                        
+
                         RichEditor::make('adaptive_digital_solutions')
                             ->label('Adaptive Digital Solutions')
                             ->placeholder('Add digital solutions...')
@@ -343,7 +351,7 @@ class SyllabusForm
                                 'undo',
                             ])
                             ->columnSpanFull(),
-                        
+
                         RichEditor::make('online_references')
                             ->label('Online References')
                             ->placeholder('Add online references...')
@@ -359,7 +367,7 @@ class SyllabusForm
                                 'undo',
                             ])
                             ->columnSpanFull(),
-                        
+
                         RichEditor::make('other_references')
                             ->label('Other References')
                             ->placeholder('Add other references...')
@@ -397,7 +405,7 @@ class SyllabusForm
                             ])
                             ->default('<table><tr><th>Component</th><th>Percentage</th></tr><tr><td>Class Participation</td><td>10%</td></tr><tr><td>Quizzes & Assignments</td><td>30%</td></tr><tr><td>Midterm Examination</td><td>25%</td></tr><tr><td>Final Examination</td><td>35%</td></tr></table><br><strong>Grading Scale:</strong><br>A: 90-100<br>B: 80-89<br>C: 70-79<br>D: 60-69<br>F: Below 60')
                             ->columnSpanFull(),
-                        
+
                         RichEditor::make('classroom_policies')
                             ->label('Classroom Policies')
                             ->toolbarButtons([
@@ -413,7 +421,7 @@ class SyllabusForm
                             ])
                             ->default("1. Attendance is mandatory for all class sessions.<br>2. Late submissions will be penalized according to the course policy.<br>3. Academic integrity must be maintained at all times.<br>4. Respectful behavior is expected from all students.<br>5. Electronic devices should be used for academic purposes only during class.")
                             ->columnSpanFull(),
-                        
+
                         RichEditor::make('consultation_hours')
                             ->label('Consultation Hours')
                             ->toolbarButtons([
@@ -436,13 +444,13 @@ class SyllabusForm
                         Select::make('principal_prepared_by')
                             ->label('Principal Prepared By')
                             ->relationship('principalPreparer', 'name')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
+                            ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
                             ->required()
                             ->default(auth()->id())
                             ->columnSpanFull(),
-                        
+
                         Repeater::make('prepared_by')
                             ->label('Additional Preparers')
                             ->schema([
@@ -452,12 +460,12 @@ class SyllabusForm
                                     ->searchable()
                                     ->required()
                                     ->preload(),
-                                
+
                                 TextInput::make('role')
                                     ->label('Role/Position')
                                     ->placeholder('e.g., Faculty, Distinguished Faculty, Library Officer')
                                     ->maxLength(255),
-                                
+
                                 RichEditor::make('description')
                                     ->label('Description')
                                     ->placeholder('Additional details about their contribution')
@@ -477,26 +485,26 @@ class SyllabusForm
                             ->addActionLabel('Add Preparer')
                             ->collapsible()
                             ->columnSpanFull(),
-                        
+
                         Select::make('reviewed_by')
                             ->label('Reviewed By (Department Chair)')
                             ->relationship('reviewer', 'name')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
+                            ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
                             ->columnSpanFull(),
-                        
+
                         Select::make('recommending_approval')
                             ->label('Recommending Approval (Associate Dean)')
                             ->relationship('recommendingApprover', 'name')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
+                            ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload(),
-                        
+
                         Select::make('approved_by')
                             ->label('Approved By (Dean)')
                             ->relationship('approver', 'name')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
+                            ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload(),
 

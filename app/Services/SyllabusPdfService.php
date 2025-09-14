@@ -3,15 +3,16 @@
 namespace App\Services;
 
 use App\Models\Syllabus;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\View;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class SyllabusPdfService
 {
     /**
-     * Generate PDF for a syllabus
+     * Generate PDF for a syllabus using Spatie Browsershot
      */
-    public function generatePdf(Syllabus $syllabus, bool $useNewTemplate = true): \Barryvdh\DomPDF\PDF
+    public function generatePdf(Syllabus $syllabus, bool $useNewTemplate = true): string
     {
         try {
             // Load the syllabus with all relationships
@@ -27,21 +28,29 @@ class SyllabusPdfService
             $data = $this->preparePdfData($syllabus);
 
             // Choose template based on flag
-            $template = 'pdf.syllabus';
+            $template = $useNewTemplate ? 'pdf.syllabus-new' : 'pdf.syllabus';
 
-            // Generate PDF
-            $pdf = PDF::loadView($template, $data);
-            
-            // Configure PDF settings
-            $pdf->setPaper('A4', 'landscape');
-            $pdf->setOptions([
-                'dpi' => 150,
-                'defaultFont' => 'sans-serif',
-                'isHtml5ParserEnabled' => true,
-                'isPhpEnabled' => true
-            ]);
+            // Create temporary directory for PDF generation
+            $temporaryDirectory = (new TemporaryDirectory())->create();
+            $pdfPath = $temporaryDirectory->path('syllabus.pdf');
 
-            return $pdf;
+            // Use Spatie LaravelPdf for PDF generation with footerView
+            $pdf = \Spatie\LaravelPdf\Facades\Pdf::view($template, $data)
+                ->footerView('pdf.syllabus-footer', $data)
+                ->landscape();
+
+            // Optionally set format and margins if needed (using config)
+            $config = config('browsershot');
+            if (isset($config['pdf']['format'])) {
+                $pdf->format($config['pdf']['format']);
+            }
+            if (isset($config['pdf']['margins'])) {
+                $m = $config['pdf']['margins'];
+                $pdf->margins($m['top'], $m['right'], $m['bottom'], $m['left']);
+            }
+
+            $pdf->save($pdfPath);
+            return $pdfPath;
         } catch (\Exception $e) {
             // Log the error for debugging
             \Log::error('PDF Generation Error: ' . $e->getMessage(), [
@@ -283,7 +292,7 @@ class SyllabusPdfService
      */
     public function downloadPdf(Syllabus $syllabus, ?string $filename = null): \Symfony\Component\HttpFoundation\Response
     {
-        $pdf = $this->generatePdf($syllabus);
+        $pdfPath = $this->generatePdf($syllabus);
         
         if (!$filename) {
             $courseCode = $syllabus->course->code ?? 'COURSE';
@@ -292,7 +301,7 @@ class SyllabusPdfService
             $filename = "{$courseCode}_{$courseName}_Syllabus_v{$version}.pdf";
         }
 
-        return $pdf->download($filename);
+        return response()->download($pdfPath, $filename)->deleteFileAfterSend(true);
     }
 
     /**
@@ -300,18 +309,21 @@ class SyllabusPdfService
      */
     public function streamPdf(Syllabus $syllabus): \Symfony\Component\HttpFoundation\Response
     {
-        $pdf = $this->generatePdf($syllabus);
+        $pdfPath = $this->generatePdf($syllabus);
         
         $courseCode = $syllabus->course->code ?? 'COURSE';
         $filename = "{$courseCode}_Syllabus.pdf";
 
-        return $pdf->stream($filename);
+        return response()->file($pdfPath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"'
+        ]);
     }
 
     /**
      * Generate error PDF when main generation fails
      */
-    private function generateErrorPdf(Syllabus $syllabus, string $errorMessage): \Barryvdh\DomPDF\PDF
+    private function generateErrorPdf(Syllabus $syllabus, string $errorMessage): string
     {
         $errorData = [
             'syllabus' => $syllabus,
@@ -322,7 +334,29 @@ class SyllabusPdfService
 
         $html = view('pdf.error', $errorData)->render();
         
-        return PDF::loadHTML($html)->setPaper('A4', 'portrait');
+        // Create temporary directory for error PDF
+        $temporaryDirectory = (new TemporaryDirectory())->create();
+        $pdfPath = $temporaryDirectory->path('error.pdf');
+
+        // Generate simple error PDF
+        $config = config('browsershot');
+        
+        Browsershot::html($html)
+            ->format($config['pdf']['format'])
+            ->portrait()
+            ->margins(
+                $config['pdf']['margins']['top'],
+                $config['pdf']['margins']['right'],
+                $config['pdf']['margins']['bottom'],
+                $config['pdf']['margins']['left']
+            )
+            ->showBackground()
+            ->emulateMedia('print')
+            ->timeout($config['timeout'] / 2) // Shorter timeout for error PDF
+            ->setOption('args', $config['chrome_args'])
+            ->save($pdfPath);
+
+        return $pdfPath;
     }
 
     /**

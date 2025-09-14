@@ -9,19 +9,19 @@
     <table>
         <tbody>
             <tr>
-                <th colspan="2" style="width: 1%; white-space: nowrap;">Course Code</th>
+                <th colspan="2" class="course-info-header">Course Code</th>
                 <td colspan="12">
                     {{ $course->code ?? '' }}
                 </td>
             </tr>
             <tr>
-                <th colspan="2" style="width: 1%; white-space: nowrap;">Course Title</th>
+                <th colspan="2" class="course-info-header">Course Title</th>
                 <td colspan="12">
                     {{ $course->name ?? '' }}
                 </td>
             </tr>
             <tr>
-                <th rowspan="2" colspan="2" style="width: 1%; white-space: nowrap;">
+                <th rowspan="2" colspan="2" class="course-info-header">
                     Credit Units
                 </th>
                 <td colspan="1">Lecture</td>
@@ -36,9 +36,9 @@
                 </td>
             </tr>
             <tr>
-                <th colspan="2" style="width: 1%; white-space: nowrap;">Course Type</th>
+                <th colspan="2" class="course-info-header">Course Type</th>
                 <td colspan="3">
-                    <div>
+                    <div class="course-type-option">
                         <input type="checkbox" name="course-type"
                             {{ ($course->course_type ?? '') === 'onsite' ? 'checked' : '' }} disabled />
                         <p>
@@ -48,7 +48,7 @@
                     </div>
                 </td>
                 <td colspan="3">
-                    <div>
+                    <div class="course-type-option">
                         <input type="checkbox" name="course-type"
                             {{ ($course->course_type ?? '') === 'offsite' ? 'checked' : '' }} disabled />
                         <p>
@@ -58,7 +58,7 @@
                     </div>
                 </td>
                 <td colspan="3">
-                    <div>
+                    <div class="course-type-option">
                         <input type="checkbox" name="course-type"
                             {{ ($course->course_type ?? '') === 'hybrid' ? 'checked' : '' }} disabled />
                         <p>
@@ -68,7 +68,7 @@
                     </div>
                 </td>
                 <td colspan="3">
-                    <div>
+                    <div class="course-type-option">
                         <input type="checkbox" name="course-type"
                             {{ ($course->course_type ?? '') === 'others' ? 'checked' : '' }} disabled />
                         <p>Others. Please specify.</p>
@@ -83,8 +83,8 @@
         <tbody>
             @if (!empty($prerequisites))
                 <tr>
-                    <th rowspan="2" style="width: 1%; white-space: nowrap;">Pre-requisite(s)</th>
-                    <th style="width: 1%; white-space: nowrap;">Course Code</th>
+                    <th rowspan="2" class="course-info-header">Pre-requisite(s)</th>
+                    <th class="course-info-header">Course Code</th>
                     @php
                         $prerequisiteCount = count($prerequisites);
                         $totalColumns = 12; // Full 12 columns available for prerequisites
@@ -109,7 +109,7 @@
                     @endforeach
                 </tr>
                 <tr>
-                    <th style="width: 1%; white-space: nowrap;">Course Title</th>
+                    <th class="course-info-header">Course Title</th>
                     @foreach ($prerequisites as $index => $prereq)
                         <td colspan="{{ $columnSpans[$index] }}">
                             {{ $prereq['courseTitle'] ?? ($prereq['name'] ?? '') }}
@@ -118,13 +118,12 @@
                 </tr>
             @else
                 <tr>
-                    <th rowspan="2" style="width: 1%; white-space: nowrap;">Pre-requisite(s)</th>
-                    <th style="width: 1%; white-space: nowrap;">Course Code</th>
-                    <td rowspan="2" colspan="12" style="text-align: center; vertical-align: middle;">No
-                        Prerequisites</td>
+                    <th rowspan="2" class="course-info-header">Pre-requisite(s)</th>
+                    <th class="course-info-header">Course Code</th>
+                    <td rowspan="2" colspan="12" class="prerequisites-empty">No Prerequisites</td>
                 </tr>
                 <tr>
-                    <th style="width: 1%; white-space: nowrap;">Course Title</th>
+                    <th class="course-info-header">Course Title</th>
                 </tr>
             @endif
         </tbody>

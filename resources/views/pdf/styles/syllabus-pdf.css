@@ -1,0 +1,394 @@
+/* ===============================================
+   Syllabus PDF Stylesheet
+   University of the East - Syllabus Generator v2
+   =============================================== */
+
+/* ===========================================
+   BASE DOCUMENT STYLES
+   =========================================== */
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===========================================
+   TYPOGRAPHY
+   =========================================== */
+
+/* Headings - Hierarchical structure */
+h1, h2, h3, h4, h5, h6 {
+    margin: 8pt 0 4pt 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 16pt;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+/* Paragraphs and text content */
+p {
+    margin: 4pt 0;
+    text-align: justify;
+}
+
+/* Lists */
+ul, ol {
+    margin: 4pt 0;
+    padding-left: 20pt;
+}
+
+li {
+    margin: 2pt 0;
+    padding: 0;
+}
+
+/* ===========================================
+   LAYOUT ELEMENTS
+   =========================================== */
+
+/* Images and logos */
+img {
+    text-align: center;
+    display: block;
+    margin: auto;
+    max-width: 60pt;
+    max-height: 60pt;
+}
+
+/* Header logo styling */
+.header-logo {
+    text-align: center;
+    margin-bottom: 8pt;
+}
+
+/* Notes and annotations */
+.note {
+    font-size: 8pt;
+    text-align: center;
+    font-style: italic;
+    color: #555555;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===========================================
+   TABLE STYLES - BASE
+   =========================================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0;
+    font-size: 10pt;
+}
+
+th, td {
+    border: 1pt solid #000;
+    padding: 4pt 6pt;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Signature tables - borderless */
+table.signatures th, 
+table.signatures td {
+    border: none;
+    padding: 0;
+}
+
+/* ===========================================
+   LEARNING MATRIX TABLE - SPECIALIZED
+   =========================================== */
+
+/* Learning Matrix container table */
+table.learning-matrix-table {
+    font-size: 8pt;
+    border: 2pt solid #000;
+}
+
+/* Learning Matrix headers - black background theme */
+.learning-matrix-table th {
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    padding: 3pt;
+    border: 1pt solid #000;
+}
+
+/* Learning Matrix data cells */
+.learning-matrix-table td {
+    border: 1pt solid #000;
+    padding: 3pt;
+    vertical-align: top;
+    font-size: 8pt;
+}
+
+/* ===========================================
+   LEARNING MATRIX - COLUMN WIDTHS
+   =========================================== */
+
+/* Primary identification columns */
+.matrix-header-week {
+    width: 8%;
+}
+
+.matrix-header-hour {
+    width: 8%;
+}
+
+/* Content columns */
+.matrix-header-outcome {
+    width: 25%;
+}
+
+.matrix-header-content {
+    width: 20%;
+}
+
+/* Teaching activity section */
+.matrix-header-activity {
+    width: 25%;
+}
+
+.matrix-header-title {
+    width: 18%;
+}
+
+/* Modality columns */
+.matrix-header-modality-section {
+    width: 12%;
+    font-size: 7pt;
+    line-height: 1.1;
+}
+
+.matrix-header-modality-section small {
+    font-size: 5pt;
+    display: block;
+    font-weight: normal;
+}
+
+.matrix-header-modality-o,
+.matrix-header-modality-a,
+.matrix-header-modality-s {
+    width: 3%;
+    font-size: 7pt;
+    line-height: 1.1;
+}
+
+.matrix-header-modality-o small,
+.matrix-header-modality-a small,
+.matrix-header-modality-s small {
+    font-size: 5pt;
+    display: block;
+    font-weight: normal;
+}
+
+/* Resource and assessment columns */
+.matrix-header-resource {
+    width: 10%;
+}
+
+.matrix-header-assessment {
+    width: 9%;
+}
+
+/* Preliminary examination header */
+.matrix-header-preliminary {
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    padding: 6pt;
+}
+
+/* ===========================================
+   LEARNING MATRIX - CELL CONTENT STYLING
+   =========================================== */
+
+/* Week identification cells */
+.matrix-week {
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+/* Hour allocation cells */
+.matrix-hour {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Learning outcome content */
+.matrix-outcome {
+    text-align: justify;
+    line-height: 1.2;
+}
+
+/* Content description */
+.matrix-content {
+    text-align: left;
+    line-height: 1.2;
+}
+
+/* Teaching activity descriptions */
+.matrix-activity-title {
+    text-align: left;
+    line-height: 1.2;
+}
+
+/* Modality checkboxes */
+.matrix-modality-check {
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+/* Resource references */
+.matrix-resource {
+    text-align: left;
+    line-height: 1.2;
+}
+
+/* Assessment information */
+.matrix-assessment {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Learning outcome text formatting */
+.outcome-text {
+    font-size: 8pt;
+    line-height: 1.2;
+}
+
+/* ===========================================
+   PAGE LAYOUT AND PRINT SETTINGS
+   =========================================== */
+
+/* ===========================================
+     PAGE LAYOUT AND PRINT FOOTER (Running Footer)
+     =========================================== */
+
+@media print {
+    @page {
+        margin: 0.5in;
+        size: A4 landscape;
+        @bottom-center {
+            content: element(pageFooter);
+        }
+    }
+
+    #pageFooter {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        position: fixed;
+        font-size: 9pt;
+        width: 100%;
+        text-align: center;
+
+        bottom: -0.1in;
+    }
+
+    #pageFooterLeft {
+        float: left;
+        text-align: left;
+    }
+
+    #pageFooterRight {
+        float: left;
+        text-align: left;
+    }
+
+    .page-break {
+        break-after: page;
+    }
+}
+
+/* ===========================================
+   UTILITY CLASSES
+   =========================================== */
+
+/* Only use classes when semantic HTML elements are insufficient */
+
+/* Error display styling */
+.error-container {
+    margin: 8pt 0;
+    padding: 4pt;
+    border: 1pt solid #ff0000;
+    background-color: #ffe6e6;
+}
+
+.error-container strong {
+    color: #cc0000;
+}
+
+/* Legend and helper text */
+.legend-text {
+    margin-top: 8pt;
+    font-size: 8pt;
+    text-align: left;
+}
+
+.legend-text strong {
+    font-weight: bold;
+}
+
+/* Course details table styling */
+.course-info-header {
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* Course type checkboxes and labels */
+.course-type-option {
+    display: flex;
+    align-items: center;
+}
+
+.course-type-option input[type="checkbox"] {
+    margin-right: 4pt;
+}
+
+.course-type-option p {
+    margin: 0;
+    text-align: center;
+}
+
+/* Prerequisites table - center alignment for empty state */
+.prerequisites-empty {
+    text-align: center;
+    vertical-align: middle;
+}

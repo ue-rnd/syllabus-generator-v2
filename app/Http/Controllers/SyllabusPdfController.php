@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Syllabus;
 use App\Services\SyllabusPdfService;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class SyllabusPdfController extends Controller
 {
@@ -13,11 +13,6 @@ class SyllabusPdfController extends Controller
      */
     public function view(Syllabus $syllabus): Response
     {
-        // Simple permission check - user must be authenticated
-        if (!auth()->check()) {
-            abort(403, 'Unauthorized');
-        }
-
         try {
             $pdfService = new SyllabusPdfService();
             return $pdfService->streamPdf($syllabus);
@@ -31,11 +26,6 @@ class SyllabusPdfController extends Controller
      */
     public function download(Syllabus $syllabus): Response
     {
-        // Simple permission check - user must be authenticated
-        if (!auth()->check()) {
-            abort(403, 'Unauthorized');
-        }
-
         try {
             $pdfService = new SyllabusPdfService();
             return $pdfService->downloadPdf($syllabus);

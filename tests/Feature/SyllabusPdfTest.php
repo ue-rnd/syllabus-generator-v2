@@ -33,7 +33,6 @@ class SyllabusPdfTest extends TestCase
             'name' => 'Test Course',
             'code' => 'TEST101',
             'college_id' => $college->id,
-            'department_id' => $department->id,
         ]);
         
         $syllabus = Syllabus::factory()->create([
@@ -74,10 +73,12 @@ class SyllabusPdfTest extends TestCase
         
         // Test PDF service
         $pdfService = new SyllabusPdfService();
-        $pdf = $pdfService->generatePdf($syllabus);
+        $pdfPath = $pdfService->generatePdf($syllabus);
         
-        $this->assertNotNull($pdf);
-        $this->assertInstanceOf(\Barryvdh\DomPDF\PDF::class, $pdf);
+        $this->assertNotNull($pdfPath);
+        $this->assertIsString($pdfPath);
+        $this->assertFileExists($pdfPath);
+        $this->assertTrue(str_ends_with($pdfPath, '.pdf'));
     }
 
     public function test_pdf_controller_requires_authentication()
@@ -85,10 +86,10 @@ class SyllabusPdfTest extends TestCase
         $syllabus = Syllabus::factory()->create();
         
         $response = $this->get(route('syllabus.pdf.view', $syllabus));
-        $response->assertStatus(403);
+        $response->assertStatus(302); // Redirects to login
         
         $response = $this->get(route('syllabus.pdf.download', $syllabus));
-        $response->assertStatus(403);
+        $response->assertStatus(302); // Redirects to login
     }
 
     public function test_authenticated_user_can_view_pdf()
@@ -100,7 +101,6 @@ class SyllabusPdfTest extends TestCase
         $department = Department::factory()->create(['college_id' => $college->id]);
         $course = Course::factory()->create([
             'college_id' => $college->id,
-            'department_id' => $department->id,
         ]);
         $syllabus = Syllabus::factory()->create(['course_id' => $course->id]);
         

@@ -32,6 +32,7 @@ class College extends Model
      * The attributes that should be cast.
      */
     protected $casts = [
+        'objectives' => 'array',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'dean_id' => 'integer',

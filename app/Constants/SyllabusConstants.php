@@ -325,4 +325,13 @@ class SyllabusConstants
     {
         return self::STATUSES;
     }
+
+    public static function renderVerbAndContent($verb, $content) {
+        $verb = ucfirst($verb);
+
+        // Remove the first HTML tag from $content if present
+        $contentStripped = preg_replace('/^<[^>]+>/', '', $content);
+
+        return "<p>{$verb} {$contentStripped}</p>";
+    }
 }

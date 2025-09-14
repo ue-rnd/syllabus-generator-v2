@@ -69,7 +69,7 @@ class CourseInfolist
                                 
                                 return $prerequisiteCourses->pluck('name')->unique()->implode(', ');
                             })
-                            ->placeholder('None')
+                            ->placeholder('-')
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),

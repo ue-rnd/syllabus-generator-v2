@@ -29,7 +29,6 @@ class CourseFactory extends Factory
             ],
             'is_active' => $this->faker->boolean(95), // 95% chance of being active
             'sort_order' => $this->faker->numberBetween(1, 100),
-            'logo_path' => null, // Can be set manually when needed
             'college_id' => \App\Models\College::factory(),
         ];
     }
