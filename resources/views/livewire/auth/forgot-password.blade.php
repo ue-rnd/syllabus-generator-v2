@@ -25,7 +25,7 @@
             </form>
         </div>
         @if (session('error'))
-            <div class="text-green-600 font-medium">
+            <div class="text-red-600 font-medium">
                 {{ session('error') }}
             </div>
         @endif

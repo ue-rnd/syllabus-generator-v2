@@ -37,7 +37,7 @@
         </div>
         @if (session('success'))
             <div class="p-3 rounded bg-green-800 text-white">
-                {{ session('status') }}
+                {{ session('success') }}
             </div>
         @endif
         @if (session('error'))
