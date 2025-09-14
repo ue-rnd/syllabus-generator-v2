@@ -6,71 +6,51 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Locked;
 use Livewire\Component;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 
 #[Layout('components.layouts.app.main-layout')]
-class ResetPassword extends Component
-{
-    #[Locked]
-    public string $token = '';
+class ResetPassword extends Controller{
+    public function render(){
+        $token = request()->route('token');
 
-    public string $email = '';
-
-    public string $password = '';
-
-    public string $password_confirmation = '';
-
-    /**
-     * Mount the component.
-     */
-    public function mount(string $token): void
-    {
-        $this->token = $token;
-
-        $this->email = request()->string('email')->value();
+        $tokenData = \DB::table('password_reset_tokens')->where('token', $token)->first();
+        if (!$tokenData || \Carbon\Carbon::parse($tokenData->created_at)->addMinutes(60)->isPast()) {
+            Session::flash('error', 'This password reset token is invalid or has expired. Please request a new password reset.');
+            return redirect()->route('login');
+        }
+        return view('livewire.auth.reset-password', compact('token'));
     }
 
-    /**
-     * Reset the password for the given user.
-     */
-    public function resetPassword(): void
-    {
-        $this->validate([
-            'token' => ['required'],
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+    public function reset(Request $request) {
+        $token = $request->route('token');
+        $request->validate([
+            'new_password' => 'required|string|min:8',
+            'confirm_password' => 'required|string|min:8|same:new_password',
         ]);
 
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
-        $status = Password::reset(
-            $this->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) {
-                $user->forceFill([
-                    'password' => Hash::make($this->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
-
-                event(new PasswordReset($user));
-            }
-        );
-
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
-        if ($status != Password::PasswordReset) {
-            $this->addError('email', __($status));
-
-            return;
+        // check if the token exists and is valid
+        $tokenData = \DB::table('password_reset_tokens')->where('token', $token)->first();
+        if (!$tokenData || \Carbon\Carbon::parse($tokenData->created_at)->addMinutes(60)->isPast()) {
+            return back()->withErrors(['token' => 'This password reset token is invalid or has expired.']);
         }
 
-        Session::flash('status', __($status));
+        // change the user's password
+        $user = \App\Models\User::where('email', $tokenData->email)->first();
+        if (!$user) {
+            return back()->withErrors(['email' => 'No user found for this email address.']);
+        }
 
-        $this->redirectRoute('login', navigate: true);
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+        event(new PasswordReset($user));
+
+        \DB::table('password_reset_tokens')->where('email', $tokenData->email)->delete();
+        Session::flash('success', 'Your password has been reset successfully. You can now log in with your new password.');
+        return redirect()->route('showLoginForm');
+
     }
 }

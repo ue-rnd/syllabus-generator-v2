@@ -36,5 +36,15 @@
                 {{ $message }}
             </div>
         @enderror
+        @if (session('success'))
+            <div class="bg-green-800 w-full p-4 rounded text-white">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="bg-red-700 w-full p-4 rounded text-white">
+                {{ session('error') }}
+            </div>
+        @endif
     </div>
 @endsection

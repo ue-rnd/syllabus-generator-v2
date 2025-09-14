@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 #[Layout('components.layouts.app.main-layout')]
 class Login extends Controller {
-    public function showLoginForm() {
+    public function render() {
         return view('livewire.auth.login');
     }
 
