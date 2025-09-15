@@ -90,4 +90,20 @@ class College extends Model
     {
         return $this->hasManyThrough(Program::class, Department::class);
     }
+
+    /**
+     * Get all users belonging to this college.
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    /**
+     * Get all syllabi belonging to this college.
+     */
+    public function syllabi()
+    {
+        return $this->hasMany(Syllabus::class);
+    }
 }

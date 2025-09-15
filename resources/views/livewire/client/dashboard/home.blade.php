@@ -22,37 +22,68 @@
         </div>
     </div>
     <div class="border-b-2 border-gray-300 pb-2 flex items-center justify-between text-lg max-w-7xl mx-auto">
-        <h4>Available</h4>
+        <h4>My Syllabi</h4>
         <div class="flex items-center space-x-2">
             <p>Home</p>
             <span>></span>
-            <p>Curricular</p>
+            <p>Syllabi</p>
         </div>
     </div>
-    <div class="grid grid-cols-4 gap-4 max-w-7xl mx-auto">
-        @foreach([1,2,3,4] as $count)
-        <div class="border bg-white p-4 rounded shadow">
-            <div class="space-y-2">
-                <img src="http://placehold.co/175x175" alt="College Logo" class="mx-auto">
-                <h4 class="text-center text-red-700 font-medium">CCSS</h4>
-                <h2 class="text-center">College of Computer Studies and Systems</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        {{-- TODO: Replace with dynamic syllabi data filtered by user's college --}}
+        {{-- $syllabi = auth()->user()->college?->syllabi()->with(['course', 'user'])->published()->latest()->get() ?? collect() --}}
+        @foreach([1,2,3,4,5,6] as $count)
+        <div class="border bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-8 h-8 text-red-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="text-sm font-medium text-gray-600">Syllabus #{{$count}}</span>
+                    </div>
+                    <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Published</span>
+                </div>
+
+                <div class="space-y-2">
+                    <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">
+                        Introduction to Computer Science
+                    </h3>
+                    <p class="text-sm text-gray-600">Course Code: CS101</p>
+                    <p class="text-sm text-gray-600">College: College of Computer Studies and Systems</p>
+                </div>
+
+                <div class="flex items-center justify-between pt-2 border-t">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-xs text-gray-500">Updated 2 days ago</span>
+                    </div>
+                    <button class="text-red-700 hover:text-red-800 text-sm font-medium">
+                        View Details →
+                    </button>
+                </div>
             </div>
         </div>
         @endforeach
     </div>
-    <div class="border-b-2 border-gray-300 pb-2 flex items-center justify-between text-xl max-w-7xl mx-auto">
-        <h4>Unavailable</h4>
+
+    {{-- Empty state when no syllabi exist --}}
+    {{-- TODO: Replace with actual syllabi count --}}
+    {{-- @if($syllabi->isEmpty()) --}}
+    @if(count([1,2,3,4,5,6]) == 0)
+    <div class="text-center py-12 max-w-7xl mx-auto">
+        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No syllabi found</h3>
+        <p class="text-gray-600 mb-6">You haven't created any syllabi yet. Get started by creating your first syllabus.</p>
+        <button class="bg-red-700 text-white px-6 py-2 rounded-lg hover:bg-red-800 transition-colors">
+            Create Syllabus
+        </button>
     </div>
-    <div class="grid grid-cols-4 gap-4 max-w-7xl mx-auto">
-        @foreach([1,2,3,4] as $count)
-        <div class="border bg-white p-4 rounded shadow opacity-70">
-            <div class="space-y-2">
-                <img src="http://placehold.co/175x175" alt="College Logo" class="mx-auto">
-                <h4 class="text-center text-red-700 font-medium">CCSS</h4>
-                <h2 class="text-center">College of Computer Studies and Systems</h2>
-            </div>
-        </div>
-        @endforeach
-    </div>
+    @endif
 </div>
 @endsection

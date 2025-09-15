@@ -173,4 +173,12 @@ class User extends Authenticatable
             'last_login_ip' => $ip ?? request()->ip(),
         ]);
     }
+
+    /**
+     * Get the college that the user belongs to
+     */
+    public function college()
+    {
+        return $this->belongsTo(College::class);
+    }
 }
