@@ -13,7 +13,8 @@
                 <h4 class="text-2xl font-medium">Forgot Password</h4>
                 <p class="text-gray-600">Please enter your email address to reset your password.</p>
             </div>
-            <form method="post" class="space-y-4">
+            <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
+                @csrf
                 <div>
                     <label for="email" class="text-gray-600 font-medium">Email</label>
                     <input type="email" name="email" id="email" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
@@ -23,5 +24,15 @@
                 </div>
             </form>
         </div>
+        @if (session('error'))
+            <div class="text-red-600 font-medium">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="p-3 rounded bg-green-800 text-white">
+                {{ session('success') }}
+            </div>
+        @endif
     </div>
 @endsection

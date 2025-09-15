@@ -2,26 +2,38 @@
 
 namespace App\Livewire\Auth;
 
-use Illuminate\Support\Facades\Password;
 use Livewire\Attributes\Layout;
-use Livewire\Component;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 
 #[Layout('components.layouts.app.main-layout')]
-class ForgotPassword extends Component
-{
-    public string $email = '';
+class ForgotPassword extends Controller {
+    public function render(){
+        return view('livewire.auth.forgot-password');
+    }
 
-    /**
-     * Send a password reset link to the provided email address.
-     */
-    public function sendPasswordResetLink(): void
-    {
-        $this->validate([
-            'email' => ['required', 'string', 'email'],
-        ]);
+    public function sendResetLinkEmail(Request $request) {
+        $request->validate(['email' => 'required|email']);
 
-        Password::sendResetLink($this->only('email'));
+        $user = \App\Models\User::where('email', $request->email)->first();
+        if ($user) {
+            $token = \Illuminate\Support\Str::random(60);
 
-        session()->flash('status', __('A reset link will be sent if the account exists.'));
+            \DB::table('password_reset_tokens')->updateOrInsert(
+                ['email' => $request->email],
+                ['token' => $token, 'created_at' => now()]
+            );
+
+            $resetLink = url("/reset-password/{$token}");
+            \Mail::raw("Click here to reset your password: $resetLink", function ($message) use ($request) {
+                $message->to($request->email)
+                        ->subject('Password Reset Link');
+            });
+            
+        }
+
+        session()->flash('success', 'If the email address exists in our records, you will receive a password reset link shortly.');
+        return redirect()->route('password.request');
     }
 }
