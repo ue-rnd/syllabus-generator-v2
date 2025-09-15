@@ -27,7 +27,7 @@
                     <button class="w-full bg-red-700 text-white py-2 rounded ease duration-200 hover:bg-red-800">Login</button>
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('forgot_password') }}" class="text-red-700">Forgot your password?</a>
+                    <a href="{{ route('password.request') }}" class="text-red-700">Forgot your password?</a>
                 </div>
             </form>
         </div>

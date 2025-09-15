@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('home', function() {
+    Route::get('dashboard', function() {
         return view('livewire.client.dashboard.home');
     })->name('dashboard');
     Route::get('home', function() {
