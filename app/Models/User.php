@@ -218,4 +218,12 @@ class User extends Authenticatable
     {
         return $query->where('is_active', true);
     }
+
+    /**
+     * Get the college that the user belongs to
+     */
+    public function college()
+    {
+        return $this->belongsTo(College::class);
+    }
 }
