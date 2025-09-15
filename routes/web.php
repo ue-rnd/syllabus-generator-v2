@@ -29,25 +29,28 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('home', function() {
-    return view('livewire.client.dashboard.home');
-})->name('dashboard_home');
+Route::middleware(['auth'])->group(function() {
+    Route::get('home', function() {
+        return view('livewire.client.dashboard.home');
+    })->name('dashboard_home');
 
-Route::get('profile', function(){
-    return view('livewire.client.dashboard.profile');
-})->name('profile');
+    Route::get('profile', function(){
+        return view('livewire.client.dashboard.profile');
+    })->name('profile');
 
-Route::get('notifications', function(){
-    return view('livewire.client.dashboard.notifications');
-})->name('notifications');
+    Route::get('notifications', function(){
+        return view('livewire.client.dashboard.notifications');
+    })->name('notifications');
 
-Route::get('bookmarks', function(){
-    return view('livewire.client.dashboard.bookmarks');
-})->name('bookmarks');
+    Route::get('bookmarks', function(){
+        return view('livewire.client.dashboard.bookmarks');
+    })->name('bookmarks');
+
+    Route::get('create_subject', function(){
+        return view('livewire.client.dashboard.create_subject');
+    })->name('create_subject');
+});
 
 
-Route::get("forgot_password", function() {
-    return view('livewire.auth.forgot-password');
-})->name('forgot_password');
 
 require __DIR__.'/auth.php';
