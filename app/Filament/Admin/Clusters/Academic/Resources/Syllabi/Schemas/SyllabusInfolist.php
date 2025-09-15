@@ -116,7 +116,31 @@ class SyllabusInfolist
                     ])
                     ->columns(3)
                     ->columnSpanFull(),
-
+                Section::make('Curricular Details')
+                    ->description('Academic year and schedule')
+                    ->schema([
+                        TextEntry::make('ay_start')
+                            ->label('AY Start')
+                            ->numeric()
+                            ->columnSpan(3),
+                        TextEntry::make('ay_start')
+                            ->label('AY Start')
+                            ->numeric()
+                            ->columnSpan(3),
+                        TextEntry::make('week_prelim')
+                            ->label('Prelims Week')
+                            ->numeric()
+                            ->columnSpan(2),
+                        TextEntry::make('week_midterm')
+                            ->label('Midterms Week')
+                            ->numeric(),
+                        TextEntry::make('week_final')
+                            ->label('Finals Week')
+                            ->numeric(),
+                    ])
+                    ->columns(6)
+                    ->columnSpanFull(),
+                
                 Section::make('Basic Information')
                     ->description('Course identification and college association')
                     ->schema([

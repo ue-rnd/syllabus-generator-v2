@@ -22,6 +22,37 @@ class SyllabusForm
     {
         return $schema
             ->components([
+                Section::make('Curricular Details')
+                    ->description('Academic year and schedule')
+                    ->schema([
+                        TextInput::make('ay_start')
+                            ->label('AY Start')
+                            ->numeric()
+                            ->required()
+                            ->columnSpan(3),
+                        TextInput::make('ay_start')
+                            ->label('AY Start')
+                            ->numeric()
+                            ->required()
+                            ->columnSpan(3),
+                        TextInput::make('week_prelim')
+                            ->label('Prelims Week')
+                            ->numeric()
+                            ->required()
+                            ->columnSpan(2),
+                        TextInput::make('week_midterm')
+                            ->label('Midterms Week')
+                            ->numeric()
+                            ->required()
+                            ->columnSpan(2),
+                        TextInput::make('week_final')
+                            ->label('Finals Week')
+                            ->numeric()
+                            ->required()
+                            ->columnSpan(2),
+                    ])
+                    ->columns(6)
+                    ->columnSpanFull(),
                 Section::make('Basic Information')
                     ->description('Course identification and college association')
                     ->schema([

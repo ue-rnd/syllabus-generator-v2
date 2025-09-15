@@ -49,6 +49,11 @@ class Syllabus extends Model
         'rejected_by_role',
         'rejected_at',
         'parent_syllabus_id',
+        'week_prelim',
+        'week_midterm',
+        'week_final',
+        'ay_start',
+        'ay_end',
     ];
 
     /**
@@ -75,6 +80,11 @@ class Syllabus extends Model
         'assoc_dean_reviewed_at' => 'datetime',
         'dean_approved_at' => 'datetime',
         'rejected_at' => 'datetime',
+        'week_prelim' => 'integer',
+        'week_midterm' => 'integer',
+        'week_final' => 'integer',
+        'ay_start' => 'integer',
+        'ay_end' => 'integer',
     ];
 
     /**
