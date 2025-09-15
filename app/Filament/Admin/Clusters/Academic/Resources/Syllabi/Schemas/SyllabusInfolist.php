@@ -123,8 +123,8 @@ class SyllabusInfolist
                             ->label('AY Start')
                             ->numeric()
                             ->columnSpan(3),
-                        TextEntry::make('ay_start')
-                            ->label('AY Start')
+                        TextEntry::make('ay_end')
+                            ->label('AY End')
                             ->numeric()
                             ->columnSpan(3),
                         TextEntry::make('week_prelim')
