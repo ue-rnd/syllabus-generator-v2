@@ -33,7 +33,7 @@ class SyllabiTable
                 
                 BadgeColumn::make('status')
                     ->label('Status')
-                    ->formatStateUsing(fn (string $state): string => SyllabusConstants::getStatusOptions()[$state] ?? 'Unknown')
+                    ->formatStateUsing(fn (string $state): string => SyllabusConstants::getStatusOptions()[$state])
                     ->color(fn (string $state): string => SyllabusConstants::getStatusColor($state))
                     ->sortable(),
                 

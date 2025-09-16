@@ -24,17 +24,23 @@
         
         {{-- University of the East Header --}}
         @include('pdf.components.info-university', [
-            'logoPath' => public_path('images/logo_ue.png')
+            'logoPath' => public_path('images/logo_ue.png'),
+            'university_mission' => $university_mission,
+            'university_vision'=> $university_vision,
+            'university_core_values' => $university_core_values,
+            'university_guiding_principles' => $university_guiding_principles,
+            'university_institutional_outcomes'=> $university_institutional_outcomes,
         ])
         
         {{-- College Constants --}}
         @include('pdf.components.info-college', [
-            'college' => $college
+            'college' => $college,
+            'programObjectives' => $programObjectives,
         ])
         
         {{-- Program Outcomes --}}
         @include('pdf.components.info-program', [
-            'programOutcomes' => $programOutcomes ?? []
+            'programOutcomes' => $programOutcomes
         ])
         
         {{-- Course Syllabus Details --}}
@@ -43,11 +49,14 @@
             'syllabus' => $syllabus,
             'course_outcomes' => $course_outcomes,
             'prerequisites' => $prerequisites ?? [],
-            'academicYear' => $academicYear ?? date('Y') . '-' . (date('Y') + 1)
+            'academicYear' => $syllabus->ay_start . '-' . $syllabus->ay_end,
         ])
         
         {{-- Learning Matrix --}}
         @include('pdf.components.syllabus-learning-matrix', [
+            'week_prelim' => $syllabus->week_prelim,
+            'week_midterm' => $syllabus->week_midterm,
+            'week_finals' => $syllabus->week_finals,
             'learning_matrix' => $learning_matrix,
             'total_hours' => $total_hours,
         ])

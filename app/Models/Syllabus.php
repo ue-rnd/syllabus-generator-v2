@@ -30,9 +30,6 @@ class Syllabus extends Model
         'grading_system',
         'classroom_policies',
         'consultation_hours',
-        'default_classroom_policies',
-        'default_consultation_hours',
-        'default_grading_system',
         'principal_prepared_by',
         'prepared_by',
         'reviewed_by',
@@ -54,6 +51,7 @@ class Syllabus extends Model
         'week_final',
         'ay_start',
         'ay_end',
+        'program_outcomes'
     ];
 
     /**
@@ -85,6 +83,7 @@ class Syllabus extends Model
         'week_final' => 'integer',
         'ay_start' => 'integer',
         'ay_end' => 'integer',
+        'program_outcomes' => 'array'
     ];
 
     /**
