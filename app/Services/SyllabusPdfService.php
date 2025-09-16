@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Setting;
 use App\Models\Syllabus;
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\View;
@@ -70,8 +71,14 @@ class SyllabusPdfService
     private function preparePdfData(Syllabus $syllabus): array
     {
         $errors = [];
-        
+
         try {
+            $university_mission = Setting::where('key', 'university_mission')->value('value');
+            $university_vision = Setting::where('key', 'university_vision')->value('value');
+            $university_core_values = Setting::where('key', 'university_core_values')->value('value');
+            $university_guiding_principles = Setting::where('key', 'university_guiding_principles')->value('value');
+            $university_institutional_outcomes = Setting::where('key', 'university_institutional_outcomes')->value('value');
+
             // Basic data with error handling
             $course = $syllabus->course;
             $college = $course->college ?? null;
@@ -108,8 +115,11 @@ class SyllabusPdfService
                 }
             }
 
-            // Prepare program outcomes (template for now)
-            $programOutcomes = [];
+            $program = $syllabus->course->programs()->first();
+
+            $programObjectives = $program->objectives;
+
+            $programOutcomes = $syllabus->program_outcomes ?? [];
             
             // Prepare preparers data
             $preparers = $this->getPreparersData($syllabus);
@@ -137,6 +147,12 @@ class SyllabusPdfService
             ];
 
             return [
+                'university_mission' => $university_mission,
+                'university_vision'=> $university_vision,
+                'university_core_values' => $university_core_values,
+                'university_guiding_principles' => $university_guiding_principles,
+                'university_institutional_outcomes'=> $university_institutional_outcomes,
+
                 'syllabus' => $syllabus,
                 'course' => $course,
                 'college' => $college,
@@ -145,8 +161,9 @@ class SyllabusPdfService
                 'approvers' => $approvers,
                 'references' => $references,
                 'otherElements' => $otherElements,
+                'programObjectives' => $programObjectives,
                 'programOutcomes' => $programOutcomes,
-                'learning_matrix' => $this->processingLearningMatrix($syllabus->learning_matrix ?? []),
+                'learning_matrix' => $this->processingLearningMatrix($syllabus, $syllabus->learning_matrix ?? []),
                 'course_outcomes' => $syllabus->course_outcomes ?? [],
                 'total_hours' => $syllabus->total_hours,
                 'approval_details' => $syllabus->getApprovalStatusDetails(),
@@ -163,6 +180,12 @@ class SyllabusPdfService
             
             // Return minimal data structure to prevent template errors
             return [
+                'university_mission' => $university_mission,
+                'university_vision'=> $university_vision,
+                'university_core_values' => $university_core_values,
+                'university_guiding_principles' => $university_guiding_principles,
+                'university_institutional_outcomes'=> $university_institutional_outcomes,
+
                 'syllabus' => $syllabus,
                 'course' => $syllabus->course ?? new \App\Models\Course(),
                 'college' => null,
@@ -229,9 +252,9 @@ class SyllabusPdfService
     /**
      * Process learning matrix for PDF display
      */
-    private function processingLearningMatrix(array $learningMatrix): array
+    private function processingLearningMatrix(Syllabus $syllabus, array $learningMatrix): array
     {
-        return collect($learningMatrix)->map(function ($item) {
+        return collect($learningMatrix)->map(function ($item) use ($syllabus) {
             // Process week range
             $weekDisplay = 'N/A';
             if (isset($item['week_range'])) {
@@ -271,6 +294,11 @@ class SyllabusPdfService
             $assessments = $item['assessments'];
 
             return [
+                'week_prelim' => $syllabus->week_prelim,
+                'week_midterm'=> $syllabus->week_midterm,
+                'week_final' => $syllabus->week_final,
+                'start' => $start,
+                'end'=> $end,
                 'week_display' => $weekDisplay,
                 'learning_outcomes' => $learningOutcomes,
                 'learning_activities' => $learningActivities,

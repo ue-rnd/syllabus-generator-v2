@@ -48,10 +48,14 @@
                         $totalActivities = max(1, count($weekItem['learning_activities'] ?? []));
                         $totalOutcomes = max(1, count($weekItem['learning_outcomes'] ?? []));
                         $maxRows = $totalActivities;
+
+                        $prelim = $startWeek <= $week_prelim && $week_prelim <= $endWeek;
+                        $midterm = $startWeek <= $week_midterm && $week_midterm <= $endWeek;
+                        $finals = $startWeek <= $week_finals && $week_finals <= $endWeek;
                     @endphp
 
                     <tr>
-                        <td rowspan="{{ $maxRows }}" class="center">
+                        <td rowspan="{{ $prelim || $midterm || $finals ? $maxRows + 1 : $maxRows }}" class="center">
                             @if ($startWeek === $endWeek)
                                 {{ $startWeek }}<sup>{{ $startWeek === 1 ? 'st' : ($startWeek === 2 ? 'nd' : ($startWeek === 3 ? 'rd' : 'th')) }}</sup>
                             @else
@@ -126,7 +130,7 @@
                                     @if (isset($weekItem['assessments']))
                                         <ul>
                                             @foreach ($weekItem['assessments'] as $assessment)
-                                                <li>{{ SyllabusConstants::ASSESSMENT_TYPES[$assessment] }}</li>
+                                                <li>{{ SyllabusConstants::getAssessmentTypeOptions()[$assessment] }}</li>
                                             @endforeach
                                         </ul>
                                     @else
@@ -135,6 +139,17 @@
 
                                 </td>
                             @endif
+                    </tr>
+
+                    {{-- if prelim or midterm or finals --}}
+                    <tr>
+                        @if ($prelim)
+                            <td colspan="11" class="center">Preliminary Examination</td>
+                        @elseif ($midterm)
+                            <td colspan="11" class="center">Midterm Examination</td>
+                        @elseif ($finals)
+                            <td colspan="11" class="center">Final Examination</td>
+                        @endif
                     </tr>
                 @endfor
 @endforeach

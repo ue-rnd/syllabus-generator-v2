@@ -28,6 +28,7 @@
                 </div>
                 <div class="text-center">
                     <a href="{{ route('password.request') }}" class="text-red-700">Forgot your password?</a>
+                    {{-- <a href="{{ route('forgot_password') }}" class="text-red-700">Forgot your password?</a> --}}
                 </div>
             </form>
         </div>

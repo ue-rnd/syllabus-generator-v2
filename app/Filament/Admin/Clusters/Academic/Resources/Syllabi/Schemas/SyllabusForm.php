@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Clusters\Academic\Resources\Syllabi\Schemas;
 use App\Constants\SyllabusConstants;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\Setting;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -28,26 +29,46 @@ class SyllabusForm
                         TextInput::make('ay_start')
                             ->label('AY Start')
                             ->numeric()
+                            ->default(function () {
+                                $setting = Setting::where('key', 'default_ay_start')->first();
+                                return $setting ? $setting->value : null;
+                            })
                             ->required()
                             ->columnSpan(3),
-                        TextInput::make('ay_start')
-                            ->label('AY Start')
+                        TextInput::make('ay_end')
+                            ->label('AY End')
                             ->numeric()
+                            ->default(function () {
+                                $setting = Setting::where('key', 'default_ay_end')->first();
+                                return $setting ? $setting->value : null;
+                            })
                             ->required()
                             ->columnSpan(3),
                         TextInput::make('week_prelim')
                             ->label('Prelims Week')
                             ->numeric()
+                            ->default(function () {
+                                $setting = Setting::where('key', 'default_week_prelim')->first();
+                                return $setting ? $setting->value : null;
+                            })
                             ->required()
                             ->columnSpan(2),
                         TextInput::make('week_midterm')
                             ->label('Midterms Week')
                             ->numeric()
+                            ->default(function () {
+                                $setting = Setting::where('key', 'default_week_midterm')->first();
+                                return $setting ? $setting->value : null;
+                            })
                             ->required()
                             ->columnSpan(2),
                         TextInput::make('week_final')
                             ->label('Finals Week')
                             ->numeric()
+                            ->default(function () {
+                                $setting = Setting::where('key', 'default_week_final')->first();
+                                return $setting ? $setting->value : null;
+                            })
                             ->required()
                             ->columnSpan(2),
                     ])
@@ -67,10 +88,31 @@ class SyllabusForm
                                 if ($state) {
                                     $course = Course::find($state);
 
-                                    if ($course && empty($get('name'))) {
+                                    if ($course) {
                                         $set('name', $course->name . ' Syllabus ' . '(' . (new \DateTime())->format('Y-m-d') . ')');
                                         $set('recommending_approval', $course->college->associate_dean_id);
                                         $set('approved_by', $course->college->dean_id);
+
+                                        $program = $course->programs()->first();
+                                        $programOutcomes = $program->outcomes;
+
+                                        function parseOutcome(string $outcomes) {
+                                            $outcome = [];
+
+                                            preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $outcomes, $matches);
+
+                                            foreach ($matches[1] as $li) {
+                                                $outcome[] = array(
+                                                    'content' => trim($li),
+                                                    'addressed' => []
+                                                );
+                                            }
+                                            return $outcome;
+                                        }
+
+                                        $programOutcomesFormatted = parseOutcome($programOutcomes);
+
+                                        $set('program_outcomes', $programOutcomesFormatted);
                                     }
                                 }
                             })
@@ -94,6 +136,32 @@ class SyllabusForm
                             ->rows(3),
                     ])
                     ->columns(2)
+                    ->columnSpanFull(),
+
+                Section::make('Program Outcomes')
+                    ->description('Identify the program outcomes that this course fulfills')
+                    ->schema([
+                        Repeater::make('program_outcomes')
+                            ->label('Program Outcomes')
+                            ->schema([
+                                RichEditor::make('content')
+                                    ->label('Content')
+                                    ->placeholder('Content...')
+                                    ->required()
+                                    ->toolbarButtons([])
+                                    ->columnSpanFull(),
+
+                                Select::make('addressed')
+                                    ->label('How It Was Addressed')
+                                    ->options(SyllabusConstants::getOutcomesAddressedOptions())
+                                    ->multiple()
+                                    ->searchable()
+                                    ->required()
+                                    ->placeholder('Select how the outcome was addressed')
+                                    ->columnSpanFull(),
+                            ])
+                            ->addable(false),
+                    ])
                     ->columnSpanFull(),
 
                 Section::make('Course Outcomes')
@@ -131,7 +199,6 @@ class SyllabusForm
                             ->hiddenLabel()
                             ->columnSpanFull(),
                     ])->columnSpanFull(),
-
 
                 Section::make('Learning Matrix')
                     ->description('Define the learning activities, outcomes, and assessments for each week or week range.')
@@ -237,6 +304,7 @@ class SyllabusForm
                                     ->schema([
                                         RichEditor::make('description')
                                             ->label('Activity Description')
+                                            ->required()
                                             ->toolbarButtons([
                                                 'blockquote',
                                                 'bold',
