@@ -144,12 +144,14 @@ class SyllabusForm
                         Repeater::make('program_outcomes')
                             ->label('Program Outcomes')
                             ->schema([
-                                RichEditor::make('content')
-                                    ->label('Content')
-                                    ->placeholder('Content...')
-                                    ->required()
-                                    ->toolbarButtons([])
-                                    ->columnSpanFull(),
+                                TextInput::make('content')->readOnly(),
+
+                                // RichEditor::make('content')
+                                //     ->label('Content')
+                                //     ->placeholder('Content...')
+                                //     ->required()
+                                //     ->toolbarButtons([])
+                                //     ->columnSpanFull(),
 
                                 Select::make('addressed')
                                     ->label('How It Was Addressed')
