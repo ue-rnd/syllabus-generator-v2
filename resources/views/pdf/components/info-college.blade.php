@@ -16,12 +16,12 @@
         </p>
     @endif
     
-    @if($college && $college->core_values)
+    {{-- @if($college && $college->core_values)
         <h3>College Core Values</h3>
         <p>
             {!! $college->core_values !!}
         </p>
-    @endif
+    @endif --}}
     
     @if($college && $college->objectives)
         <h3>College Objectives</h3>
@@ -40,3 +40,5 @@
         </p>
     @endif
 </div>
+
+<div class="page-break"></div>

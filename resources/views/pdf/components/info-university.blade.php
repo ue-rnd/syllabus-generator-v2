@@ -18,6 +18,8 @@
     {!! $university_core_values !!}
 </div>
 
+<div class="page-break"></div>
+
 <div>
     <div>
         <h3>Guiding Principles</h3>
@@ -27,3 +29,5 @@
         {!! $university_institutional_outcomes !!}
     </div>
 </div>
+
+<div class="page-break"></div>

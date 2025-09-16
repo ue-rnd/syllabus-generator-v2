@@ -90,6 +90,7 @@ class SyllabusForm
 
                                     if ($course) {
                                         $set('name', $course->name . ' Syllabus ' . '(' . (new \DateTime())->format('Y-m-d') . ')');
+                                        $set('reviewed_by', $course->programs()->first()->department->department_chair_id);
                                         $set('recommending_approval', $course->college->associate_dean_id);
                                         $set('approved_by', $course->college->dean_id);
 
@@ -609,9 +610,6 @@ class SyllabusForm
                             ->relationship('reviewer', 'name')
                             ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
-                            ->default(function ($get) {
-
-                            })
                             ->preload()
                             ->columnSpanFull(),
 

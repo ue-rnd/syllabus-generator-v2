@@ -10,7 +10,7 @@
 {{-- Learning Matrix Component --}}
 @if (!empty($learning_matrix))
     <div>
-        <table>
+        <table class="learning-matrix">
             <thead>
                 <tr>
                     <th colspan="11">
@@ -49,6 +49,8 @@
                         $totalOutcomes = max(1, count($weekItem['learning_outcomes'] ?? []));
                         $maxRows = $totalActivities;
 
+                        $weekMultiplier = $endWeek - $startWeek + 1;
+
                         $prelim = $startWeek <= $week_prelim && $week_prelim <= $endWeek;
                         $midterm = $startWeek <= $week_midterm && $week_midterm <= $endWeek;
                         $finals = $startWeek <= $week_finals && $week_finals <= $endWeek;
@@ -65,10 +67,10 @@
                             @endif
                         </td>
                         <td rowspan="{{ $maxRows }}" class="center">
-                            {{ $syllabus->default_lecture_hours }}
+                            {{ $syllabus->default_lecture_hours * $weekMultiplier }}
                         </td>
                         <td rowspan="{{ $maxRows }}" class="center">
-                            {{ $syllabus->default_laboratory_hours }}
+                            {{ $syllabus->default_laboratory_hours * $weekMultiplier }}
                         </td>
                         {{-- Learning Outcome --}}
                         <td rowspan="{{ $maxRows }}">
@@ -142,16 +144,18 @@
                     </tr>
 
                     {{-- if prelim or midterm or finals --}}
-                    <tr>
-                        @if ($prelim)
-                            <td colspan="11" class="center">Preliminary Examination</td>
-                        @elseif ($midterm)
-                            <td colspan="11" class="center">Midterm Examination</td>
-                        @elseif ($finals)
-                            <td colspan="11" class="center">Final Examination</td>
-                        @endif
-                    </tr>
+                    
                 @endfor
+
+                <tr>
+                    @if ($prelim)
+                        <td colspan="11" class="center">Preliminary Examination</td>
+                    @elseif ($midterm)
+                        <td colspan="11" class="center">Midterm Examination</td>
+                    @elseif ($finals)
+                        <td colspan="11" class="center">Final Examination</td>
+                    @endif
+                </tr>
 @endforeach
 </tbody>
 </table>
@@ -199,3 +203,6 @@
         </table>
     </div>
     @endif
+</div>
+
+<div class="page-break"></div>
