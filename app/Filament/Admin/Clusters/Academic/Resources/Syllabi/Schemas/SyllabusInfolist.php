@@ -64,7 +64,7 @@ class SyllabusInfolist
                                 TextEntry::make('action')
                                     ->badge()
                                     ->formatStateUsing(function ($state) {
-                                        return SyllabusConstants::APPROVAL_STATUSES[$state];
+                                        return SyllabusConstants::getApprovalStatusOptions()[$state];
                                     })
                                     ->color(function ($state) {
                                         return SyllabusConstants::getApprovalStatusColor($state);
@@ -105,8 +105,8 @@ class SyllabusInfolist
                         TextEntry::make('rejected_by_role')
                             ->label('Rejected By')
                             ->badge()
-                            ->color(fn($state): string => is_string($state) ? SyllabusConstants::getRoleColor($state) : 'gray')
-                            ->formatStateUsing(fn($state): string => is_string($state) ? (SyllabusConstants::APPROVAL_ROLES[$state] ?? str($state)->replace('_', ' ')->title()) : '')
+                            ->color(fn($state): string => SyllabusConstants::getRoleColor($state))
+                            ->formatStateUsing(fn($state): string => SyllabusConstants::getApprovalRoleOptions()[$state])
                             ->visible(fn($record): bool => !empty($record->rejected_by_role)),
 
                         TextEntry::make('rejected_at')
@@ -159,6 +159,28 @@ class SyllabusInfolist
                     ])
                     ->columns(2)
                     ->columnSpanFull(),
+
+                Section::make('Program Outcomes')
+                    ->description('Identify the program outcomes that this course addresses')
+                    ->schema([
+                        RepeatableEntry::make('program_outcomes')
+                            ->label('Program Outcomes')
+                            ->schema([
+                                TextEntry::make('content')
+                                    ->html()
+                                    ->columnSpanFull(),
+
+                                TextEntry::make('addressed')
+                                    ->formatStateUsing(function ($state): string {
+                                        return SyllabusConstants::getOutcomesAddressedOptions()[$state];
+                                    })
+                                    ->badge()
+                                    ->columnSpanFull()
+                                    ->placeholder('-'),
+                            ])
+                            ->placeholder('-')
+                            ->columnSpanFull(),
+                    ])->columnSpanFull(),
 
                 Section::make('Course Outcomes')
                     ->description('Define the learning outcomes for this course.')
@@ -250,7 +272,7 @@ class SyllabusInfolist
                                             ->html(),
                                         TextEntry::make('modality')
                                             ->formatStateUsing(function ($state) {
-                                                return SyllabusConstants::LEARNING_MODALITIES[$state];
+                                                return SyllabusConstants::getLearningModalityOptions()[$state];
                                             })
                                             ->color(function ($state) {
                                                 return SyllabusConstants::getLearningModalityColor($state);
@@ -265,7 +287,7 @@ class SyllabusInfolist
                                 TextEntry::make('assessments')
                                     ->badge()
                                     ->formatStateUsing(function ($state) {
-                                            return SyllabusConstants::ASSESSMENT_TYPES[$state];
+                                            return SyllabusConstants::getAssessmentTypeOptions()[$state];
                                         })
                                     ->color(function ($state) {
                                             return SyllabusConstants::getAssessmentTypeColor($state);

@@ -32,13 +32,11 @@
     @endif
     
     {{-- Program Educational Objectives Template - Not filled in yet --}}
-    <h3>Program Educational Objectives</h3>
-    <ol>
-        <li>Program Educational Objective 1: (To be defined)</li>
-        <li>Program Educational Objective 2: (To be defined)</li>
-        <li>Program Educational Objective 3: (To be defined)</li>
-        <li>Program Educational Objective 4: (To be defined)</li>
-        <li>Program Educational Objective 5: (To be defined)</li>
-        <li>Program Educational Objective 6: (To be defined)</li>
-    </ol>
+
+    @if ($programObjectives)
+        <h3>Program Educational Objectives</h3>
+        <p>
+            {!! $programObjectives !!}
+        </p>
+    @endif
 </div>

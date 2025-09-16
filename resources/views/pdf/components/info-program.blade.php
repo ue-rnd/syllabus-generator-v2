@@ -33,18 +33,19 @@
             </tr>
         </thead>
         <tbody>
+            {{-- Loop through program outcomes if available --}}
             @if(!empty($programOutcomes))
                 @foreach($programOutcomes as $key => $outcome)
                     <tr>
-                        <td>{!! $outcome['text'] ?? '' !!}</td>
+                        <td>{!! $outcome['content'] ?? '' !!}</td>
                         <td style="text-align: center;">
-                            {!! ($outcome['selection'] ?? '') === 'Introduced' ? '&#10003;' : '&nbsp;' !!}
+                            {!! (in_array('introduced', $outcome['addressed'] ?? []) ? '&check;' : '&nbsp;') !!}
                         </td>
                         <td style="text-align: center;">
-                            {!! ($outcome['selection'] ?? '') === 'Enhanced' ? '&#10003;' : '&nbsp;' !!}
+                            {!! (in_array('enhanced', $outcome['addressed'] ?? []) ? '&check;' : '&nbsp;') !!}
                         </td>
                         <td style="text-align: center;">
-                            {!! ($outcome['selection'] ?? '') === 'Demonstrated' ? '&#10003;' : '&nbsp;' !!}
+                            {!! (in_array('demonstrated', $outcome['addressed'] ?? []) ? '&check;' : '&nbsp;') !!}
                         </td>
                     </tr>
                 @endforeach

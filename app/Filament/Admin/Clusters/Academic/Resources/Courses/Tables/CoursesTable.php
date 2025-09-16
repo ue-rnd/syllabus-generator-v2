@@ -58,6 +58,7 @@ class CoursesTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('sort_order')
             ->filters([
                 TrashedFilter::make(),
             ])
