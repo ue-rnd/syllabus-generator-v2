@@ -45,7 +45,7 @@ class SyllabusForm
                             ->required()
                             ->columnSpan(3),
                         TextInput::make('week_prelim')
-                            ->label('Prelims Week')
+                            ->label('Prelims Exam Week')
                             ->numeric()
                             ->default(function () {
                                 $setting = Setting::where('key', 'default_week_prelim')->first();
@@ -54,7 +54,7 @@ class SyllabusForm
                             ->required()
                             ->columnSpan(2),
                         TextInput::make('week_midterm')
-                            ->label('Midterms Week')
+                            ->label('Midterms Exam Week')
                             ->numeric()
                             ->default(function () {
                                 $setting = Setting::where('key', 'default_week_midterm')->first();
@@ -63,7 +63,7 @@ class SyllabusForm
                             ->required()
                             ->columnSpan(2),
                         TextInput::make('week_final')
-                            ->label('Finals Week')
+                            ->label('Finals Exam Week')
                             ->numeric()
                             ->default(function () {
                                 $setting = Setting::where('key', 'default_week_final')->first();
@@ -80,6 +80,13 @@ class SyllabusForm
                         Select::make('course_id')
                             ->label('Course')
                             ->relationship('course', 'name')
+                            ->formatStateUsing(function ($record) {
+                                if ($record) {
+                                    return "$record->name ($record->code)";
+                                }
+
+                                return "";
+                            })
                             ->searchable()
                             ->preload()
                             ->required()
@@ -199,7 +206,6 @@ class SyllabusForm
                             ])
                             ->addActionLabel('Add Course Outcome')
                             ->collapsible()
-                            ->hiddenLabel()
                             ->columnSpanFull(),
                     ])->columnSpanFull(),
 

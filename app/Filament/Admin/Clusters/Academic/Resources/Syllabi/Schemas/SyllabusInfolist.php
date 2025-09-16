@@ -128,14 +128,14 @@ class SyllabusInfolist
                             ->numeric()
                             ->columnSpan(3),
                         TextEntry::make('week_prelim')
-                            ->label('Prelims Week')
+                            ->label('Prelims Exam Week')
                             ->numeric()
                             ->columnSpan(2),
                         TextEntry::make('week_midterm')
-                            ->label('Midterms Week')
+                            ->label('Midterms Exam Week')
                             ->numeric(),
                         TextEntry::make('week_final')
-                            ->label('Finals Week')
+                            ->label('Finals Exam Week')
                             ->numeric(),
                     ])
                     ->columns(6)

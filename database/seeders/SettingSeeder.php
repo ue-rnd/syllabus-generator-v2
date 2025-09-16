@@ -33,7 +33,7 @@ class SettingSeeder extends Seeder
 
         Setting::create([
             'key' => 'default_week_prelim',
-            'label' => 'Default Prelims Week',
+            'label' => 'Default Prelims Exam Week',
             'value' => 6,
             'type' => 'number',
             'sort_order' => 3,
@@ -42,7 +42,7 @@ class SettingSeeder extends Seeder
 
         Setting::create([
             'key' => 'default_week_midterm',
-            'label' => 'Default Midterms Week',
+            'label' => 'Default Midterms Exam Week',
             'value' => 12,
             'type' => 'number',
             'sort_order' => 4,
@@ -51,7 +51,7 @@ class SettingSeeder extends Seeder
 
         Setting::create([
             'key' => 'default_week_final',
-            'label' => 'Default Finals Week',
+            'label' => 'Default Finals Exam Week',
             'value' => 18,
             'type' => 'number',
             'sort_order'=> 5,
