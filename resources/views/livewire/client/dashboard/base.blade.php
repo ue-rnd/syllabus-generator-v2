@@ -4,5 +4,6 @@
 	@include('components.dashboard.sidebar')
 	<main class="ml-16 my-10">
 		@yield('content')
+		@yield('scripts')
 	</main>
 @endsection

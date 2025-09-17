@@ -56,6 +56,10 @@ Route::middleware('auth')->group(function () {
     Route::get('create_subject', function(){
         return view('livewire.client.dashboard.create_subject');
     })->name('create_subject');
+
+    Route::get('create_syllabi', function(){
+        return view('livewire.client.dashboard.create_syllabi');
+    })->name('create_syllabi');
 });
 
 

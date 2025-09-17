@@ -4,52 +4,60 @@
     <div class="w-full mx-auto">
         <button class="bg-red-700 text-white px-4 py-1 rounded hover:bg-red-800 ease duration-200">Save</button>
     </div>
-    <div class="w-full border mx-auto bg-white rounded shadow-sm" x-data="{ activeTab: 'outcomes' }">
+    <div class="w-full border mx-auto bg-white rounded shadow-sm" x-data="{ activeTab: 'learning_matrix' }">
         <div class="flex border-b">
-            <button @click="activeTab = 'outcomes'" :class="{'border-red-700 text-red-700': activeTab === 'outcomes'}" class="px-4 py-2 border-b-2">Program Outcomes</button>
             <button @click="activeTab = 'description'" :class="{'border-red-700 text-red-700': activeTab === 'description'}" class="px-4 py-2 border-b-2">Syllabus Description</button>
+            <button @click="activeTab = 'learning_matrix'" :class="{'border-red-700 text-red-700': activeTab === 'learning_matrix'}" class="px-4 py-2 border-b-2">Learning Matrix</button>
+            <button @click="activeTab = 'references'" :class="{'border-red-700 text-red-700': activeTab === 'references'}" class="px-4 py-2 border-b-2">References</button>
+            <button @click="activeTab = 'other_elements'" :class="{'border-red-700 text-red-700': activeTab === 'other_elements'}" class="px-4 py-2 border-b-2">Other elements</button>
+            <button @click="activeTab = 'prepared_by'" :class="{'border-red-700 text-red-700': activeTab === 'prepared_by'}" class="px-4 py-2 border-b-2">Prepared By</button>
         </div>
-        <div x-show="activeTab === 'outcomes'">
-            <div class="p-4 space-y-12">
-                @foreach (range(1,5) as $i)
-                    <div class="space-y-2">
-                        <label for="outcome_{{ $i }}" class="font-medium text-gray-600">Program Outcome {{ $i }}</label>
-                        <div class="grid md:grid-cols-3 grid-cols-1 gap-2">
-                            <div>
-                                <input type="radio" id="introduced_{{ $i }}" name="outcome_type_{{ $i }}" value="introduced" class="hidden peer" required />
-                                <label for="introduced_{{ $i }}" class="inline-flex items-center w-full border justify-center py-4 peer-checked:border-red-700 ease duration-100 rounded peer-checked:text-red-700">                           
-                                    <p>Introduced</p>
-                                </label>
-                            </div>
-                            <div>
-                                <input type="radio" id="enhanced_{{ $i }}" name="outcome_type_{{ $i }}" value="enhanced" class="hidden peer" required />
-                                <label for="enhanced_{{ $i }}" class="inline-flex items-center w-full border justify-center py-4 peer-checked:border-red-700 ease duration-100 rounded peer-checked:text-red-700">                           
-                                    <p>Enhanced</p>
-                                </label>
-                            </div>
-                            <div>
-                                <input type="radio" id="demonstrate_{{ $i }}" name="outcome_type_{{ $i }}" value="demonstrate" class="hidden peer" required />
-                                <label for="demonstrate_{{ $i }}" class="inline-flex items-center w-full border justify-center py-4 peer-checked:border-red-700 ease duration-100 rounded peer-checked:text-red-700">                           
-                                    <p>Demonstrate</p>
-                                </label>
-                            </div>
-                        </div>
-                        <select name="verb" id="verb" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
-                            <option value="remember">Remember</option>
-                            <option value="understand">Understand</option>
-                            <option value="apply">Apply</option>
-                            <option value="analyze">Analyze</option>
-                            <option value="evaluate">Evaluate</option>
-                            <option value="create">Create</option>
-                        </select>
-                        <textarea rows="10" class="w-full border p-4 rounded focus:outline-none focus:ring-1 focus:ring-red-400"></textarea>
+        <div x-show="activeTab === 'learning_matrix'">
+            <div class="p-4 space-y-6">
+                <h4 class="font-medium text-xl">Week 1</h4>
+                <div class="md:flex md:max-w-64 block items-center md:space-x-4">
+                    <div class="space-y-1 w-full max-w-64">
+                        <label for="lecture_hour" class="text-sm font-medium text-gray-600">Lecture Hours</label>
+                        <input type="number" name="lecture_hour" id="lecture_hour" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
                     </div>
-                @endforeach
-                
+                    <div class="space-y-1 w-full max-w-64">
+                        <label for="laboratory_hour" class="text-sm font-medium text-gray-600">Laboratory Hours</label>
+                        <input type="number" name="laboratory_hour" id="laboratory_hour" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
+                    </div>
+                </div>
+                <div class="space-y-1 w-full">
+                    <label for="learning_outcome" class="text-sm font-medium text-gray-600">Learning Outcome</label>
+                    <textarea name="learning_outcome" id="learning_outcome" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400" placeholder="Enter your statement here." rows="6"></textarea>
+                </div>
+                <div class="space-y-1 w-full">
+                    <label for="content" class="text-sm font-medium text-gray-600">Content</label>
+                    <textarea name="content" id="content" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400" placeholder="Enter your statement here." rows="6"></textarea>
+                </div>
+                <h4 class="font-medium text-lg">Teaching Learning Activity 1</h4>
+                <div class="md:flex md:max-w-xl border block items-center md:space-x-4">
+                    <div class="space-y-1">
+                        <label for="title" class="text-sm font-medium text-gray-600">Title</label>
+                        <input type="text" name="title" id="title" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="" class="text-sm font-medium text-gray-600">Modality</label>
+                        <select name="course_modality" id="course_modality" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
+                            <option value="onsite">Onsite</option>
+                            <option value="offsite">Offsite</option>
+                            <option value="hybrid">Hybrid</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         <div x-show="activeTab === 'description'">
-            <div class="p-4 space-y-8">
+            <div class="p-4 space-y-6">
+                <div class="space-y-1 w-full max-w-64">
+                    <label for="school_year" class="text-sm font-medium text-gray-600">School Year</label>
+                    <select name="school_year" id="school_year" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
+                        <option value="2025-2026">2025 - 2026</option>
+                    </select>
+                </div>
                 <div class="md:flex block items-center md:space-x-4">
                     <div class="space-y-1">
                         <label for="course_code" class="text-sm font-medium text-gray-600">Course Code</label>
@@ -60,6 +68,7 @@
                         <input type="text" name="course_title" id="course_title" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400">
                     </div>
                 </div>
+                <h4 class="font-medium text-lg">Credit Units</h4>
                 <div class="md:flex block items-center md:space-x-4">
                     <div class="space-y-1">
                         <label for="lecture_units" class="text-sm font-medium text-gray-600">Lecture Units</label>
@@ -78,8 +87,9 @@
                         <option value="hybrid">Hybrid</option>
                     </select>
                 </div>
+                <h4 class="font-medium text-lg">Pre-Requisite(s)</h4>
                 <div class="space-y-1">
-                    <label for="course_modality" class="text-sm font-medium text-gray-600">Subject</label>
+                    
                     <div class="grid grid-cols-2 max-w-xl w-full gap-4">
                         <div>
                             <label for="course_code_1" class="text-sm font-medium text-gray-600">Course Code 1</label>
@@ -107,8 +117,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="space-y-1">
+                    <label for="course_description" class="text-sm font-medium text-gray-600">Course Description</label>
+                    <textarea name="course_description" id="course_description" class="w-full border p-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" rows="10" placeholder="Enter your statement here."></textarea>
+                </div>
+                <div class="space-y-1">
+                    <label for="course_outcome" class="text-sm font-medium text-gray-600">Course Outcome</label>
+                    <textarea name="course_outcome" id="course_outcome" class="w-full border p-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" rows="10" placeholder="Enter your statement here."></textarea>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    
 @endsection
