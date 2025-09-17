@@ -92,7 +92,7 @@ class CourseForm
                             ->schema([
                                 Select::make('verb')
                                     ->label('Action Verb')
-                                    ->options(SyllabusConstants::getActionVerbOptions())
+                                    ->options(SyllabusConstants::ACTION_VERBS)
                                     ->searchable()
                                     ->required()
                                     ->placeholder('Select an action verb'),
@@ -101,17 +101,11 @@ class CourseForm
                                     ->label('Outcome Description')
                                     ->placeholder('Complete the outcome statement...')
                                     ->required()
-                                    ->toolbarButtons([
-                                        'blockquote',
-                                        'bold',
-                                        'bulletList',
-                                        'italic',
-                                        'link',
-                                        'orderedList',
-                                        'redo',
-                                        'strike',
-                                        'undo',
-                                    ])
+                                    ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo']])
                                     ->columnSpanFull(),
                             ])
                             ->addActionLabel('Add Course Outcome')

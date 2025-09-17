@@ -46,30 +46,18 @@ class ProgramForm
                         Textarea::make('description')
                             ->columnSpanFull(),
                         RichEditor::make('outcomes')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo']])
                             ->columnSpanFull(),
                         RichEditor::make('objectives')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo']])
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),

@@ -4,15 +4,15 @@ namespace App\Filament\Admin\Clusters\Academic\Resources\Syllabi\Schemas;
 
 use App\Constants\SyllabusConstants;
 use App\Models\Course;
-use App\Models\User;
 use App\Models\Setting;
+use App\Models\User;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -31,6 +31,7 @@ class SyllabusForm
                             ->numeric()
                             ->default(function () {
                                 $setting = Setting::where('key', 'default_ay_start')->first();
+
                                 return $setting ? $setting->value : null;
                             })
                             ->required()
@@ -40,6 +41,7 @@ class SyllabusForm
                             ->numeric()
                             ->default(function () {
                                 $setting = Setting::where('key', 'default_ay_end')->first();
+
                                 return $setting ? $setting->value : null;
                             })
                             ->required()
@@ -49,6 +51,7 @@ class SyllabusForm
                             ->numeric()
                             ->default(function () {
                                 $setting = Setting::where('key', 'default_week_prelim')->first();
+
                                 return $setting ? $setting->value : null;
                             })
                             ->required()
@@ -58,6 +61,7 @@ class SyllabusForm
                             ->numeric()
                             ->default(function () {
                                 $setting = Setting::where('key', 'default_week_midterm')->first();
+
                                 return $setting ? $setting->value : null;
                             })
                             ->required()
@@ -67,6 +71,7 @@ class SyllabusForm
                             ->numeric()
                             ->default(function () {
                                 $setting = Setting::where('key', 'default_week_final')->first();
+
                                 return $setting ? $setting->value : null;
                             })
                             ->required()
@@ -80,12 +85,12 @@ class SyllabusForm
                         Select::make('course_id')
                             ->label('Course')
                             ->relationship('course', 'name')
-                            ->formatStateUsing(function ($record) {
+                            ->getOptionLabelFromRecordUsing(function ($record) {
                                 if ($record) {
-                                    return "$record->name ($record->code)";
+                                    return "[$record->code] $record->name";
                                 }
 
-                                return "";
+                                return '';
                             })
                             ->searchable()
                             ->preload()
@@ -96,7 +101,7 @@ class SyllabusForm
                                     $course = Course::find($state);
 
                                     if ($course) {
-                                        $set('name', $course->name . ' Syllabus ' . '(' . (new \DateTime())->format('Y-m-d') . ')');
+                                        $set('name', $course->name.' Syllabus '.'('.(new \DateTime)->format('Y-m-d').')');
                                         $set('reviewed_by', $course->programs()->first()->department->department_chair_id);
                                         $set('recommending_approval', $course->college->associate_dean_id);
                                         $set('approved_by', $course->college->dean_id);
@@ -104,17 +109,19 @@ class SyllabusForm
                                         $program = $course->programs()->first();
                                         $programOutcomes = $program->outcomes;
 
-                                        function parseOutcome(string $outcomes) {
+                                        function parseOutcome(string $outcomes)
+                                        {
                                             $outcome = [];
 
                                             preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $outcomes, $matches);
 
                                             foreach ($matches[1] as $li) {
-                                                $outcome[] = array(
+                                                $outcome[] = [
                                                     'content' => trim($li),
-                                                    'addressed' => []
-                                                );
+                                                    'addressed' => [],
+                                                ];
                                             }
+
                                             return $outcome;
                                         }
 
@@ -123,8 +130,7 @@ class SyllabusForm
                                         $set('program_outcomes', $programOutcomesFormatted);
                                     }
                                 }
-                            })
-                            ,
+                            }),
 
                         TextInput::make('name')
                             ->required()
@@ -152,14 +158,12 @@ class SyllabusForm
                         Repeater::make('program_outcomes')
                             ->label('Program Outcomes')
                             ->schema([
-                                TextInput::make('content')->readOnly(),
-
-                                // RichEditor::make('content')
-                                //     ->label('Content')
-                                //     ->placeholder('Content...')
-                                //     ->required()
-                                //     ->toolbarButtons([])
-                                //     ->columnSpanFull(),
+                                RichEditor::make('content')
+                                    ->label('Content')
+                                    ->placeholder('Content...')
+                                    ->required()
+                                    ->toolbarButtons([])
+                                    ->columnSpanFull(),
 
                                 Select::make('addressed')
                                     ->label('How It Was Addressed')
@@ -170,7 +174,8 @@ class SyllabusForm
                                     ->placeholder('Select how the outcome was addressed')
                                     ->columnSpanFull(),
                             ])
-                            ->addable(false),
+                            ->addable(false)
+                            ->deletable(false),
                     ])
                     ->columnSpanFull(),
 
@@ -182,7 +187,7 @@ class SyllabusForm
                             ->schema([
                                 Select::make('verb')
                                     ->label('Action Verb')
-                                    ->options(SyllabusConstants::getActionVerbOptions())
+                                    ->options(SyllabusConstants::ACTION_VERBS)
                                     ->searchable()
                                     ->required()
                                     ->placeholder('Select an action verb'),
@@ -191,17 +196,11 @@ class SyllabusForm
                                     ->label('Outcome Description')
                                     ->placeholder('Complete the outcome statement...')
                                     ->required()
-                                    ->toolbarButtons([
-                                        'blockquote',
-                                        'bold',
-                                        'bulletList',
-                                        'italic',
-                                        'link',
-                                        'orderedList',
-                                        'redo',
-                                        'strike',
-                                        'undo',
-                                    ])
+                                    ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                        ['table', 'attachFiles'],
+                                        ['undo', 'redo']])
                                     ->columnSpanFull(),
                             ])
                             ->addActionLabel('Add Course Outcome')
@@ -244,7 +243,7 @@ class SyllabusForm
                                             ->columnSpanFull(),
 
                                         TextInput::make('week_range.start')
-                                            ->label(fn($get) => $get('week_range.is_range') ? 'Week Start' : 'Week')
+                                            ->label(fn ($get) => $get('week_range.is_range') ? 'Week Start' : 'Week')
                                             ->numeric()
                                             ->required()
                                             ->minValue(1)
@@ -253,26 +252,20 @@ class SyllabusForm
                                         TextInput::make('week_range.end')
                                             ->label('Week End')
                                             ->numeric()
-                                            ->required(fn($get) => $get('week_range.is_range'))
-                                            ->visible(fn($get) => $get('week_range.is_range'))
-                                            ->minValue(fn($get) => $get('week_range.start') ?? 1)
+                                            ->required(fn ($get) => $get('week_range.is_range'))
+                                            ->visible(fn ($get) => $get('week_range.is_range'))
+                                            ->minValue(fn ($get) => $get('week_range.start') ?? 1)
                                             ->maxValue(20),
                                     ]),
 
                                 RichEditor::make('content')
                                     ->label('Content')
                                     ->placeholder('Add item content...')
-                                    ->toolbarButtons([
-                                        'blockquote',
-                                        'bold',
-                                        'bulletList',
-                                        'italic',
-                                        'link',
-                                        'orderedList',
-                                        'redo',
-                                        'strike',
-                                        'undo',
-                                    ])
+                                    ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                        ['table', 'attachFiles'],
+                                        ['undo', 'redo']])
                                     ->required()
                                     ->columnSpanFull(),
 
@@ -281,7 +274,7 @@ class SyllabusForm
                                     ->schema([
                                         Select::make('verb')
                                             ->label('Action Verb')
-                                            ->options(SyllabusConstants::getActionVerbOptions())
+                                            ->options(SyllabusConstants::ACTION_VERBS)
                                             ->searchable()
                                             ->required()
                                             ->placeholder('Select an action verb'),
@@ -290,17 +283,11 @@ class SyllabusForm
                                             ->label('Outcome Description')
                                             ->placeholder('Complete the outcome statement...')
                                             ->required()
-                                            ->toolbarButtons([
-                                                'blockquote',
-                                                'bold',
-                                                'bulletList',
-                                                'italic',
-                                                'link',
-                                                'orderedList',
-                                                'redo',
-                                                'strike',
-                                                'undo',
-                                            ])
+                                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                                ['table', 'attachFiles'],
+                                                ['undo', 'redo']])
                                             ->columnSpanFull(),
                                     ])
                                     ->addActionLabel('Add Learning Outcome')
@@ -314,17 +301,11 @@ class SyllabusForm
                                         RichEditor::make('description')
                                             ->label('Activity Description')
                                             ->required()
-                                            ->toolbarButtons([
-                                                'blockquote',
-                                                'bold',
-                                                'bulletList',
-                                                'italic',
-                                                'link',
-                                                'orderedList',
-                                                'redo',
-                                                'strike',
-                                                'undo',
-                                            ])
+                                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                                ['table', 'attachFiles'],
+                                                ['undo', 'redo']])
                                             ->columnSpanFull(),
 
                                         Select::make('modality')
@@ -335,17 +316,11 @@ class SyllabusForm
                                         RichEditor::make('reference')
                                             ->label('Reference/Resource')
                                             ->placeholder('Add reference or resource details...')
-                                            ->toolbarButtons([
-                                                'blockquote',
-                                                'bold',
-                                                'bulletList',
-                                                'italic',
-                                                'link',
-                                                'orderedList',
-                                                'redo',
-                                                'strike',
-                                                'undo',
-                                            ])
+                                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                                ['table', 'attachFiles'],
+                                                ['undo', 'redo']])
                                             ->columnSpanFull(),
                                     ])
                                     ->addActionLabel('Add Learning Activity')
@@ -363,7 +338,7 @@ class SyllabusForm
                             ->addActionLabel('Add Item')
                             ->collapsible()
                             ->itemLabel(function (array $state): ?string {
-                                if (!isset($state['week_range'])) {
+                                if (! isset($state['week_range'])) {
                                     return 'New Week';
                                 }
 
@@ -372,7 +347,7 @@ class SyllabusForm
                                 $end = $weekRange['end'] ?? null;
                                 $isRange = $weekRange['is_range'] ?? false;
 
-                                if (!$start) {
+                                if (! $start) {
                                     return 'New Week';
                                 }
 
@@ -404,37 +379,39 @@ class SyllabusForm
                                             $isRange = $weekRange['is_range'] ?? false;
 
                                             // Ensure $start and $end are numeric
-                                            if (!is_null($start) && !is_numeric($start)) {
-                                                $start = preg_replace('/[^\d.]/', '', (string)$start);
+                                            if (! is_null($start) && ! is_numeric($start)) {
+                                                $start = preg_replace('/[^\d.]/', '', (string) $start);
                                             }
-                                            if (!is_null($end) && !is_numeric($end)) {
-                                                $end = preg_replace('/[^\d.]/', '', (string)$end);
+                                            if (! is_null($end) && ! is_numeric($end)) {
+                                                $end = preg_replace('/[^\d.]/', '', (string) $end);
                                             }
-                                            $start = is_numeric($start) ? (int)$start : null;
-                                            $end = is_numeric($end) ? (int)$end : $start;
+                                            $start = is_numeric($start) ? (int) $start : null;
+                                            $end = is_numeric($end) ? (int) $end : $start;
 
-                                            if (!$start) {
-                                                $errors[] = "Item " . ($index + 1) . ": Week is required";
+                                            if (! $start) {
+                                                $errors[] = 'Item '.($index + 1).': Week is required';
+
                                                 continue;
                                             }
 
                                             if ($isRange && $start > $end) {
-                                                $errors[] = "Item " . ($index + 1) . ": Start week must be less than or equal to end week";
+                                                $errors[] = 'Item '.($index + 1).': Start week must be less than or equal to end week';
+
                                                 continue;
                                             }
 
                                             // Check for overlaps
                                             for ($week = $start; $week <= $end; $week++) {
                                                 if (isset($occupiedWeeks[$week])) {
-                                                    $errors[] = "Week {$week} is used in multiple items (Item " . ($index + 1) . ")";
+                                                    $errors[] = "Week {$week} is used in multiple items (Item ".($index + 1).')';
                                                 } else {
                                                     $occupiedWeeks[$week] = true;
                                                 }
                                             }
                                         }
 
-                                        if (!empty($errors)) {
-                                            $fail('Week validation errors: ' . implode('; ', $errors));
+                                        if (! empty($errors)) {
+                                            $fail('Week validation errors: '.implode('; ', $errors));
                                         }
                                     };
                                 },
@@ -448,65 +425,41 @@ class SyllabusForm
                         RichEditor::make('textbook_references')
                             ->label('Textbook References')
                             ->placeholder('Add textbook references...')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
 
                         RichEditor::make('adaptive_digital_solutions')
                             ->label('Adaptive Digital Solutions')
                             ->placeholder('Add digital solutions...')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
 
                         RichEditor::make('online_references')
                             ->label('Online References')
                             ->placeholder('Add online references...')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
 
                         RichEditor::make('other_references')
                             ->label('Other References')
                             ->placeholder('Add other references...')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
@@ -516,51 +469,38 @@ class SyllabusForm
                     ->schema([
                         RichEditor::make('grading_system')
                             ->label('Grading System')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'table',
-                                'undo',
-                            ])
-                            ->default('<table><tr><th>Component</th><th>Percentage</th></tr><tr><td>Class Participation</td><td>10%</td></tr><tr><td>Quizzes & Assignments</td><td>30%</td></tr><tr><td>Midterm Examination</td><td>25%</td></tr><tr><td>Final Examination</td><td>35%</td></tr></table><br><strong>Grading Scale:</strong><br>A: 90-100<br>B: 80-89<br>C: 70-79<br>D: 60-69<br>F: Below 60')
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
+                            ->default('Cumulative Grading System is prescribed by the University. As such, the following computations are applied:
+
+Midterm Grade = (Prelim Grade + 2 (Tentative Midterm Grade)) / 3
+
+Final Grade = (Midterm Grade + 2 (Tentative Final Grade)) / 3')
                             ->columnSpanFull(),
 
                         RichEditor::make('classroom_policies')
                             ->label('Classroom Policies')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
-                            ->default("1. Attendance is mandatory for all class sessions.<br>2. Late submissions will be penalized according to the course policy.<br>3. Academic integrity must be maintained at all times.<br>4. Respectful behavior is expected from all students.<br>5. Electronic devices should be used for academic purposes only during class.")
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
+                            ->default('See Student Manual
+
+See Canvas Course Page')
                             ->columnSpanFull(),
 
                         RichEditor::make('consultation_hours')
                             ->label('Consultation Hours')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
-                            ->default("Monday to Friday: 2:00 PM - 4:00 PM<br>By appointment: Contact through official email<br>Response time: Within 24-48 hours for email inquiries")
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
+                            ->default('Monday to Friday: 2:00 PM - 4:00 PM<br>By appointment: Contact through official email<br>Response time: Within 24-48 hours for email inquiries')
                             ->columnSpanFull(),
                     ])->columnSpanFull(),
 
@@ -569,7 +509,7 @@ class SyllabusForm
                         Select::make('principal_prepared_by')
                             ->label('Principal Prepared By')
                             ->relationship('principalPreparer', 'name')
-                            ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
                             ->required()
@@ -579,12 +519,19 @@ class SyllabusForm
                         Repeater::make('prepared_by')
                             ->label('Additional Preparers')
                             ->schema([
+                                TextEntry::make('index')
+                                    ->label('No.')
+                                    ->default(fn ($index) => $index + 1)
+                                    ->live(),
+
                                 Select::make('user_id')
                                     ->label('Faculty Member')
                                     ->options(User::all()->pluck('full_name', 'id'))
                                     ->searchable()
                                     ->required()
-                                    ->preload(),
+                                    ->preload()
+                                    ->distinct()
+                                    ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
 
                                 TextInput::make('role')
                                     ->label('Role/Position')
@@ -594,27 +541,41 @@ class SyllabusForm
                                 RichEditor::make('description')
                                     ->label('Description')
                                     ->placeholder('Additional details about their contribution')
-                                    ->toolbarButtons([
-                                        'blockquote',
-                                        'bold',
-                                        'bulletList',
-                                        'italic',
-                                        'link',
-                                        'orderedList',
-                                        'redo',
-                                        'strike',
-                                        'undo',
-                                    ])
+                                    ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                        ['table', 'attachFiles'],
+                                        ['undo', 'redo']])
+                                    ->columnSpanFull(),
+
+                                Toggle::make('is_reviewer')
+                                    ->label('Is Reviewer?'),
+
+                                TextEntry::make('library_committee_note')
+                                    ->label(fn ($index) => $index)
+                                    ->default('Is a member of the library committee')
+                                    ->visible(fn ($get, $record, $index) => $get('index') === count($get('../') ?? []) - 2)
+                                    ->columnSpanFull(),
+
+                                TextEntry::make('external_reviewer_note')
+                                    ->label('')
+                                    ->default('Is an external reviewer')
+                                    ->visible(fn ($get, $record, $index) => $get('index') === count($get('../') ?? []) - 1)
                                     ->columnSpanFull(),
                             ])
                             ->addActionLabel('Add Preparer')
                             ->collapsible()
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->live(),
 
                         Select::make('reviewed_by')
-                            ->label('Reviewed By (Department Chair)')
+                            ->label('Verified By (Department Chair)')
                             ->relationship('reviewer', 'name')
-                            ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
+                            ->options(
+                                User::where('position', 'department_chair')
+                                    ->pluck('name', 'id')
+                            )
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
                             ->columnSpanFull(),
@@ -622,14 +583,22 @@ class SyllabusForm
                         Select::make('recommending_approval')
                             ->label('Recommending Approval (Associate Dean)')
                             ->relationship('recommendingApprover', 'name')
-                            ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
+                            ->options(
+                                User::where('position', 'associate_dean')
+                                    ->pluck('name', 'id')
+                            )
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload(),
 
                         Select::make('approved_by')
                             ->label('Approved By (Dean)')
                             ->relationship('approver', 'name')
-                            ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name ?? $record->name)
+                            ->options(
+                                User::where('position', 'dean')
+                                    ->pluck('name', 'id')
+                            )
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload(),
 

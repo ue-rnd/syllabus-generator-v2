@@ -93,17 +93,11 @@ class SettingResource extends Resource
                             'richtext' => [
                                 RichEditor::make('value')
                                     ->label($record->label)
-                                    ->toolbarButtons([
-                                        'blockquote',
-                                        'bold',
-                                        'bulletList',
-                                        'italic',
-                                        'link',
-                                        'orderedList',
-                                        'redo',
-                                        'strike',
-                                        'undo',
-                                    ])
+                                    ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo']])
                                     ->required()
                             ],
                             default => [

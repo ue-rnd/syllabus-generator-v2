@@ -38,7 +38,13 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
+                \App\Filament\Admin\Widgets\StatsOverviewWidget::class,
+                \App\Filament\Admin\Widgets\SystemHealthWidget::class,
+                \App\Filament\Admin\Widgets\CollegesChartWidget::class,
+                \App\Filament\Admin\Widgets\SyllabiGenerationChartWidget::class,
+                \App\Filament\Admin\Widgets\LatestSyllabiWidget::class,
+                \App\Filament\Admin\Widgets\ActiveCoursesWidget::class,
+                \App\Filament\Admin\Widgets\QuickStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

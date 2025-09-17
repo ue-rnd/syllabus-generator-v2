@@ -171,6 +171,7 @@ class SyllabusInfolist
                                     ->columnSpanFull(),
 
                                 TextEntry::make('addressed')
+                                ->label('How It Was Addressed')
                                     ->formatStateUsing(function ($state): string {
                                         return SyllabusConstants::getOutcomesAddressedOptions()[$state];
                                     })

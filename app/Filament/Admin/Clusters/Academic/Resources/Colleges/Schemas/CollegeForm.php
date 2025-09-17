@@ -45,6 +45,10 @@ class CollegeForm
                         Select::make('dean_id')
                             ->label('Dean')
                             ->relationship('dean', 'name')
+                            ->options(
+                                User::where('position', 'dean')
+                                    ->pluck('name', 'id')
+                            )
                             ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
@@ -53,6 +57,10 @@ class CollegeForm
                         Select::make('associate_dean_id')
                             ->label('Associate Dean')
                             ->relationship('associateDean', 'name')
+                            ->options(
+                                User::where('position', 'associate_dean')
+                                    ->pluck('name', 'id')
+                            )
                             ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
@@ -66,57 +74,33 @@ class CollegeForm
                     ->description('Core institutional values and objectives')
                     ->schema([
                         RichEditor::make('mission')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo']])
                             ->columnSpanFull(),
                         RichEditor::make('vision')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo']])
                             ->columnSpanFull(),
                         RichEditor::make('core_values')
                             ->label('Core Values')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo']])
                             ->columnSpanFull(),
                         RichEditor::make('objectives')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'undo',
-                            ])
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo']])
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),

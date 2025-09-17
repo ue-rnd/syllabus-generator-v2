@@ -28,6 +28,10 @@ class DepartmentForm
                         Select::make('department_chair_id')
                             ->label('Department Chair')
                             ->relationship('departmentChair', 'name')
+                            ->options(
+                                User::where('position', 'department_chair')
+                                    ->pluck('name', 'id')
+                            )
                             ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name)
                             ->searchable(['firstname', 'lastname', 'middlename', 'name'])
                             ->preload()
