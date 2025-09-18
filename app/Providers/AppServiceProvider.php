@@ -19,6 +19,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
         
+        // Alternative approach - force HTTPS if behind proxy
+        if (request()->header('x-forwarded-proto') == 'https') {
+            URL::forceScheme('https');
+        }   
     }
 }
