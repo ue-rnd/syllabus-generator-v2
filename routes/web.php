@@ -9,7 +9,6 @@ use App\Livewire\Client\Dashboard\Profile as DashboardProfile;
 use App\Livewire\Client\Dashboard\Notifications;
 use App\Livewire\Client\Dashboard\Bookmarks;
 use App\Livewire\Client\Syllabi\CreateSyllabus;
-use App\Models\Syllabus as SyllabusModel;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
