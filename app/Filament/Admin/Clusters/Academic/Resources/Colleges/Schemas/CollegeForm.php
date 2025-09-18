@@ -95,13 +95,11 @@ class CollegeForm
         ['table', 'attachFiles'],
         ['undo', 'redo']])
                             ->columnSpanFull(),
-                        RichEditor::make('objectives')
-                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-        ['table', 'attachFiles'],
-        ['undo', 'redo']])
-                            ->columnSpanFull(),
+                        Textarea::make('objectives_text')
+                            ->label('Objectives')
+                            ->columnSpanFull()
+                            ->rows(4)
+                            ->helperText('Enter each objective on a new line'),
                     ])
                     ->columnSpanFull(),
 

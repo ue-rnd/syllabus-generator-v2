@@ -21,6 +21,7 @@ class College extends Model
         'vision',
         'core_values',
         'objectives',
+        'objectives_text',
         'is_active',
         'sort_order',
         'logo_path',
@@ -38,6 +39,29 @@ class College extends Model
         'dean_id' => 'integer',
         'associate_dean_id' => 'integer',
     ];
+
+    /**
+     * Get the objectives as a formatted string for display.
+     */
+    public function getObjectivesTextAttribute()
+    {
+        if (is_array($this->objectives)) {
+            return implode("\n", $this->objectives);
+        }
+        return $this->objectives;
+    }
+
+    /**
+     * Set the objectives from a text string.
+     */
+    public function setObjectivesTextAttribute($value)
+    {
+        if (is_string($value)) {
+            $this->objectives = array_filter(array_map('trim', explode("\n", $value)));
+        } else {
+            $this->objectives = $value;
+        }
+    }
 
     /**
      * Scope a query to only include active colleges.
