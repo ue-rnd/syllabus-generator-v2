@@ -8,13 +8,14 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libzip-dev \
     zip \
     curl \
     npm \
     libicu-dev
 
-# Install PHP extensions (including intl)
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd intl
+# Install PHP extensions (including intl and zip)
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd intl zip
 
 # Install Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
