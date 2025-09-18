@@ -35,7 +35,7 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # Copy Environment
-RUN cp .env.example .env
+# RUN cp .env.example .env
 RUN php artisan migrate --seed
 RUN php artisan key:generate
 RUN php artisan storage:link
