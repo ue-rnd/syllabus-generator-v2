@@ -61,12 +61,12 @@
                          @this.set(this.wireModel, content);
                      });
                      
-                     // Watch for Livewire property changes and update editor content
-                     this.$watch('$wire.{{ $wireModel }}', (newValue) => {
-                         if (this.quill && newValue !== this.quill.root.innerHTML) {
-                             this.quill.root.innerHTML = newValue || '';
-                         }
-                     });
+                    // Watch for Livewire property changes and update editor content
+                    this.$watch(() => @this.get(this.wireModel), (newValue) => {
+                        if (this.quill && newValue !== this.quill.root.innerHTML) {
+                            this.quill.root.innerHTML = newValue || '';
+                        }
+                    });
                      
                      // Listen for step navigation events to refresh content
                      this.$wire.on('step-changed', () => {

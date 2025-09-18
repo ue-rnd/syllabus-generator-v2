@@ -48,7 +48,7 @@ class Home extends Component
         $user = Auth::user();
         
         // Get syllabi where user is the principal preparer or assigned in prepared_by
-        $syllabiQuery = Syllabus::with(['course', 'principalPreparer'])
+        $syllabiQuery = Syllabus::with(['course.college', 'principalPreparer'])
             ->where(function ($query) use ($user) {
                 $query->where('principal_prepared_by', $user->id)
                       ->orWhereJsonContains('prepared_by', [['user_id' => $user->id]]);

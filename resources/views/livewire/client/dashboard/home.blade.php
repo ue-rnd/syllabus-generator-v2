@@ -1,17 +1,17 @@
 <div class="p-4 space-y-10">
     <div>
-        <div class="grid grid-cols-2 gap-2 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
         <div class="space-y-4">
             <div class="flex items-center space-x-4">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book" class="size-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"></path></svg>
                 <h4 class="text-4xl font-medium">Syllabus Generator</h4>
             </div>
-            <button class="flex items-center bg-red-700 text-white px-4 py-2 space-x-2 rounded hover:bg-red-800 transition-colors">
+            <a href="{{ route('syllabus') }}" wire:navigate aria-label="Create Syllabus" class="flex items-center bg-red-700 text-white px-4 py-2 space-x-2 rounded hover:bg-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v2.5h-2.5a.75.75 0 0 0 0 1.5h2.5v2.5a.75.75 0 0 0 1.5 0v-2.5h2.5a.75.75 0 0 0 0-1.5h-2.5v-2.5Z" clip-rule="evenodd" />
                 </svg>
                 <span>Create Syllabus</span>
-            </button>
+            </a>
         </div>
         <div class="border bg-white rounded shadow-sm">
             <div class="border-b p-2 text-sm font-medium text-gray-700 flex space-x-2 items-center">
@@ -23,7 +23,7 @@
     <div class="border-b-2 border-gray-300 pb-2 flex items-center justify-between text-lg max-w-7xl mx-auto">
         <h4>My Syllabi</h4>
         <div class="flex items-center space-x-2">
-            <p>Home</p>
+            <a href="{{ route('home') }}" wire:navigate class="hover:underline">Home</a>
             <span>></span>
             <p>Syllabi</p>
         </div>
@@ -98,9 +98,19 @@
                         </svg>
                         <span class="text-xs text-gray-500">{{ $syllabus->updated_at->diffForHumans() }}</span>
                     </div>
-                    <button class="text-red-700 hover:text-red-800 text-sm font-medium">
-                        View Details →
-                    </button>
+                    <div class="flex items-center gap-3">
+                        <a href="{{ route('syllabus.edit', $syllabus) }}" wire:navigate class="text-gray-700 hover:text-gray-900 text-sm font-medium">
+                            Edit
+                        </a>
+                        <span class="text-gray-300">|</span>
+                        <a href="{{ route('syllabus.pdf.view', $syllabus) }}" target="_blank" rel="noopener" class="text-red-700 hover:text-red-800 text-sm font-medium">
+                            Open PDF
+                        </a>
+                        <span class="text-gray-300">|</span>
+                        <a href="{{ route('syllabus.pdf.download', $syllabus) }}" class="text-gray-700 hover:text-gray-900 text-sm font-medium">
+                            Download
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -119,9 +129,9 @@
                     @endif
                 </p>
                 @if(!$search && !$statusFilter)
-                    <button class="bg-red-700 text-white px-6 py-2 rounded-lg hover:bg-red-800 transition-colors">
+                    <a href="{{ route('syllabus') }}" wire:navigate class="inline-block bg-red-700 text-white px-6 py-2 rounded-lg hover:bg-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
                         Create Syllabus
-                    </button>
+                    </a>
                 @endif
             </div>
         </div>

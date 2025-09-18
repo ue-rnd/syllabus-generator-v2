@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Setting;
 use App\Models\Syllabus;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\View;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -54,7 +56,7 @@ class SyllabusPdfService
             return $pdfPath;
         } catch (\Exception $e) {
             // Log the error for debugging
-            \Log::error('PDF Generation Error: ' . $e->getMessage(), [
+            Log::error('PDF Generation Error: ' . $e->getMessage(), [
                 'syllabus_id' => $syllabus->id,
                 'course_id' => $syllabus->course_id,
                 'trace' => $e->getTraceAsString()
@@ -169,7 +171,7 @@ class SyllabusPdfService
                 'approval_details' => $syllabus->getApprovalStatusDetails(),
                 'academicYear' => $this->getCurrentAcademicYear(),
                 'generated_at' => now(),
-                'generated_by' => auth()->user(),
+                'generated_by' => Auth::user(),
                 'logo_path' => public_path('images/logo_ue.png'),
                 'logo_url' => asset('images/logo_ue.png'),
                 'logo_base64' => $this->getLogoBase64(),
@@ -201,7 +203,7 @@ class SyllabusPdfService
                 'approval_details' => ['status' => 'error'],
                 'academicYear' => date('Y') . '-' . (date('Y') + 1),
                 'generated_at' => now(),
-                'generated_by' => auth()->user(),
+                'generated_by' => Auth::user(),
                 'logo_path' => public_path('images/logo_ue.png'),
                 'logo_url' => asset('images/logo_ue.png'),
                 'logo_base64' => $this->getLogoBase64(),
@@ -291,7 +293,7 @@ class SyllabusPdfService
             })->toArray();
 
             // Process assessments
-            $assessments = $item['assessments'];
+            $assessments = $item['assessments'] ?? [];
 
             return [
                 'week_prelim' => $syllabus->week_prelim,

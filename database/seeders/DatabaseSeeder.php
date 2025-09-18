@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             ProgramSeeder::class,
             CourseSeeder::class,
+            SettingSeeder::class,
         ]);
 
         $superAdmin = User::factory()->create([

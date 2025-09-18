@@ -585,7 +585,7 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Weekly Assessments</label>
                                 <x-select 
                                     wire:model.live="learning_matrix.{{ $index }}.assessments"
-                                    :options="array_values($assessmentTypes)"
+                                    :options="$assessmentTypes"
                                     placeholder="Select assessments..."
                                     multiselect
                                     class="text-sm" />
@@ -718,38 +718,38 @@
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Principal Prepared By</label>
-                        <select wire:model.live="principal_prepared_by" 
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                            <option value="">Select principal preparer...</option>
-                            <!-- Add options from users -->
-                        </select>
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                            {{ $principalPreparerName ?? 'Auto-selected: current user' }}
+                        </div>
+                        <input type="hidden" wire:model="principal_prepared_by">
+                        @error('principal_prepared_by') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Reviewed By (Department Chair)</label>
-                        <select wire:model.live="reviewed_by" 
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                            <option value="">Select reviewer...</option>
-                            <!-- Add options from users -->
-                        </select>
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                            {{ $reviewerName ?? 'Auto-selected from department' }}
+                        </div>
+                        <input type="hidden" wire:model="reviewed_by">
+                        @error('reviewed_by') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Recommending Approval (Associate Dean)</label>
-                        <select wire:model.live="recommending_approval" 
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                            <option value="">Select recommending approver...</option>
-                            <!-- Add options from users -->
-                        </select>
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                            {{ $recommendingName ?? 'Auto-selected from college' }}
+                        </div>
+                        <input type="hidden" wire:model="recommending_approval">
+                        @error('recommending_approval') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Approved By (Dean)</label>
-                        <select wire:model.live="approved_by" 
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                            <option value="">Select approver...</option>
-                            <!-- Add options from users -->
-                        </select>
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                            {{ $approverName ?? 'Auto-selected from college' }}
+                        </div>
+                        <input type="hidden" wire:model="approved_by">
+                        @error('approved_by') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                 </div>
             </div>
@@ -774,11 +774,39 @@
                 @endfor
             </div>
             
-            <button type="button" 
-                    wire:click="nextStep"
-                    class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                    @if($currentStep == $totalSteps) disabled @endif>
-                @if($currentStep == $totalSteps) Finish @else Next @endif
+            @if($currentStep == $totalSteps)
+                <button type="button" 
+                        wire:click="confirmSubmit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Finish
+                </button>
+            @else
+                <button type="button" 
+                        wire:click="nextStep"
+                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Next
+                </button>
+            @endif
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Submit Modal (Alpine + Livewire) -->
+<div x-data="{ open: $wire.entangle('showConfirmModal') }" x-show="open" class="fixed inset-0 z-50 flex items-center justify-center" style="display: none;">
+    <div class="fixed inset-0 bg-black/40" x-on:click="open = false"></div>
+    <div class="relative bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6">
+        <h2 class="text-lg font-medium text-gray-900">Submit Syllabus for Approval</h2>
+        <p class="mt-2 text-sm text-gray-600">Are you sure you want to submit? You cannot edit until the review process is complete.</p>
+        <div class="mt-6 flex justify-end space-x-3">
+            <button type="button"
+                    x-on:click="open = false"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
+                Cancel
+            </button>
+            <button type="button"
+                    x-on:click="open = false; $wire.submit()"
+                    class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">
+                Submit
             </button>
         </div>
     </div>

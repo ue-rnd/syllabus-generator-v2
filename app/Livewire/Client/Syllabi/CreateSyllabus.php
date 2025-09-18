@@ -3,8 +3,11 @@
 namespace App\Livewire\Client\Syllabi;
 
 use App\Models\Course;
+use App\Models\User;
+use App\Models\Syllabus;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -66,9 +69,46 @@ class CreateSyllabus extends Component
     public $reviewed_by = '';
     public $recommending_approval = '';
     public $approved_by = '';
+    public $showConfirmModal = false;
     
-    public function mount()
+    public ?Syllabus $existing = null;
+
+    public function mount(?Syllabus $syllabus = null)
     {
+        // If editing, hydrate from existing syllabus
+        if ($syllabus) {
+            $this->existing = $syllabus->load(['course.programs.department', 'course.college']);
+
+            $this->ay_start = $syllabus->ay_start;
+            $this->ay_end = $syllabus->ay_end;
+            $this->week_prelim = $syllabus->week_prelim;
+            $this->week_midterm = $syllabus->week_midterm;
+            $this->week_final = $syllabus->week_final;
+            $this->course_id = $syllabus->course_id;
+            $this->name = $syllabus->name;
+            $this->description = $syllabus->description;
+            $this->course = $syllabus->course;
+            $this->program_outcomes = $syllabus->program_outcomes ?? [];
+            $this->course_outcomes = $syllabus->course_outcomes ?? [];
+            $this->default_lecture_hours = (float) $syllabus->default_lecture_hours;
+            $this->default_laboratory_hours = (float) $syllabus->default_laboratory_hours;
+            $this->learning_matrix = $syllabus->learning_matrix ?? [];
+            $this->textbook_references = $syllabus->textbook_references ?? '';
+            $this->adaptive_digital_solutions = $syllabus->adaptive_digital_solutions ?? '';
+            $this->online_references = $syllabus->online_references ?? '';
+            $this->other_references = $syllabus->other_references ?? '';
+            $this->grading_system = $syllabus->grading_system ?? $this->grading_system;
+            $this->classroom_policies = $syllabus->classroom_policies ?? $this->classroom_policies;
+            $this->consultation_hours = $syllabus->consultation_hours ?? $this->consultation_hours;
+            $this->principal_prepared_by = $syllabus->principal_prepared_by;
+            $this->prepared_by = $syllabus->prepared_by ?? [];
+            $this->reviewed_by = $syllabus->reviewed_by;
+            $this->recommending_approval = $syllabus->recommending_approval;
+            $this->approved_by = $syllabus->approved_by;
+
+            return; // Skip defaults below
+        }
+
         // Set default values from settings
         $this->ay_start = Setting::where('key', 'default_ay_start')->first()?->value ?? date('Y');
         $this->ay_end = Setting::where('key', 'default_ay_end')->first()?->value ?? (date('Y') + 1);
@@ -82,6 +122,14 @@ class CreateSyllabus extends Component
         $this->course_outcomes = [];
         $this->learning_matrix = [];
         $this->prepared_by = [];
+
+        // Set principal preparer as the authenticated user by default
+        $this->principal_prepared_by = Auth::id();
+    }
+
+    public function confirmSubmit(): void
+    {
+        $this->showConfirmModal = true;
     }
     
     public function updatedCourseId($value)
@@ -103,10 +151,21 @@ class CreateSyllabus extends Component
                 } else {
                     $this->program_outcomes = [];
                 }
+
+                // Auto-populate approvers based on course relationships
+                $department = $program?->department;
+                $college = $this->course->college;
+
+                $this->reviewed_by = $department?->department_chair_id ?? '';
+                $this->recommending_approval = $college?->associate_dean_id ?? '';
+                $this->approved_by = $college?->dean_id ?? '';
             }
         } else {
             $this->course = null;
             $this->program_outcomes = [];
+            $this->reviewed_by = '';
+            $this->recommending_approval = '';
+            $this->approved_by = '';
         }
     }
     
@@ -173,6 +232,17 @@ class CreateSyllabus extends Component
     {
         unset($this->learning_matrix[$matrixIndex]['learning_activities'][$activityIndex]);
         $this->learning_matrix[$matrixIndex]['learning_activities'] = array_values($this->learning_matrix[$matrixIndex]['learning_activities']);
+    }
+    
+    private function authorizeEdit(): void
+    {
+        $userId = Auth::id();
+        if (!($this->existing && (
+            $this->existing->principal_prepared_by === $userId ||
+            collect($this->existing->prepared_by)->contains('user_id', $userId)
+        ))) {
+            abort(403, 'You are not authorized to edit this syllabus.');
+        }
     }
     
     private function parseProgramOutcomes($outcomes)
@@ -276,8 +346,212 @@ class CreateSyllabus extends Component
                     'course_outcomes.*.content.min' => 'The outcome description must be at least 10 characters long.',
                 ]);
                 break;
+            case 4:
+                $this->validate([
+                    'default_lecture_hours' => 'nullable|numeric|min:0',
+                    'default_laboratory_hours' => 'nullable|numeric|min:0',
+                    'learning_matrix' => 'required|array|min:1',
+                    'learning_matrix.*.week_range.is_range' => 'nullable|boolean',
+                    'learning_matrix.*.week_range.start' => 'required|integer|min:1|max:20',
+                    'learning_matrix.*.week_range.end' => 'nullable|integer|min:1|max:20',
+                    'learning_matrix.*.content' => 'required|string|min:3',
+                    // learning_outcomes, learning_activities, assessments are optional
+                ], [
+                    'learning_matrix.required' => 'Please add at least one learning matrix item.',
+                    'learning_matrix.min' => 'Please add at least one learning matrix item.',
+                    'learning_matrix.*.week_range.start.required' => 'Please specify the week (start).',
+                    'learning_matrix.*.content.required' => 'Content is required for each matrix item.',
+                ]);
+
+                // Additional validation: if is_range is true, end must be >= start
+                foreach ($this->learning_matrix as $idx => $item) {
+                    $isRange = $item['week_range']['is_range'] ?? false;
+                    $start = $item['week_range']['start'] ?? null;
+                    $end = $item['week_range']['end'] ?? null;
+                    if ($isRange) {
+                        if ($end === null) {
+                            $this->addError("learning_matrix.$idx.week_range.end", 'Week end is required when using a range.');
+                        } elseif ($start !== null && $end < $start) {
+                            $this->addError("learning_matrix.$idx.week_range.end", 'Week end must be greater than or equal to week start.');
+                        }
+                    }
+                }
+                break;
+            case 5:
+                $this->validate([
+                    'textbook_references' => 'nullable|string',
+                    'adaptive_digital_solutions' => 'nullable|string',
+                    'online_references' => 'nullable|string',
+                    'other_references' => 'nullable|string',
+                ]);
+                break;
+            case 6:
+                $this->validate([
+                    'grading_system' => 'required|string|min:10',
+                    'classroom_policies' => 'required|string|min:10',
+                    'consultation_hours' => 'nullable|string',
+                ], [
+                    'grading_system.required' => 'Please define the grading system.',
+                    'classroom_policies.required' => 'Please define classroom policies.',
+                ]);
+                break;
             // Add other step validations as we implement them
         }
+    }
+
+    public function submit()
+    {
+        if ($this->existing) {
+            $this->authorizeEdit();
+
+            $this->validate([ // minimal validation for update
+                'name' => 'required|string|max:255',
+            ]);
+
+            $this->existing->update([
+                'name' => $this->name,
+                'description' => $this->description,
+                'course_id' => $this->course_id,
+                'default_lecture_hours' => $this->default_lecture_hours,
+                'default_laboratory_hours' => $this->default_laboratory_hours,
+                'course_outcomes' => $this->course_outcomes,
+                'learning_matrix' => $this->learning_matrix,
+                'textbook_references' => $this->textbook_references,
+                'adaptive_digital_solutions' => $this->adaptive_digital_solutions,
+                'online_references' => $this->online_references,
+                'other_references' => $this->other_references,
+                'grading_system' => $this->grading_system,
+                'classroom_policies' => $this->classroom_policies,
+                'consultation_hours' => $this->consultation_hours,
+                'principal_prepared_by' => $this->principal_prepared_by,
+                'prepared_by' => $this->prepared_by,
+                'reviewed_by' => $this->reviewed_by,
+                'recommending_approval' => $this->recommending_approval,
+                'approved_by' => $this->approved_by,
+                'week_prelim' => $this->week_prelim,
+                'week_midterm' => $this->week_midterm,
+                'week_final' => $this->week_final,
+                'ay_start' => $this->ay_start,
+                'ay_end' => $this->ay_end,
+                'program_outcomes' => $this->program_outcomes,
+            ]);
+
+            session()->flash('success', 'Syllabus updated successfully.');
+            return redirect()->route('home');
+        }
+
+        // Validate all steps before saving
+        $this->validate([
+            // Step 1
+            'ay_start' => 'required|numeric',
+            'ay_end' => 'required|numeric',
+            'week_prelim' => 'required|numeric|min:1|max:20',
+            'week_midterm' => 'required|numeric|min:1|max:20',
+            'week_final' => 'required|numeric|min:1|max:20',
+            'course_id' => 'required|exists:courses,id',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            // Step 2
+            'program_outcomes' => 'required|array|min:1',
+            'program_outcomes.*.addressed' => 'required|array|min:1',
+            'program_outcomes.*.addressed.*' => 'required|string|in:Introduced,Enhanced,Demonstrated',
+            // Step 3
+            'course_outcomes' => 'required|array|min:1',
+            'course_outcomes.*.verb' => 'required|string',
+            'course_outcomes.*.content' => 'required|string|min:10',
+            // Step 4
+            'default_lecture_hours' => 'nullable|numeric|min:0',
+            'default_laboratory_hours' => 'nullable|numeric|min:0',
+            'learning_matrix' => 'required|array|min:1',
+            'learning_matrix.*.week_range.is_range' => 'nullable|boolean',
+            'learning_matrix.*.week_range.start' => 'required|integer|min:1|max:20',
+            'learning_matrix.*.week_range.end' => 'nullable|integer|min:1|max:20',
+            'learning_matrix.*.content' => 'required|string|min:3',
+            // Step 5
+            'textbook_references' => 'nullable|string',
+            'adaptive_digital_solutions' => 'nullable|string',
+            'online_references' => 'nullable|string',
+            'other_references' => 'nullable|string',
+            // Step 6
+            'grading_system' => 'required|string|min:10',
+            'classroom_policies' => 'required|string|min:10',
+            'consultation_hours' => 'nullable|string',
+            // Step 7
+            'principal_prepared_by' => 'required|integer|exists:users,id',
+            'reviewed_by' => 'required|integer|exists:users,id',
+            'recommending_approval' => 'required|integer|exists:users,id',
+            'approved_by' => 'required|integer|exists:users,id',
+        ], [
+            'program_outcomes.required' => 'Program outcomes are required. Please select a course first.',
+            'program_outcomes.min' => 'At least one program outcome must be available.',
+            'program_outcomes.*.addressed.required' => 'Please select how this program outcome is addressed.',
+            'program_outcomes.*.addressed.min' => 'Please select at least one addressing method for this program outcome.',
+            'program_outcomes.*.addressed.*.required' => 'Please select a valid addressing method.',
+            'program_outcomes.*.addressed.*.in' => 'Please select a valid addressing method.',
+            'course_outcomes.required' => 'At least one course outcome is required.',
+            'course_outcomes.min' => 'At least one course outcome must be added.',
+            'course_outcomes.*.verb.required' => 'Please select an action verb for this outcome.',
+            'course_outcomes.*.content.required' => 'Please provide a description for this outcome.',
+            'course_outcomes.*.content.min' => 'The outcome description must be at least 10 characters long.',
+            'learning_matrix.required' => 'Please add at least one learning matrix item.',
+            'learning_matrix.min' => 'Please add at least one learning matrix item.',
+            'learning_matrix.*.week_range.start.required' => 'Please specify the week (start).',
+            'learning_matrix.*.content.required' => 'Content is required for each matrix item.',
+            'grading_system.required' => 'Please define the grading system.',
+            'classroom_policies.required' => 'Please define classroom policies.',
+            'principal_prepared_by.required' => 'Principal preparer is required.',
+            'reviewed_by.required' => 'Department chair is required.',
+            'recommending_approval.required' => 'Associate dean is required.',
+            'approved_by.required' => 'Dean is required.',
+        ]);
+
+        // Additional range validation for step 4
+        foreach ($this->learning_matrix as $idx => $item) {
+            $isRange = $item['week_range']['is_range'] ?? false;
+            $start = $item['week_range']['start'] ?? null;
+            $end = $item['week_range']['end'] ?? null;
+            if ($isRange) {
+                if ($end === null) {
+                    $this->addError("learning_matrix.$idx.week_range.end", 'Week end is required when using a range.');
+                } elseif ($start !== null && $end < $start) {
+                    $this->addError("learning_matrix.$idx.week_range.end", 'Week end must be greater than or equal to week start.');
+                }
+            }
+        }
+
+        // Create and submit Syllabus for approval
+        $syllabus = Syllabus::create([
+            'name' => $this->name,
+            'description' => $this->description,
+            'course_id' => $this->course_id,
+            'default_lecture_hours' => $this->default_lecture_hours,
+            'default_laboratory_hours' => $this->default_laboratory_hours,
+            'course_outcomes' => $this->course_outcomes,
+            'learning_matrix' => $this->learning_matrix,
+            'textbook_references' => $this->textbook_references,
+            'adaptive_digital_solutions' => $this->adaptive_digital_solutions,
+            'online_references' => $this->online_references,
+            'other_references' => $this->other_references,
+            'grading_system' => $this->grading_system,
+            'classroom_policies' => $this->classroom_policies,
+            'consultation_hours' => $this->consultation_hours,
+            'principal_prepared_by' => $this->principal_prepared_by,
+            'prepared_by' => $this->prepared_by,
+            'reviewed_by' => $this->reviewed_by,
+            'recommending_approval' => $this->recommending_approval,
+            'approved_by' => $this->approved_by,
+            'status' => 'pending_approval',
+            'submitted_at' => now(),
+            'week_prelim' => $this->week_prelim,
+            'week_midterm' => $this->week_midterm,
+            'week_final' => $this->week_final,
+            'ay_start' => $this->ay_start,
+            'ay_end' => $this->ay_end,
+            'program_outcomes' => $this->program_outcomes,
+        ]);
+
+        session()->flash('success', 'Syllabus created and submitted for approval.');
+        return redirect()->route('home');
     }
     
     public function render()
@@ -291,7 +565,12 @@ class CreateSyllabus extends Component
             'courses' => $courses,
             'actionVerbs' => $actionVerbs,
             'learningModalities' => $learningModalities,
-            'assessmentTypes' => $assessmentTypes
+            'assessmentTypes' => $assessmentTypes,
+            // Approver display names
+            'principalPreparerName' => $this->principal_prepared_by ? (User::find($this->principal_prepared_by)?->full_name ?? User::find($this->principal_prepared_by)?->name ?? null) : null,
+            'reviewerName' => $this->reviewed_by ? (User::find($this->reviewed_by)?->full_name ?? User::find($this->reviewed_by)?->name ?? null) : null,
+            'recommendingName' => $this->recommending_approval ? (User::find($this->recommending_approval)?->full_name ?? User::find($this->recommending_approval)?->name ?? null) : null,
+            'approverName' => $this->approved_by ? (User::find($this->approved_by)?->full_name ?? User::find($this->approved_by)?->name ?? null) : null,
         ]);
     }
 }

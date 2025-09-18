@@ -25,19 +25,35 @@
     
     @if($college && $college->objectives)
         <h3>College Objectives</h3>
-        <p>
-            In pursuit of its vision and mission, the College will produce GRADUATES
-            {!! $college->objectives !!}
-        </p>
+        @if (is_array($college->objectives))
+            <ul>
+                @foreach ($college->objectives as $objective)
+                    <li>{!! is_array($objective) ? ($objective['content'] ?? e(json_encode($objective))) : $objective !!}</li>
+                @endforeach
+            </ul>
+        @else
+            <p>
+                In pursuit of its vision and mission, the College will produce GRADUATES
+                {!! $college->objectives !!}
+            </p>
+        @endif
     @endif
     
     {{-- Program Educational Objectives Template - Not filled in yet --}}
 
     @if ($programObjectives)
         <h3>Program Educational Objectives</h3>
-        <p>
-            {!! $programObjectives !!}
-        </p>
+        @if (is_array($programObjectives))
+            <ul>
+                @foreach ($programObjectives as $objective)
+                    <li>{!! is_array($objective) ? e(json_encode($objective)) : $objective !!}</li>
+                @endforeach
+            </ul>
+        @else
+            <p>
+                {!! $programObjectives !!}
+            </p>
+        @endif
     @endif
 </div>
 

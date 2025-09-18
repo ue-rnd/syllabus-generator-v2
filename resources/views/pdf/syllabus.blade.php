@@ -24,7 +24,7 @@
         
         {{-- University of the East Header --}}
         @include('pdf.components.info-university', [
-            'logoPath' => public_path('images/logo_ue.png'),
+            'logo_base64' => $logo_base64 ?? null,
             'university_mission' => $university_mission,
             'university_vision'=> $university_vision,
             'university_core_values' => $university_core_values,
@@ -56,7 +56,7 @@
         @include('pdf.components.syllabus-learning-matrix', [
             'week_prelim' => $syllabus->week_prelim,
             'week_midterm' => $syllabus->week_midterm,
-            'week_finals' => $syllabus->week_finals,
+            'week_finals' => $syllabus->week_final,
             'learning_matrix' => $learning_matrix,
             'total_hours' => $total_hours,
         ])
