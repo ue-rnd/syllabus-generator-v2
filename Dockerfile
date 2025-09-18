@@ -15,27 +15,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Clone repo
-RUN git clone --depth=1 https://github.com/ue-rnd/syllabus-generator-v2.git .
-
-# Fix Git "dubious ownership"
-RUN git config --global --add safe.directory /var/www/html
+COPY ./ .
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-interaction --prefer-dist
 RUN npm install
 RUN npm run build 
 
-
-
-# Set permissions for Laravel
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
-
-# Copy Environment
-# RUN cp .env.example .env
 RUN php artisan migrate --seed --force
 RUN php artisan key:generate
 RUN php artisan storage:link
