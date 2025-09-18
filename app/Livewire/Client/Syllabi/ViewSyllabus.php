@@ -121,7 +121,7 @@ class ViewSyllabus extends Component
             'description' => 'nullable|string',
             'program_outcomes' => 'required|array|min:1',
             'program_outcomes.*.addressed' => 'required|array|min:1',
-            'program_outcomes.*.addressed.*' => 'required|string|in:Introduced,Enhanced,Demonstrated',
+            'program_outcomes.*.addressed.*' => 'required|string|in:introduced,enhanced,demonstrated',
             'course_outcomes' => 'required|array|min:1',
             'course_outcomes.*.verb' => 'required|string',
             'course_outcomes.*.content' => 'required|string|min:10',

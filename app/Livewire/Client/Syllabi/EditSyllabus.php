@@ -133,7 +133,7 @@ class EditSyllabus extends CreateSyllabus
             // Step 2
             'program_outcomes' => 'required|array|min:1',
             'program_outcomes.*.addressed' => 'required|array|min:1',
-            'program_outcomes.*.addressed.*' => 'required|string|in:Introduced,Enhanced,Demonstrated',
+            'program_outcomes.*.addressed.*' => 'required|string|in:introduced,enhanced,demonstrated',
             // Step 3
             'course_outcomes' => 'required|array|min:1',
             'course_outcomes.*.verb' => 'required|string',

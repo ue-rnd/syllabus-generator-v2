@@ -339,7 +339,7 @@ class CreateSyllabus extends Component
                 $this->validate([
                     'program_outcomes' => 'required|array|min:1',
                     'program_outcomes.*.addressed' => 'required|array|min:1',
-                    'program_outcomes.*.addressed.*' => 'required|string|in:Introduced,Enhanced,Demonstrated',
+                    'program_outcomes.*.addressed.*' => 'required|string|in:introduced,enhanced,demonstrated',
                 ], [
                     'program_outcomes.required' => 'Program outcomes are required. Please select a course first.',
                     'program_outcomes.min' => 'At least one program outcome must be available.',

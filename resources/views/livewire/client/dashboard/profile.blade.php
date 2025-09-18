@@ -1,7 +1,10 @@
 <div class="p-4 space-y-10">
     <div class="max-w-lg border mx-auto p-4 bg-white rounded">
         <form action="" method="post" class="space-y-4 my-4">
-            <img src="http://placehold.co/250x250" alt="Profile Picture" class="mx-auto rounded-full size-24">
+            @php($user = auth()->user())
+            <div class="mx-auto rounded-full size-24 bg-red-600 text-white flex items-center justify-center text-3xl font-semibold">
+                <span>{{ method_exists($user, 'initials') ? $user->initials() : substr($user?->name ?? 'U', 0, 2) }}</span>
+            </div>
             <div class="space-y-1">
                 <label for="fullname" class="text-sm font-medium text-gray-600">Full Name</label>
                 <input type="text" name="fullname" id="fullname" class="w-full border px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-red-400" value="Thaddeus Toledo">
