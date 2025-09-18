@@ -1,5 +1,5 @@
-# Use PHP 8.3 FPM image
-FROM php:8.3-fpm
+# Use PHP 8.3 CLI image
+FROM php:8.3-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -48,5 +48,5 @@ EXPOSE 8000
 
 # Set environment variables for Laravel
 
-# Start Laravel using PHP-FPM
-CMD ["php-fpm"]
+# Start Laravel using the built-in server
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
