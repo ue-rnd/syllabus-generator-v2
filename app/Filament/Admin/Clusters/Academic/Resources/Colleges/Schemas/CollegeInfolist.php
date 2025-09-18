@@ -23,7 +23,7 @@ class CollegeInfolist
                             ->disk('public')
                             ->visibility('public'),
                         TextEntry::make('name'),
-                        TextEntry::make('code'), 
+                        TextEntry::make('code'),
                         TextEntry::make('description')
                             ->placeholder('-')
                             ->columnSpanFull(),
@@ -38,24 +38,24 @@ class CollegeInfolist
                 Section::make()
                     ->inlineLabel()
                     ->schema([
-                            TextEntry::make('mission')
-                                ->html()
-                                ->placeholder('-')
-                                ->columnSpanFull(),
-                            TextEntry::make('vision')
-                                ->html()
-                                ->placeholder('-')
-                                ->columnSpanFull(),
-                            TextEntry::make('core_values')
-                                ->label('Core Values')
-                                ->html()
-                                ->placeholder('-')
-                                ->columnSpanFull(),
-                            TextEntry::make('objectives')
-                                ->html()
-                                ->placeholder('-')
-                                ->columnSpanFull(),
-                        ])
+                        TextEntry::make('mission')
+                            ->html()
+                            ->placeholder('-')
+                            ->columnSpanFull(),
+                        TextEntry::make('vision')
+                            ->html()
+                            ->placeholder('-')
+                            ->columnSpanFull(),
+                        TextEntry::make('core_values')
+                            ->label('Core Values')
+                            ->html()
+                            ->placeholder('-')
+                            ->columnSpanFull(),
+                        TextEntry::make('objectives')
+                            ->html()
+                            ->placeholder('-')
+                            ->columnSpanFull(),
+                    ])
                     ->columnSpanFull(),
                 Section::make()
                     ->inlineLabel()
@@ -71,19 +71,19 @@ class CollegeInfolist
                     ->inlineLabel()
                     ->schema([
                         TextEntry::make('deleted_at')
-                        ->label('Deleted At')
+                            ->label('Deleted At')
                             ->dateTime()
                             ->visible(fn (College $record): bool => $record->trashed())
                             ->columnSpanFull(),
                         TextEntry::make('created_at')
-                        ->label('Created At')
+                            ->label('Created At')
                             ->dateTime()
                             ->placeholder('-'),
                         TextEntry::make('updated_at')
-                        ->label('Updated At')
+                            ->label('Updated At')
                             ->dateTime()
                             ->placeholder('-'),
-                        ]),
+                    ]),
             ]);
     }
 }

@@ -51,7 +51,7 @@ return new class extends Migration
 
             // Metadata
             $table->integer('sort_order')->default(0);
-            
+
             $table->softDeletes();
             $table->timestamps();
 

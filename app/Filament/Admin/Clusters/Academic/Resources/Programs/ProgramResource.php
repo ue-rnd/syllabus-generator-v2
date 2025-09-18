@@ -7,10 +7,10 @@ use App\Filament\Admin\Clusters\Academic\Resources\Programs\Pages\CreateProgram;
 use App\Filament\Admin\Clusters\Academic\Resources\Programs\Pages\EditProgram;
 use App\Filament\Admin\Clusters\Academic\Resources\Programs\Pages\ListPrograms;
 use App\Filament\Admin\Clusters\Academic\Resources\Programs\Pages\ViewProgram;
+use App\Filament\Admin\Clusters\Academic\Resources\Programs\RelationManagers\CoursesRelationManager;
 use App\Filament\Admin\Clusters\Academic\Resources\Programs\Schemas\ProgramForm;
 use App\Filament\Admin\Clusters\Academic\Resources\Programs\Schemas\ProgramInfolist;
 use App\Filament\Admin\Clusters\Academic\Resources\Programs\Tables\ProgramsTable;
-use App\Filament\Admin\Clusters\Academic\Resources\Programs\RelationManagers\CoursesRelationManager;
 use App\Models\Program;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -70,5 +70,30 @@ class ProgramResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        if ($user->position === 'superadmin') {
+            return parent::getEloquentQuery();
+        }
+
+        if (in_array($user->position, ['dean', 'associate_dean', 'department_chair'])) {
+            return parent::getEloquentQuery();
+        }
+
+        return parent::getEloquentQuery()->whereRaw('0 = 1');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('viewAny', Program::class);
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create', Program::class);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Syllabus;
 use App\Models\Course;
+use App\Models\Syllabus;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,8 +17,9 @@ class TestSyllabiSeeder extends Seeder
         $user = User::first();
         $courses = Course::take(3)->get();
 
-        if (!$user || $courses->isEmpty()) {
+        if (! $user || $courses->isEmpty()) {
             $this->command->error('No user or courses found. Please run other seeders first.');
+
             return;
         }
 
@@ -59,6 +60,6 @@ class TestSyllabiSeeder extends Seeder
             Syllabus::create($syllabusData);
         }
 
-        $this->command->info('Created ' . count($syllabi) . ' test syllabi.');
+        $this->command->info('Created '.count($syllabi).' test syllabi.');
     }
 }

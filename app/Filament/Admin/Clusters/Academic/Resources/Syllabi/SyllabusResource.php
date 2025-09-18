@@ -65,14 +65,21 @@ class SyllabusResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $user = auth()->user();
+        $query = parent::getEloquentQuery()
             ->with([
                 'course',
                 'principalPreparer',
                 'reviewer',
                 'recommendingApprover',
-                'approver'
+                'approver',
             ]);
+
+        if ($user->position === 'superadmin') {
+            return $query;
+        }
+
+        return $query;
     }
 
     public static function getRecordRouteBindingEloquentQuery(): Builder
@@ -83,10 +90,20 @@ class SyllabusResource extends Resource
                 'principalPreparer',
                 'reviewer',
                 'recommendingApprover',
-                'approver'
+                'approver',
             ])
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('viewAny', Syllabus::class);
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create', Syllabus::class);
     }
 }

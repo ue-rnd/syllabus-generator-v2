@@ -2,8 +2,8 @@
 
 namespace App\Filament\Admin\Clusters\Academic\Resources\Syllabi\Tables;
 
-use App\Filament\Admin\Clusters\Academic\Resources\Syllabi\Actions\SyllabusApprovalActions;
 use App\Constants\SyllabusConstants;
+use App\Filament\Admin\Clusters\Academic\Resources\Syllabi\Actions\SyllabusApprovalActions;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -26,57 +26,57 @@ class SyllabiTable
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                
+
                 TextColumn::make('course.name')
                     ->label('Course')
                     ->searchable()
                     ->sortable(),
-                
+
                 BadgeColumn::make('status')
                     ->label('Status')
                     ->formatStateUsing(fn (string $state): string => SyllabusConstants::getStatusOptions()[$state])
                     ->color(fn (string $state): string => SyllabusConstants::getStatusColor($state))
                     ->sortable(),
-                
+
                 TextColumn::make('version')
                     ->label('Ver.')
                     ->sortable()
                     ->toggleable(),
-                
+
                 TextColumn::make('submitted_at')
                     ->label('Submitted')
                     ->dateTime()
                     ->sortable()
                     ->placeholder('Not submitted')
                     ->toggleable(isToggledHiddenByDefault: true),
-                
+
                 TextColumn::make('principalPreparer.name')
                     ->label('Principal Preparer')
                     ->searchable()
                     ->toggleable(),
-                
+
                 TextColumn::make('reviewer.name')
                     ->label('Reviewed By')
                     ->searchable()
                     ->toggleable(),
-                
+
                 TextColumn::make('approver.name')
                     ->label('Approved By')
                     ->searchable()
                     ->toggleable(),
-                
+
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                
+
                 TextColumn::make('updated_at')
                     ->label('Updated')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                
+
                 TextColumn::make('deleted_at')
                     ->label('Deleted')
                     ->dateTime()
@@ -99,15 +99,14 @@ class SyllabiTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make()
-                    ->visible(fn ($record): bool =>
-                        in_array($record->status, ['draft', 'for_revisions']) &&
+                    ->visible(fn ($record): bool => in_array($record->status, ['draft', 'for_revisions']) &&
                         ($record->principal_prepared_by === auth()->id() ||
                          collect($record->prepared_by)->contains('user_id', auth()->id()))
                     ),
                 ReplicateAction::make('duplicate')
                     ->label('Duplicate')
                     ->beforeReplicaSaved(function (array $data): array {
-                        $data['name'] = $data['name'] . ' (Copy)';
+                        $data['name'] = $data['name'].' (Copy)';
                         $data['status'] = 'draft';
                         $data['submitted_at'] = null;
                         $data['dept_chair_reviewed_at'] = null;
@@ -121,6 +120,7 @@ class SyllabiTable
                         $data['recommending_approval'] = null;
                         $data['approved_by'] = null;
                         $data['parent_syllabus_id'] = null;
+
                         return $data;
                     }),
                 SyllabusApprovalActions::submitForApproval(),

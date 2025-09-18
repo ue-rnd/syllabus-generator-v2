@@ -15,6 +15,26 @@ use Filament\Schemas\Schema;
 
 class CourseForm
 {
+    protected static function filterCollegesForUser($query)
+    {
+        $user = auth()->user();
+
+        if ($user->position === 'superadmin') {
+            return $query;
+        }
+
+        if (in_array($user->position, ['dean', 'associate_dean'])) {
+            return $user->getAccessibleColleges();
+        }
+
+        if ($user->position === 'department_chair') {
+            // Department chairs can create courses in their college
+            return $query->where('id', $user->college_id);
+        }
+
+        return $query->whereRaw('0 = 1');
+    }
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -28,7 +48,11 @@ class CourseForm
                             ->required(),
                         Select::make('college_id')
                             ->label('College')
-                            ->relationship('college', 'name')
+                            ->relationship(
+                                name: 'college',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn ($query) => self::filterCollegesForUser($query)
+                            )
                             ->required()
                             ->searchable()
                             ->preload()

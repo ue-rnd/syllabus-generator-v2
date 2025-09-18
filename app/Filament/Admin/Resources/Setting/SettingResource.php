@@ -14,7 +14,6 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -29,6 +28,26 @@ class SettingResource extends Resource
     protected static ?int $navigationSort = 30;
 
     public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canView($record): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canDelete($record): bool
     {
         return false;
     }
@@ -58,7 +77,7 @@ class SettingResource extends Resource
                 TextColumn::make('label')
                     ->sortable()
                     ->searchable(),
-                
+
                 TextColumn::make('category')
                     ->formatStateUsing(fn ($state) => SettingConstants::getCategoryOptions()[$state])
                     ->color(fn (string $state) => SettingConstants::getCategoryColor($state))
@@ -75,34 +94,34 @@ class SettingResource extends Resource
             ->defaultSort('sort_order')
             ->actions([
                 EditAction::make()
-                    ->modalHeading(fn ($record) => 'Edit ' . $record->label)
+                    ->modalHeading(fn ($record) => 'Edit '.$record->label)
                     ->form(function (Setting $record) {
                         return match ($record->type) {
                             'select' => [
                                 Select::make('value')
                                     ->label($record->label)
                                     ->options($record->attributes['options'])
-                                    ->required()
+                                    ->required(),
                             ],
                             'number' => [
                                 TextInput::make('value')
                                     ->label($record->label)
                                     ->type('number')
-                                    ->required()
+                                    ->required(),
                             ],
                             'richtext' => [
                                 RichEditor::make('value')
                                     ->label($record->label)
                                     ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-        ['table', 'attachFiles'],
-        ['undo', 'redo']])
-                                    ->required()
+                                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                        ['table', 'attachFiles'],
+                                        ['undo', 'redo']])
+                                    ->required(),
                             ],
                             default => [
                                 TextInput::make('value')
-                                    ->label($record->label)
+                                    ->label($record->label),
                             ]
                         };
                     }),

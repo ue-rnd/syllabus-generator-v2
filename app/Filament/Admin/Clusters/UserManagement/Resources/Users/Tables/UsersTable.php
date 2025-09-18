@@ -82,17 +82,17 @@ class UsersTable
                 DeleteAction::make()
                     ->before(function (User $record) {
                         $currentUserId = Auth::id();
-                        
+
                         if ($record->id === $currentUserId) {
                             Notification::make()
                                 ->title('Cannot Delete Own Account')
                                 ->body('You cannot delete your own account.')
                                 ->warning()
                                 ->send();
-                            
+
                             return false;
                         }
-                        
+
                         // Check if trying to delete the last superadmin
                         if ($record->hasRole('superadmin')) {
                             $remainingSuperadmins = User::role('superadmin')->where('id', '!=', $record->id)->count();
@@ -102,7 +102,7 @@ class UsersTable
                                     ->body('You cannot delete the last superadmin account. At least one superadmin must remain in the system.')
                                     ->danger()
                                     ->send();
-                                
+
                                 return false;
                             }
                         }
@@ -110,14 +110,14 @@ class UsersTable
                 ForceDeleteAction::make()
                     ->before(function (User $record) {
                         $currentUserId = Auth::id();
-                        
+
                         if ($record->id === $currentUserId) {
                             Notification::make()
                                 ->title('Cannot Delete Own Account')
                                 ->body('You cannot permanently delete your own account.')
                                 ->warning()
                                 ->send();
-                            
+
                             return false;
                         }
                     }),
@@ -129,17 +129,17 @@ class UsersTable
                         ->before(function ($records) {
                             $currentUserId = Auth::id();
                             $selfSelected = $records->contains('id', $currentUserId);
-                            
+
                             if ($selfSelected) {
                                 Notification::make()
                                     ->title('Cannot Delete Own Account')
                                     ->body('You cannot delete your own account. Please remove your account from the selection.')
                                     ->warning()
                                     ->send();
-                                
+
                                 return false;
                             }
-                            
+
                             // Check if trying to delete the last superadmin
                             $superadminRecords = $records->filter(fn ($record) => $record->hasRole('superadmin'));
                             if ($superadminRecords->count() > 0) {
@@ -150,7 +150,7 @@ class UsersTable
                                         ->body('You cannot delete all superadmin accounts. At least one superadmin must remain in the system.')
                                         ->danger()
                                         ->send();
-                                    
+
                                     return false;
                                 }
                             }
@@ -159,14 +159,14 @@ class UsersTable
                         ->before(function ($records) {
                             $currentUserId = Auth::id();
                             $selfSelected = $records->contains('id', $currentUserId);
-                            
+
                             if ($selfSelected) {
                                 Notification::make()
                                     ->title('Cannot Delete Own Account')
                                     ->body('You cannot permanently delete your own account. Please remove your account from the selection.')
                                     ->warning()
                                     ->send();
-                                
+
                                 return false;
                             }
                         }),

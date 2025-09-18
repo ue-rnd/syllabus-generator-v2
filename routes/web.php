@@ -1,22 +1,21 @@
 <?php
 
-use App\Livewire\Settings\Appearance;
-use App\Livewire\Settings\Password;
-use App\Livewire\Settings\Profile;
-use App\Livewire\RolePermissionManager;
-use App\Livewire\Client\Dashboard\Home;
-use App\Livewire\Client\Dashboard\Profile as DashboardProfile;
-use App\Livewire\Client\Dashboard\Notifications;
 use App\Livewire\Client\Dashboard\Bookmarks;
+use App\Livewire\Client\Dashboard\Home;
+use App\Livewire\Client\Dashboard\Notifications;
+use App\Livewire\Client\Dashboard\Profile as DashboardProfile;
 use App\Livewire\Client\Syllabi\CreateSyllabus;
 use App\Livewire\Client\Syllabi\EditSyllabus as ClientEditSyllabus;
 use App\Livewire\Client\Syllabi\ViewSyllabus as ClientViewSyllabus;
+use App\Livewire\RolePermissionManager;
+use App\Livewire\Settings\Appearance;
+use App\Livewire\Settings\Password;
+use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('login');
 })->name('home');
-
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -24,7 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
-    
+
     // Role and Permission Management
     Route::get('roles', RolePermissionManager::class)
         ->middleware('can:view roles')
@@ -53,7 +52,5 @@ Route::middleware('auth')->group(function () {
 
     Route::get('bookmarks', Bookmarks::class)->name('bookmarks');
 });
-
-
 
 require __DIR__.'/auth.php';

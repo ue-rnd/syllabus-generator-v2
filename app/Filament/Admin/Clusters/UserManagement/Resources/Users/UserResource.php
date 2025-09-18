@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\Users;
 
-use App\Filament\Admin\Clusters\UserManagement\UserManagement;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Users\Pages\CreateUser;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Users\Pages\EditUser;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Users\Pages\ListUsers;
@@ -10,6 +9,7 @@ use App\Filament\Admin\Clusters\UserManagement\Resources\Users\Pages\ViewUser;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Users\Schemas\UserForm;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Users\Schemas\UserInfolist;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Users\Tables\UsersTable;
+use App\Filament\Admin\Clusters\UserManagement\UserManagement;
 use App\Models\User;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -69,5 +69,35 @@ class UserResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canView($record): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return auth()->user()->position === 'superadmin';
     }
 }

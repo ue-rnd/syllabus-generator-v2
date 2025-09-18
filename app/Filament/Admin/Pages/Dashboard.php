@@ -2,8 +2,6 @@
 
 namespace App\Filament\Admin\Pages;
 
-use App\Models\Syllabus;
-use App\Constants\SyllabusConstants;
 use Filament\Actions\Action;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Illuminate\Contracts\Support\Htmlable;
@@ -18,7 +16,6 @@ class Dashboard extends BaseDashboard
     {
         return 'Dashboard';
     }
-
 
     protected function getHeaderActions(): array
     {
@@ -53,7 +50,7 @@ class Dashboard extends BaseDashboard
                 ->visible(fn () => in_array($user->position, ['dean', 'superadmin'])),
         ];
 
-        return array_filter($actions, fn($action) => $action->isVisible());
+        return array_filter($actions, fn ($action) => $action->isVisible());
     }
 
     public function getColumns(): int|array

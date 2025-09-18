@@ -45,7 +45,7 @@ class DepartmentInfolist
                         TextEntry::make('deleted_at')
                             ->label('Deleted At')
                             ->dateTime()
-                            ->visible(fn(Department $record): bool => $record->trashed())
+                            ->visible(fn (Department $record): bool => $record->trashed())
                             ->columnSpanFull(),
                         TextEntry::make('created_at')
                             ->label('Created At')

@@ -35,14 +35,14 @@ class RolesTable
                 DeleteAction::make()
                     ->before(function ($record) {
                         $protectedRoles = ['superadmin', 'admin', 'faculty'];
-                        
+
                         if (in_array($record->name, $protectedRoles)) {
                             Notification::make()
                                 ->title('Cannot Delete Essential Role')
                                 ->body("The '{$record->name}' role is essential for system operation and cannot be deleted.")
                                 ->warning()
                                 ->send();
-                            
+
                             return false;
                         }
                     }),
@@ -53,7 +53,7 @@ class RolesTable
                         ->before(function ($records) {
                             $protectedRoles = ['superadmin', 'admin', 'faculty'];
                             $protectedRecords = $records->filter(fn ($record) => in_array($record->name, $protectedRoles));
-                            
+
                             if ($protectedRecords->count() > 0) {
                                 $roleNames = $protectedRecords->pluck('name')->join(', ');
                                 Notification::make()
@@ -61,7 +61,7 @@ class RolesTable
                                     ->body("The following roles are essential for system operation and cannot be deleted: {$roleNames}")
                                     ->warning()
                                     ->send();
-                                
+
                                 return false;
                             }
                         }),

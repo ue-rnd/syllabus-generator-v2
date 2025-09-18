@@ -7,7 +7,6 @@ use App\Filament\Admin\Clusters\Academic\Resources\Departments\Pages\CreateDepar
 use App\Filament\Admin\Clusters\Academic\Resources\Departments\Pages\EditDepartment;
 use App\Filament\Admin\Clusters\Academic\Resources\Departments\Pages\ListDepartments;
 use App\Filament\Admin\Clusters\Academic\Resources\Departments\Pages\ViewDepartment;
-use App\Filament\Admin\Clusters\Academic\Resources\Departments\RelationManagers\CollegeRelationManager;
 use App\Filament\Admin\Clusters\Academic\Resources\Departments\Schemas\DepartmentForm;
 use App\Filament\Admin\Clusters\Academic\Resources\Departments\Schemas\DepartmentInfolist;
 use App\Filament\Admin\Clusters\Academic\Resources\Departments\Tables\DepartmentsTable;
@@ -50,7 +49,7 @@ class DepartmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            
+
         ];
     }
 
@@ -70,5 +69,30 @@ class DepartmentResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        if ($user->position === 'superadmin') {
+            return parent::getEloquentQuery();
+        }
+
+        if (in_array($user->position, ['dean', 'associate_dean', 'department_chair'])) {
+            return parent::getEloquentQuery();
+        }
+
+        return parent::getEloquentQuery()->whereRaw('0 = 1');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('viewAny', Department::class);
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create', Department::class);
     }
 }

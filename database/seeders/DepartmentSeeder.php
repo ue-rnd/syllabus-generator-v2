@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\College;
 use App\Models\Department;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
 class DepartmentSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class DepartmentSeeder extends Seeder
         // Find the College of Computer Studies and Systems
         $ccss = College::where('code', 'CCSS')->first();
 
-        if (!$ccss) {
+        if (! $ccss) {
             throw new \Exception('College of Computer Studies and Systems not found. Make sure to run CollegeSeeder first.');
         }
 

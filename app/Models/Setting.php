@@ -17,11 +17,11 @@ class Setting extends Model
         'type',
         'attributes',
         'sort_order',
-        'category'
+        'category',
     ];
 
     protected $casts = [
         'attributes' => 'array',
-        'sort_order'=> 'integer',
+        'sort_order' => 'integer',
     ];
 }

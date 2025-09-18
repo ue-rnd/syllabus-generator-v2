@@ -7,11 +7,11 @@ use App\Filament\Admin\Clusters\Academic\Resources\Courses\Pages\CreateCourse;
 use App\Filament\Admin\Clusters\Academic\Resources\Courses\Pages\EditCourse;
 use App\Filament\Admin\Clusters\Academic\Resources\Courses\Pages\ListCourses;
 use App\Filament\Admin\Clusters\Academic\Resources\Courses\Pages\ViewCourse;
+use App\Filament\Admin\Clusters\Academic\Resources\Courses\RelationManagers\ProgramsRelationManager;
+use App\Filament\Admin\Clusters\Academic\Resources\Courses\RelationManagers\SyllabiRelationManager;
 use App\Filament\Admin\Clusters\Academic\Resources\Courses\Schemas\CourseForm;
 use App\Filament\Admin\Clusters\Academic\Resources\Courses\Schemas\CourseInfolist;
 use App\Filament\Admin\Clusters\Academic\Resources\Courses\Tables\CoursesTable;
-use App\Filament\Admin\Clusters\Academic\Resources\Courses\RelationManagers\ProgramsRelationManager;
-use App\Filament\Admin\Clusters\Academic\Resources\Courses\RelationManagers\SyllabiRelationManager;
 use App\Models\Course;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -72,5 +72,30 @@ class CourseResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        if ($user->position === 'superadmin') {
+            return parent::getEloquentQuery();
+        }
+
+        if (in_array($user->position, ['dean', 'associate_dean', 'department_chair'])) {
+            return parent::getEloquentQuery();
+        }
+
+        return parent::getEloquentQuery()->whereRaw('0 = 1');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('viewAny', Course::class);
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create', Course::class);
     }
 }
