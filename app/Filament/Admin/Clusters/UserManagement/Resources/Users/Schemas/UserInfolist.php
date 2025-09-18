@@ -35,10 +35,12 @@ class UserInfolist
                     }),
                 TextEntry::make('college.name')
                     ->label('College')
-                    ->badge(),
+                    ->badge()
+                    ->placeholder('-'),
                 TextEntry::make('department.name')
                     ->label('Department')
-                    ->badge(),
+                    ->badge()
+                    ->placeholder('-'),
                 IconEntry::make('is_active')
                     ->label('Account Status')
                     ->boolean()

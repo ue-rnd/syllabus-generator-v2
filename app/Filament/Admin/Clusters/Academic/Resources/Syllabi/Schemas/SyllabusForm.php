@@ -91,7 +91,8 @@ class SyllabusForm
                                         ->default('draft')
                                         ->required()
                                         ->searchable()
-                                        ->disabled(),
+                                        ->disabled()
+                                        ->columnSpanFull(),
 
                                     Textarea::make('description')
                                         ->columnSpanFull()
@@ -511,8 +512,8 @@ class SyllabusForm
                             ->default(auth()->id())
                             ->columnSpanFull(),
 
-                        RichEditor::make('principal_prepared_by')
-                            ->label('')
+                        RichEditor::make('note')
+                            ->hiddenLabel()
                             ->disabled()
                             ->default('<h1>Note</h1><p>The second to the last additional preparer should be the <strong>Member of the Library Committee</strong>, while the last additional preparer should be the <strong>External Reviewer</strong>.')
                             ->columnSpanFull(),
