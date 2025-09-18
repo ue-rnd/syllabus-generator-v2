@@ -2,7 +2,7 @@
     <!-- Progress Bar -->
     <div class="mb-8">
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">Create New Syllabus</h1>
+            <h1 class="text-2xl font-bold text-gray-900">{{ (isset($isEdit) && $isEdit) ? 'Edit Syllabus' : 'Create New Syllabus' }}</h1>
             <span class="text-sm text-gray-500">Step {{ $currentStep }} of {{ $totalSteps }}</span>
         </div>
         
@@ -751,6 +751,72 @@
                         <input type="hidden" wire:model="approved_by">
                         @error('approved_by') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
+
+                    <div class="mt-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="block text-sm font-medium text-gray-700">Co-editors / Additional Preparers</label>
+                            <button type="button"
+                                    wire:click="addPreparer"
+                                    class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                + Add Preparer
+                            </button>
+                        </div>
+
+                        @forelse($prepared_by as $index => $preparer)
+                            <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 mb-3" wire:key="preparer-{{ $index }}">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="text-xs text-gray-500">No. {{ $index + 1 }}</div>
+                                    <button type="button"
+                                            wire:click="removePreparer({{ $index }})"
+                                            class="text-red-600 hover:text-red-800 text-xs font-medium">
+                                        Remove
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Faculty Member <span class="text-red-500">*</span></label>
+                                        <x-select 
+                                            wire:model.live="prepared_by.{{ $index }}.user_id"
+                                            :options="$facultyOptions"
+                                            placeholder="Select a faculty member..."
+                                            searchable
+                                        />
+                                        @error('prepared_by.'.$index.'.user_id') 
+                                            <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Role/Position</label>
+                                        <input type="text"
+                                               wire:model="prepared_by.{{ $index }}.role"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                               placeholder="e.g., Faculty, Distinguished Faculty, Library Officer">
+                                        @error('prepared_by.'.$index.'.role') 
+                                            <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <x-quill-editor 
+                                        wire-model="prepared_by.{{ $index }}.description"
+                                        placeholder="Additional details about their contribution"
+                                        toolbar="basic"
+                                        :rows="3"
+                                        :initial-content="$preparer['description'] ?? ''"
+                                        wire:key="quill-preparer-desc-{{ $index }}" />
+                                    @error('prepared_by.'.$index.'.description') 
+                                        <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
+                                    @enderror
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-sm text-gray-500 italic">No co-editors added yet.</p>
+                        @endforelse
+                    </div>
                 </div>
             </div>
         @endif
@@ -776,9 +842,9 @@
             
             @if($currentStep == $totalSteps)
                 <button type="button" 
-                        wire:click="confirmSubmit"
+                        wire:click="{{ (isset($isEdit) && $isEdit) ? 'confirmUpdate' : 'confirmSubmit' }}"
                         class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                    Finish
+                    {{ (isset($isEdit) && $isEdit) ? 'Save Changes' : 'Save Draft' }}
                 </button>
             @else
                 <button type="button" 
@@ -793,8 +859,12 @@
     <div x-data="{ open: $wire.entangle('showConfirmModal') }" x-show="open" class="fixed inset-0 z-50 flex items-center justify-center" style="display: none;">
         <div class="fixed inset-0 bg-black/40" x-on:click="open = false"></div>
         <div class="relative bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6">
-            <h2 class="text-lg font-medium text-gray-900">Submit Syllabus for Approval</h2>
-            <p class="mt-2 text-sm text-gray-600">Are you sure you want to submit? You cannot edit until the review process is complete.</p>
+            <h2 class="text-lg font-medium text-gray-900">{{ (isset($isEdit) && $isEdit) ? 'Save Changes' : 'Save Draft' }}</h2>
+            <p class="mt-2 text-sm text-gray-600">
+                {{ (isset($isEdit) && $isEdit)
+                    ? 'Are you sure you want to save these changes?'
+                    : 'Save this syllabus as a draft. You and your co-editors can continue editing later.' }}
+            </p>
             <div class="mt-6 flex justify-end space-x-3">
                 <button type="button"
                         x-on:click="open = false"
@@ -802,9 +872,9 @@
                     Cancel
                 </button>
                 <button type="button"
-                        x-on:click="open = false; $wire.submit()"
+                        x-on:click="open = false; {{ (isset($isEdit) && $isEdit) ? '$wire.update()' : '$wire.submit()' }}"
                         class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">
-                    Submit
+                    {{ (isset($isEdit) && $isEdit) ? 'Save' : 'Save Draft' }}
                 </button>
             </div>
         </div>

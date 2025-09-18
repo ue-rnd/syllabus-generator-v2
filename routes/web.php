@@ -9,6 +9,8 @@ use App\Livewire\Client\Dashboard\Profile as DashboardProfile;
 use App\Livewire\Client\Dashboard\Notifications;
 use App\Livewire\Client\Dashboard\Bookmarks;
 use App\Livewire\Client\Syllabi\CreateSyllabus;
+use App\Livewire\Client\Syllabi\EditSyllabus as ClientEditSyllabus;
+use App\Livewire\Client\Syllabi\ViewSyllabus as ClientViewSyllabus;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('home', Home::class)->name('home');
 
     Route::get('syllabus/create', CreateSyllabus::class)->name('syllabus');
+    Route::get('syllabus/{syllabus}', ClientViewSyllabus::class)->name('syllabus.view');
+    Route::get('syllabus/{syllabus}/edit', ClientEditSyllabus::class)->name('syllabus.edit');
 
     Route::get('profile', DashboardProfile::class)->name('profile');
 

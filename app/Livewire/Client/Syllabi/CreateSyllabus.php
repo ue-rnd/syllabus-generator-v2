@@ -91,6 +91,23 @@ class CreateSyllabus extends Component
         $this->principal_prepared_by = Auth::id();
     }
 
+    public function addPreparer(): void
+    {
+        $this->prepared_by[] = [
+            'user_id' => null,
+            'role' => '',
+            'description' => '',
+        ];
+    }
+
+    public function removePreparer(int $index): void
+    {
+        if (isset($this->prepared_by[$index])) {
+            unset($this->prepared_by[$index]);
+            $this->prepared_by = array_values($this->prepared_by);
+        }
+    }
+
     public function confirmSubmit(): void
     {
         $this->showConfirmModal = true;
@@ -120,16 +137,16 @@ class CreateSyllabus extends Component
                 $department = $program?->department;
                 $college = $this->course->college;
 
-                $this->reviewed_by = $department?->department_chair_id ?? '';
-                $this->recommending_approval = $college?->associate_dean_id ?? '';
-                $this->approved_by = $college?->dean_id ?? '';
+                $this->reviewed_by = $department?->department_chair_id ?? null;
+                $this->recommending_approval = $college?->associate_dean_id ?? null;
+                $this->approved_by = $college?->dean_id ?? null;
             }
         } else {
             $this->course = null;
             $this->program_outcomes = [];
-            $this->reviewed_by = '';
-            $this->recommending_approval = '';
-            $this->approved_by = '';
+            $this->reviewed_by = null;
+            $this->recommending_approval = null;
+            $this->approved_by = null;
         }
     }
     
@@ -233,6 +250,51 @@ class CreateSyllabus extends Component
         }
         
         return $parsedOutcomes;
+    }
+
+    private function normalizePreparedBy(): void
+    {
+        if (!is_array($this->prepared_by)) {
+            return;
+        }
+
+        foreach ($this->prepared_by as $index => $item) {
+            if (!is_array($item)) {
+                $this->prepared_by[$index] = [];
+                continue;
+            }
+
+            $rawValue = $item['user_id'] ?? null;
+
+            // Handle common shapes: scalar string/number, arrays, or objects
+            if (is_array($rawValue)) {
+                if (array_key_exists('value', $rawValue)) {
+                    $rawValue = $rawValue['value'];
+                } elseif (array_key_exists('id', $rawValue)) {
+                    $rawValue = $rawValue['id'];
+                } elseif (array_key_exists(0, $rawValue)) {
+                    $rawValue = $rawValue[0];
+                }
+            } elseif (is_object($rawValue)) {
+                if (isset($rawValue->value)) {
+                    $rawValue = $rawValue->value;
+                } elseif (isset($rawValue->id)) {
+                    $rawValue = $rawValue->id;
+                }
+            }
+
+            // Cast numeric strings to int
+            if (is_string($rawValue) && ctype_digit($rawValue)) {
+                $rawValue = (int) $rawValue;
+            }
+
+            // Ensure final value is either int or null
+            if (!is_null($rawValue) && !is_int($rawValue)) {
+                $rawValue = null;
+            }
+
+            $this->prepared_by[$index]['user_id'] = $rawValue;
+        }
     }
     
     public function nextStep()
@@ -349,53 +411,40 @@ class CreateSyllabus extends Component
                     'classroom_policies.required' => 'Please define classroom policies.',
                 ]);
                 break;
+            case 7:
+                $this->normalizePreparedBy();
+                $this->validate([
+                    'principal_prepared_by' => 'required|integer|exists:users,id',
+                    'reviewed_by' => 'nullable|integer|exists:users,id',
+                    'recommending_approval' => 'nullable|integer|exists:users,id',
+                    'approved_by' => 'nullable|integer|exists:users,id',
+                    'prepared_by' => 'nullable|array',
+                    'prepared_by.*.user_id' => 'required_with:prepared_by|exists:users,id|different:principal_prepared_by',
+                    'prepared_by.*.role' => 'nullable|string|max:255',
+                    'prepared_by.*.description' => 'nullable|string',
+                ], [
+                    'prepared_by.*.user_id.required_with' => 'Please select a faculty member.',
+                    'prepared_by.*.user_id.different' => 'Co-editor cannot be the principal preparer.',
+                ]);
+                break;
             // Add other step validations as we implement them
         }
     }
 
     public function submit()
     {
+        $this->normalizePreparedBy();
         // Validate all steps before saving
+        // For drafts, validate only minimal required fields to allow incomplete content
         $this->validate([
-            // Step 1
-            'ay_start' => 'required|numeric',
-            'ay_end' => 'required|numeric',
-            'week_prelim' => 'required|numeric|min:1|max:20',
-            'week_midterm' => 'required|numeric|min:1|max:20',
-            'week_final' => 'required|numeric|min:1|max:20',
             'course_id' => 'required|exists:courses,id',
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            // Step 2
-            'program_outcomes' => 'required|array|min:1',
-            'program_outcomes.*.addressed' => 'required|array|min:1',
-            'program_outcomes.*.addressed.*' => 'required|string|in:Introduced,Enhanced,Demonstrated',
-            // Step 3
-            'course_outcomes' => 'required|array|min:1',
-            'course_outcomes.*.verb' => 'required|string',
-            'course_outcomes.*.content' => 'required|string|min:10',
-            // Step 4
-            'default_lecture_hours' => 'nullable|numeric|min:0',
-            'default_laboratory_hours' => 'nullable|numeric|min:0',
-            'learning_matrix' => 'required|array|min:1',
-            'learning_matrix.*.week_range.is_range' => 'nullable|boolean',
-            'learning_matrix.*.week_range.start' => 'required|integer|min:1|max:20',
-            'learning_matrix.*.week_range.end' => 'nullable|integer|min:1|max:20',
-            'learning_matrix.*.content' => 'required|string|min:3',
-            // Step 5
-            'textbook_references' => 'nullable|string',
-            'adaptive_digital_solutions' => 'nullable|string',
-            'online_references' => 'nullable|string',
-            'other_references' => 'nullable|string',
-            // Step 6
-            'grading_system' => 'required|string|min:10',
-            'classroom_policies' => 'required|string|min:10',
-            'consultation_hours' => 'nullable|string',
-            // Step 7
             'principal_prepared_by' => 'required|integer|exists:users,id',
-            'reviewed_by' => 'required|integer|exists:users,id',
-            'recommending_approval' => 'required|integer|exists:users,id',
-            'approved_by' => 'required|integer|exists:users,id',
+            // everything else optional for draft
+            'prepared_by' => 'nullable|array',
+            'prepared_by.*.user_id' => 'nullable|exists:users,id|different:principal_prepared_by',
+            'prepared_by.*.role' => 'nullable|string|max:255',
+            'prepared_by.*.description' => 'nullable|string',
         ], [
             'program_outcomes.required' => 'Program outcomes are required. Please select a course first.',
             'program_outcomes.min' => 'At least one program outcome must be available.',
@@ -403,21 +452,8 @@ class CreateSyllabus extends Component
             'program_outcomes.*.addressed.min' => 'Please select at least one addressing method for this program outcome.',
             'program_outcomes.*.addressed.*.required' => 'Please select a valid addressing method.',
             'program_outcomes.*.addressed.*.in' => 'Please select a valid addressing method.',
-            'course_outcomes.required' => 'At least one course outcome is required.',
-            'course_outcomes.min' => 'At least one course outcome must be added.',
-            'course_outcomes.*.verb.required' => 'Please select an action verb for this outcome.',
-            'course_outcomes.*.content.required' => 'Please provide a description for this outcome.',
-            'course_outcomes.*.content.min' => 'The outcome description must be at least 10 characters long.',
-            'learning_matrix.required' => 'Please add at least one learning matrix item.',
-            'learning_matrix.min' => 'Please add at least one learning matrix item.',
-            'learning_matrix.*.week_range.start.required' => 'Please specify the week (start).',
-            'learning_matrix.*.content.required' => 'Content is required for each matrix item.',
-            'grading_system.required' => 'Please define the grading system.',
-            'classroom_policies.required' => 'Please define classroom policies.',
             'principal_prepared_by.required' => 'Principal preparer is required.',
-            'reviewed_by.required' => 'Department chair is required.',
-            'recommending_approval.required' => 'Associate dean is required.',
-            'approved_by.required' => 'Dean is required.',
+            'prepared_by.*.user_id.different' => 'Co-editor cannot be the principal preparer.',
         ]);
 
         // Additional range validation for step 4
@@ -434,7 +470,12 @@ class CreateSyllabus extends Component
             }
         }
 
-        // Create and submit Syllabus for approval
+        // Sanitize optional approvers to null if invalid/empty
+        $reviewedBy = $this->reviewed_by && User::find($this->reviewed_by) ? (int) $this->reviewed_by : null;
+        $recommendingApproval = $this->recommending_approval && User::find($this->recommending_approval) ? (int) $this->recommending_approval : null;
+        $approvedBy = $this->approved_by && User::find($this->approved_by) ? (int) $this->approved_by : null;
+
+        // Create and save as Draft
         $syllabus = Syllabus::create([
             'name' => $this->name,
             'description' => $this->description,
@@ -452,11 +493,11 @@ class CreateSyllabus extends Component
             'consultation_hours' => $this->consultation_hours,
             'principal_prepared_by' => $this->principal_prepared_by,
             'prepared_by' => $this->prepared_by,
-            'reviewed_by' => $this->reviewed_by,
-            'recommending_approval' => $this->recommending_approval,
-            'approved_by' => $this->approved_by,
-            'status' => 'pending_approval',
-            'submitted_at' => now(),
+            'reviewed_by' => $reviewedBy,
+            'recommending_approval' => $recommendingApproval,
+            'approved_by' => $approvedBy,
+            'status' => 'draft',
+            'submitted_at' => null,
             'week_prelim' => $this->week_prelim,
             'week_midterm' => $this->week_midterm,
             'week_final' => $this->week_final,
@@ -465,7 +506,7 @@ class CreateSyllabus extends Component
             'program_outcomes' => $this->program_outcomes,
         ]);
 
-        session()->flash('success', 'Syllabus created and submitted for approval.');
+        session()->flash('success', 'Syllabus saved as draft.');
         return redirect()->route('home');
     }
     
@@ -488,6 +529,7 @@ class CreateSyllabus extends Component
             'reviewerName' => $this->reviewed_by ? (User::find($this->reviewed_by)?->full_name ?? User::find($this->reviewed_by)?->name ?? null) : null,
             'recommendingName' => $this->recommending_approval ? (User::find($this->recommending_approval)?->full_name ?? User::find($this->recommending_approval)?->name ?? null) : null,
             'approverName' => $this->approved_by ? (User::find($this->approved_by)?->full_name ?? User::find($this->approved_by)?->name ?? null) : null,
+            'facultyOptions' => User::all()->mapWithKeys(fn($u) => [$u->id => ($u->full_name ?? $u->name)])->toArray(),
         ]); 
     }
 }
