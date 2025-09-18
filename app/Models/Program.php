@@ -33,6 +33,8 @@ class Program extends Model
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'department_id' => 'integer',
+        'objectives' => 'array',
+        'outcomes' => 'array',
     ];
 
     /**
