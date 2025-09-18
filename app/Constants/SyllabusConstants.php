@@ -411,7 +411,7 @@ class SyllabusConstants
      */
     public const STATUSES = [
         'draft' => 'Draft',
-        'pending_approval' => 'Pending Approval',
+        'pending_approval' => 'Awaiting Review',
         'dept_chair_review' => 'Department Chair Review',
         'assoc_dean_review' => 'Associate Dean Review',
         'dean_review' => 'Dean Review',

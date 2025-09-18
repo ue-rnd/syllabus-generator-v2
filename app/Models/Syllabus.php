@@ -512,7 +512,9 @@ class Syllabus extends Model
 
         $this->update($updateData);
 
-        $this->addToApprovalHistory('approved', $user, $comments ?? 'Approved at ' . $user->primary_role . ' level');
+        // Generate appropriate approval message based on status
+        $approvalMessage = $this->getApprovalMessage($user, $this->status);
+        $this->addToApprovalHistory('approved', $user, $comments ?? $approvalMessage);
 
         return true;
     }
@@ -526,10 +528,13 @@ class Syllabus extends Model
             return false;
         }
 
+        // For superadmin, show their position, otherwise use primary_role
+        $rejectedByRole = $user->position === 'superadmin' ? 'superadmin' : $user->primary_role;
+
         $this->update([
             'status' => 'rejected',
             'rejection_comments' => $comments,
-            'rejected_by_role' => $user->primary_role,
+            'rejected_by_role' => $rejectedByRole,
             'rejected_at' => now(),
         ]);
 
@@ -575,11 +580,15 @@ class Syllabus extends Model
      */
     public function canApprove(User $user): bool
     {
+        // Check for superadmin position first
+        if ($user->position === 'superadmin') {
+            return in_array($this->status, ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review']);
+        }
+
         $roleStatusMap = [
             'department_chair' => ['pending_approval', 'dept_chair_review'],
             'associate_dean' => ['assoc_dean_review'],
             'dean' => ['dean_review'],
-            'superadmin' => ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review'],
         ];
 
         $userRole = $user->primary_role;
@@ -601,6 +610,17 @@ class Syllabus extends Model
      */
     private function getNextApprovalStatus(User $user): string
     {
+        // Superadmin progresses through each step sequentially
+        if ($user->position === 'superadmin') {
+            $superadminTransitions = [
+                'pending_approval' => 'dept_chair_review',
+                'dept_chair_review' => 'assoc_dean_review',
+                'assoc_dean_review' => 'dean_review',
+                'dean_review' => 'approved',
+            ];
+            return $superadminTransitions[$this->status] ?? $this->status;
+        }
+
         $transitions = [
             'department_chair' => [
                 'pending_approval' => 'dept_chair_review',
@@ -610,12 +630,6 @@ class Syllabus extends Model
                 'assoc_dean_review' => 'dean_review',
             ],
             'dean' => [
-                'dean_review' => 'approved',
-            ],
-            'superadmin' => [
-                'pending_approval' => 'approved',
-                'dept_chair_review' => 'approved',
-                'assoc_dean_review' => 'approved',
                 'dean_review' => 'approved',
             ],
         ];
@@ -628,6 +642,16 @@ class Syllabus extends Model
      */
     private function getTimestampField(User $user): ?string
     {
+        // For superadmin, determine field based on current status
+        if ($user->position === 'superadmin') {
+            return match ($this->status) {
+                'pending_approval' => 'dept_chair_reviewed_at',
+                'dept_chair_review' => 'assoc_dean_reviewed_at',
+                'assoc_dean_review' => 'dean_approved_at',
+                default => null,
+            };
+        }
+
         return match ($user->primary_role) {
             'department_chair' => 'dept_chair_reviewed_at',
             'associate_dean' => 'assoc_dean_reviewed_at',
@@ -641,6 +665,16 @@ class Syllabus extends Model
      */
     private function getApproverField(User $user): ?string
     {
+        // For superadmin, determine field based on current status
+        if ($user->position === 'superadmin') {
+            return match ($this->status) {
+                'pending_approval' => 'reviewed_by',
+                'dept_chair_review' => 'recommending_approval',
+                'assoc_dean_review' => 'approved_by',
+                default => null,
+            };
+        }
+
         return match ($user->primary_role) {
             'department_chair' => 'reviewed_by',
             'associate_dean' => 'recommending_approval',
@@ -650,17 +684,45 @@ class Syllabus extends Model
     }
 
     /**
+     * Get appropriate approval message based on user role and status
+     */
+    private function getApprovalMessage(User $user, string $currentStatus): string
+    {
+        // Special handling for superadmin position
+        if ($user->position === 'superadmin') {
+            return match ($currentStatus) {
+                'pending_approval' => 'External review completed (Super Admin)',
+                'dept_chair_review' => 'Approved by Super Admin (Department Chair level)',
+                'assoc_dean_review' => 'Approved by Super Admin (Associate Dean level)',
+                'dean_review' => 'Approved by Super Admin (Dean level)',
+                default => 'Approved by Super Admin',
+            };
+        }
+
+        return match ([$user->primary_role, $currentStatus]) {
+            ['department_chair', 'pending_approval'] => 'External review completed',
+            ['department_chair', 'dept_chair_review'] => 'Approved by Department Chair',
+            ['associate_dean', 'assoc_dean_review'] => 'Approved by Associate Dean',
+            ['dean', 'dean_review'] => 'Approved by Dean',
+            default => 'Approved at ' . $user->primary_role . ' level',
+        };
+    }
+
+    /**
      * Add entry to approval history
      */
     private function addToApprovalHistory(string $action, User $user, ?string $comments = null): void
     {
         $history = $this->approval_history ?? [];
-        
+
+        // For superadmin, show their position, otherwise use primary_role
+        $userRole = $user->position === 'superadmin' ? 'superadmin' : $user->primary_role;
+
         $history[] = [
             'action' => $action,
             'user_id' => $user->id,
             'user_name' => $user->full_name,
-            'user_role' => $user->primary_role,
+            'user_role' => $userRole,
             'comments' => $comments,
             'timestamp' => now()->toISOString(),
         ];

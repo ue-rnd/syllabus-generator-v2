@@ -8,6 +8,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
@@ -98,11 +99,30 @@ class SyllabiTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make()
-                    ->visible(fn ($record): bool => 
+                    ->visible(fn ($record): bool =>
                         in_array($record->status, ['draft', 'for_revisions']) &&
-                        ($record->principal_prepared_by === auth()->id() || 
+                        ($record->principal_prepared_by === auth()->id() ||
                          collect($record->prepared_by)->contains('user_id', auth()->id()))
                     ),
+                ReplicateAction::make('duplicate')
+                    ->label('Duplicate')
+                    ->beforeReplicaSaved(function (array $data): array {
+                        $data['name'] = $data['name'] . ' (Copy)';
+                        $data['status'] = 'draft';
+                        $data['submitted_at'] = null;
+                        $data['dept_chair_reviewed_at'] = null;
+                        $data['assoc_dean_reviewed_at'] = null;
+                        $data['dean_approved_at'] = null;
+                        $data['approval_history'] = [];
+                        $data['rejection_comments'] = null;
+                        $data['rejected_by_role'] = null;
+                        $data['rejected_at'] = null;
+                        $data['reviewed_by'] = null;
+                        $data['recommending_approval'] = null;
+                        $data['approved_by'] = null;
+                        $data['parent_syllabus_id'] = null;
+                        return $data;
+                    }),
                 SyllabusApprovalActions::submitForApproval(),
                 SyllabusApprovalActions::approve(),
                 SyllabusApprovalActions::reject(),
