@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 
-#[Layout('components.layouts.app.main-layout')]
+#[Layout('components.layouts.app')]
 class ResetPassword extends Controller{
     public function render(){
         $token = request()->route('token');

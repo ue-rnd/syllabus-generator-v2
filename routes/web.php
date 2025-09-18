@@ -4,6 +4,11 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\RolePermissionManager;
+use App\Livewire\Client\Dashboard\Home;
+use App\Livewire\Client\Dashboard\Profile as DashboardProfile;
+use App\Livewire\Client\Dashboard\Notifications;
+use App\Livewire\Client\Dashboard\Bookmarks;
+use App\Livewire\Client\Syllabi\CreateSyllabus;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,28 +39,15 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('dashboard', function() {
-        return view('livewire.client.dashboard.home');
-    })->name('dashboard');
-    Route::get('home', function() {
-        return view('livewire.client.dashboard.home');
-    })->name('dashboard_home');
+    Route::get('home', Home::class)->name('home');
 
-    Route::get('profile', function(){
-        return view('livewire.client.dashboard.profile');
-    })->name('profile');
+    Route::get('syllabus/create', CreateSyllabus::class)->name('syllabus');
 
-    Route::get('notifications', function(){
-        return view('livewire.client.dashboard.notifications');
-    })->name('notifications');
+    Route::get('profile', DashboardProfile::class)->name('profile');
 
-    Route::get('bookmarks', function(){
-        return view('livewire.client.dashboard.bookmarks');
-    })->name('bookmarks');
+    Route::get('notifications', Notifications::class)->name('notifications');
 
-    Route::get('create_subject', function(){
-        return view('livewire.client.dashboard.create_subject');
-    })->name('create_subject');
+    Route::get('bookmarks', Bookmarks::class)->name('bookmarks');
 });
 
 

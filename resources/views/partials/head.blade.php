@@ -9,6 +9,15 @@
 
 <link rel="preconnect" href="https://fonts.bunny.net">
 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+{{-- Quill Rich Text Editor CDN --}}
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+{{-- Livewire scripts --}}
+@livewireScripts
+
+{{-- WireUI scripts must be loaded after Alpine.js --}}
+@wireUiScripts
