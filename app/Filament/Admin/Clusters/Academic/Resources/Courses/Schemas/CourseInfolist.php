@@ -31,6 +31,7 @@ class CourseInfolist
                             ->color(fn ($state): string => is_string($state) ? CourseConstants::getTypeColor($state) : 'gray')
                             ->formatStateUsing(fn (string $state): string => CourseConstants::getTypeOptions()[$state] ?? ucfirst(str_replace('_', ' ', $state))),
                         TextEntry::make('description')
+                        ->html()
                             ->placeholder('-')
                             ->columnSpanFull(),
                     ])

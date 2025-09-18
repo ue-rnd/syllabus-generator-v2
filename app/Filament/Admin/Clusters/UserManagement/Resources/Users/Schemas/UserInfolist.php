@@ -33,6 +33,12 @@ class UserInfolist
                         'faculty' => 'success',
                         default => 'gray',
                     }),
+                TextEntry::make('college.name')
+                    ->label('College')
+                    ->badge(),
+                TextEntry::make('department.name')
+                    ->label('Department')
+                    ->badge(),
                 IconEntry::make('is_active')
                     ->label('Account Status')
                     ->boolean()

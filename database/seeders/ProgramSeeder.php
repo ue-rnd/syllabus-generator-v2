@@ -35,7 +35,8 @@ class ProgramSeeder extends Seeder
                 'department_id' => $dcs->id,
                 'sort_order' => 1,
                 'description' => "<p>The Bachelor of Science in Computer Science program emphasizes comprehension of the principles and concepts needed for designing and formulating new systems and applications. It encourages the inquisitive pursuit and investigation of new ideas and developments to prepare the student for a subsequent Master’s degree program. It is assured that students entering this degree program have higher level mathematical foundations for abstract algebra, mathematical logic, calculus, discrete mathematics, and statistics.</p>",
-                'outcomes' => "<ul><li>Apply knowledge of computing fundamentals, knowledge of a computing specialization, and mathematics, science, and domain knowledge appropriate for the computing specialization to the abstraction and conceptualization of computing models from defined problems and requirements.</li><li>Identify, analyze, formulate, research literature, and solve complex computing problems and requirements reaching substantiated conclusions using fundamental principles of mathematics, computing sciences, and relevant domain disciplines</li><li>An ability to apply mathematical foundations, algorithmic principles and computer science theory in the modeling and design of computer-based systems in a way that demonstrates comprehension of the tradeoffs involved in design choices</li><li>Knowledge and understanding of information security issues in relation to the design, development and use of information systems</li><li>Design and evaluate solutions for complex computing problems, and design and evaluate systems, components, or processes that meet specified needs with appropriate consideration for public health and safety, cultural, societal, and environmental considerations.</li><li>Create, select, adapt and apply appropriate techniques, resources and modern computing tools to complex computing activities, with an understanding of the limitations to accomplish a common goal</li><li>Function effectively as an individual and as a member or leader in diverse teams and in multidisciplinary settings</li><li>Communicate effectively with the computing community and with society at large about complex computing activities by being able to comprehend and write effective reports, design documentation, make effective presentations, and give and understand clear instructions</li><li>An ability to recognize the legal, social, ethical and professional issues involved in the utilization of computer technology and be guided by the adoption of appropriate professional, ethical and legal practices</li><li>Recognize the need and have the ability to engage in independent learning for continual development as a computing professional.</li></ul>"
+                'outcomes' => "<ul><li>Apply knowledge of computing fundamentals, knowledge of a computing specialization, and mathematics, science, and domain knowledge appropriate for the computing specialization to the abstraction and conceptualization of computing models from defined problems and requirements.</li><li>Identify, analyze, formulate, research literature, and solve complex computing problems and requirements reaching substantiated conclusions using fundamental principles of mathematics, computing sciences, and relevant domain disciplines</li><li>An ability to apply mathematical foundations, algorithmic principles and computer science theory in the modeling and design of computer-based systems in a way that demonstrates comprehension of the tradeoffs involved in design choices</li><li>Knowledge and understanding of information security issues in relation to the design, development and use of information systems</li><li>Design and evaluate solutions for complex computing problems, and design and evaluate systems, components, or processes that meet specified needs with appropriate consideration for public health and safety, cultural, societal, and environmental considerations.</li><li>Create, select, adapt and apply appropriate techniques, resources and modern computing tools to complex computing activities, with an understanding of the limitations to accomplish a common goal</li><li>Function effectively as an individual and as a member or leader in diverse teams and in multidisciplinary settings</li><li>Communicate effectively with the computing community and with society at large about complex computing activities by being able to comprehend and write effective reports, design documentation, make effective presentations, and give and understand clear instructions</li><li>An ability to recognize the legal, social, ethical and professional issues involved in the utilization of computer technology and be guided by the adoption of appropriate professional, ethical and legal practices</li><li>Recognize the need and have the ability to engage in independent learning for continual development as a computing professional.</li></ul>",
+                'objectives' => "<p>No objectives provided.</p>"
             ],
             [
                 'name' => 'Bachelor of Science in Data Science',
@@ -43,6 +44,9 @@ class ProgramSeeder extends Seeder
                 'level' => 'BACHELOR',
                 'department_id' => $dcs->id,
                 'sort_order' => 2,
+                'description' => "<p>The BSDS program includes the study of data and the methodologies, processes, algorithms, and systems for collecting, refining, storing, and analyzing data to arrive at useful insights and knowledge. Data Science is a discipline in computing that benefits from developments in computer science, mathematics, statistics, business, and other disciplines.</p>",
+                'outcomes' => "<ul><li>No outcome provided.</li></ul>",
+                'objectives' => "<p>No objectives provided.</p>"
             ],
             
             // Information Technology Department Programs
@@ -65,6 +69,8 @@ class ProgramSeeder extends Seeder
                 'department_id' => $demc->id,
                 'sort_order' => 4,
                 'description' => "<p>With specialization in Digital Animation, the Bachelor of Science in Entertainment and Multimedia Computing (BSEMC) program, with specialization in Digital Animation, aims to prepare students to be digital animation professionals, who are equipped with creative and technical knowledge, skills and values in conceptualizing, designing, and producing animation products and solutions, and in managing such projects over different technology platforms.</p>",
+                'outcomes' => "<ul><li>No outcome provided.</li></ul>",
+                'objectives' => "<p>No objectives provided.</p>"
             ],
             [
                 'name' => 'Bachelor of Science in Entertainment and Multimedia Computing with Specialization in Game Development',
@@ -72,7 +78,9 @@ class ProgramSeeder extends Seeder
                 'level' => 'BACHELOR',
                 'department_id' => $demc->id,
                 'sort_order' => 4,
-                'description' => '<p>With specialization in Game Development, the Bachelor of Science in Entertainment and Multimedia Computing (BSEMCG) program, with specialization n Game development professionals, who are equipped with creative and technical knowledge, skills and values in conceptualizing, designing, and producing digital games and tools, and in managing such projects over different technology platforms.</p>'
+                'description' => '<p>With specialization in Game Development, the Bachelor of Science in Entertainment and Multimedia Computing (BSEMCG) program, with specialization n Game development professionals, who are equipped with creative and technical knowledge, skills and values in conceptualizing, designing, and producing digital games and tools, and in managing such projects over different technology platforms.</p>',
+                'outcomes' => "<ul><li>No outcome provided.</li></ul>",
+                'objectives' => "<p>No objectives provided.</p>"
             ],
         ];
 
@@ -81,17 +89,9 @@ class ProgramSeeder extends Seeder
                 'name' => $program['name'],
                 'code' => $program['code'],
                 'level' => $program['level'],
-                'description' => $faker->paragraph(3),
-                'objectives' => [
-                    $faker->sentence(),
-                    $faker->sentence(),
-                    $faker->sentence(),
-                ],
-                'outcomes' => [
-                    $faker->sentence(),
-                    $faker->sentence(),
-                    $faker->sentence(),
-                ],
+                'description' => "<p>$faker->paragraph(3)</p>",
+                'objectives' => "<p>$faker->sentence()</p>",
+                'outcomes' => "<ul><li>$faker->sentence()</li></ul>",
                 'is_active' => true,
                 'sort_order' => $program['sort_order'],
                 'department_id' => $program['department_id'],

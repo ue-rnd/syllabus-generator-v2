@@ -8,6 +8,7 @@ class UserConstants
      * User positions/roles
      */
     public const POSITIONS = [
+        'superadmin' => 'Super Admin',
         'professor' => 'Professor',
         'associate_professor' => 'Associate Professor',
         'assistant_professor' => 'Assistant Professor',

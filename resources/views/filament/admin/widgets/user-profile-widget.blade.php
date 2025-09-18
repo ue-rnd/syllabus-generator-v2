@@ -68,7 +68,7 @@
                                     default => 'gray'
                                 }"
                             >
-                                {{ ucwords(str_replace('_', ' ', $user->position ?? 'Faculty')) }}
+                                {{ App\Constants\UserConstants::POSITIONS[$user->position] }}
                             </x-filament::badge>
                         </p>
                     </div>

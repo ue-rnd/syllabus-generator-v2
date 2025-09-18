@@ -2,19 +2,16 @@
 
 namespace App\Filament\Admin\Clusters\Academic\Resources\Courses\Schemas;
 
-use App\Constants\SyllabusConstants;
 use App\Constants\CourseConstants;
+use App\Constants\SyllabusConstants;
 use App\Models\Course;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use App\Models\College;
-use App\Models\Program;
 
 class CourseForm
 {
@@ -36,7 +33,14 @@ class CourseForm
                             ->searchable()
                             ->preload()
                             ->columnSpanFull(),
-                        Textarea::make('description')
+                        RichEditor::make('description')
+                            ->label('Description')
+                            ->required()
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
                     ])
                     ->columns(2)
@@ -96,23 +100,22 @@ class CourseForm
                                     ->searchable()
                                     ->required()
                                     ->placeholder('Select an action verb'),
-                                
+
                                 RichEditor::make('content')
                                     ->label('Outcome Description')
                                     ->placeholder('Complete the outcome statement...')
                                     ->required()
                                     ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-        ['table', 'attachFiles'],
-        ['undo', 'redo']])
+                                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                        ['table', 'attachFiles'],
+                                        ['undo', 'redo']])
                                     ->columnSpanFull(),
                             ])
                             ->addActionLabel('Add Course Outcome')
                             ->collapsible()
-                            ->itemLabel(fn (array $state): ?string => 
-                                isset($state['verb']) && isset($state['content'])
-                                    ? ucfirst($state['verb']) . ' ' . \Str::limit(strip_tags(is_string($state['content']) ? $state['content'] : ''), 50)
+                            ->itemLabel(fn (array $state): ?string => isset($state['verb']) && isset($state['content'])
+                                    ? ucfirst($state['verb']).' '.\Str::limit(strip_tags(is_string($state['content']) ? $state['content'] : ''), 50)
                                     : 'New Outcome'
                             )
                             ->columnSpanFull(),

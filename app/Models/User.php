@@ -226,4 +226,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(College::class);
     }
+
+    /**
+     * Get the college that the user belongs to
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

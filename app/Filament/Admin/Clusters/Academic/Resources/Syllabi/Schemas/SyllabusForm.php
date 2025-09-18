@@ -511,7 +511,7 @@ class SyllabusForm
                             ->default(auth()->id())
                             ->columnSpanFull(),
 
-                        TextInput::make('principal_prepared_by')
+                        RichEditor::make('principal_prepared_by')
                             ->label('')
                             ->disabled()
                             ->default('<h1>Note</h1><p>The second to the last additional preparer should be the <strong>Member of the Library Committee</strong>, while the last additional preparer should be the <strong>External Reviewer</strong>.')

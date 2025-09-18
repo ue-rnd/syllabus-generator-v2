@@ -36,18 +36,28 @@ class UserForm
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
-                TextInput::make('password')
-                    ->password()
-                    ->required(fn (string $context): bool => $context === 'create')
-                    ->minLength(8)
-                    ->dehydrated(fn ($state) => filled($state))
-                    ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
+                // TextInput::make('password')
+                //     ->password()
+                //     ->required(fn (string $context): bool => $context === 'create')
+                //     ->minLength(8)
+                //     ->dehydrated(fn ($state) => filled($state))
+                //     ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
                 Select::make('roles')
                     ->label('Role')
                     ->relationship('roles', 'name')
                     ->preload()
                     ->required()
                     ->multiple(false),
+                Select::make('college')
+                    ->label('College')
+                    ->relationship('college', 'name')
+                    ->searchable()
+                    ->preload(),
+                Select::make('department')
+                    ->label('Department')
+                    ->relationship('department', 'name')
+                    ->searchable()
+                    ->preload(),
                 Toggle::make('is_active')
                     ->label('Active Account')
                     ->default(true)
