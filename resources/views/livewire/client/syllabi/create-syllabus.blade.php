@@ -142,12 +142,13 @@
                     </div>
                     
                     <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description (Auto-filled from course)</label>
                         <textarea wire:model="description" 
                                   id="description"
                                   rows="3"
-                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('description') border-red-500 @enderror"
-                                  placeholder="Optional description of the syllabus..."></textarea>
+                                  readonly
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('description') border-red-500 @enderror"
+                                  placeholder="Auto-filled from course description"></textarea>
                         @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -726,7 +727,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Reviewed By (Department Chair)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Verified By (Department Chair)</label>
                         <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
                             {{ $reviewerName ?? 'Auto-selected from department' }}
                         </div>

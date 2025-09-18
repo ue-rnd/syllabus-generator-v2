@@ -119,6 +119,9 @@ class CreateSyllabus extends Component
             $this->course = Course::with(['programs.department', 'college'])->find($value);
             
             if ($this->course) {                
+                // Auto-fill description from course description
+                $this->description = $this->course->description ?? '';
+
                 // Get program outcomes
                 $program = $this->course->programs()->first();
                 if ($program && $program->outcomes) {
@@ -144,6 +147,7 @@ class CreateSyllabus extends Component
         } else {
             $this->course = null;
             $this->program_outcomes = [];
+            $this->description = '';
             $this->reviewed_by = null;
             $this->recommending_approval = null;
             $this->approved_by = null;

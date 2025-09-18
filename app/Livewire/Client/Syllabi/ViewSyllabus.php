@@ -3,6 +3,7 @@
 namespace App\Livewire\Client\Syllabi;
 
 use App\Models\Syllabus;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Attributes\Layout;
@@ -145,16 +146,39 @@ class ViewSyllabus extends Component
             'approved_by' => 'required|integer|exists:users,id',
         ];
 
-        $validator = Validator::make($data, $rules);
+        $messages = [
+            'course_outcomes.required' => 'Please add at least one course learning outcome.',
+            'course_outcomes.min' => 'Please add at least one course learning outcome.',
+            'course_outcomes.*.verb.required' => 'Each course outcome must have an action verb.',
+            'course_outcomes.*.content.required' => 'Each course outcome must have a description.',
+            'course_outcomes.*.content.min' => 'Each course outcome description must be at least 10 characters.',
+
+            'learning_matrix.required' => 'Please add at least one learning matrix item.',
+
+            'reviewed_by.required' => 'Verified By (Department Chair) is required.',
+            'recommending_approval.required' => 'Recommending Approval (Associate Dean) is required.',
+            'approved_by.required' => 'Approved By (Dean) is required.',
+
+            'program_outcomes.required' => 'Program outcomes are required.',
+            'program_outcomes.min' => 'Program outcomes are required.',
+            'program_outcomes.*.addressed.required' => 'Please select how each program outcome is addressed.',
+            'program_outcomes.*.addressed.min' => 'Please select at least one addressing method for each program outcome.',
+            'program_outcomes.*.addressed.*.in' => 'Please select a valid addressing method for program outcomes.',
+
+            'grading_system.required' => 'Please define the grading system.',
+            'classroom_policies.required' => 'Please define classroom policies.',
+        ];
+
+        $validator = Validator::make($data, $rules, $messages);
         $errors = [];
         if ($validator->fails()) {
-            $errors = $validator->errors()->all();
+            $errors = array_values(array_unique($validator->errors()->all()));
         }
 
         // Use model overlap validator
         $rangeCheck = $this->syllabus->validateWeekRanges();
         if ($rangeCheck !== true && is_array($rangeCheck)) {
-            $errors = array_merge($errors, $rangeCheck);
+            $errors = array_values(array_unique(array_merge($errors, $rangeCheck)));
         }
 
         // Dynamic cross-field checks involving week_final
@@ -219,10 +243,46 @@ class ViewSyllabus extends Component
             $canSubmit = $this->syllabus->canSubmitForApproval($user);
         }
 
+        // Build prerequisites list from course
+        $prerequisites = [];
+        try {
+            $prerequisites = $this->syllabus->course?->prerequisiteCourses()?->map(function ($course) {
+                return [
+                    'code' => $course->code,
+                    'name' => $course->name,
+                ];
+            })->values()->toArray() ?? [];
+        } catch (\Throwable $e) {
+            $prerequisites = [];
+        }
+
+        // Build co-editor display data
+        $coEditors = [];
+        $preparedBy = $this->syllabus->prepared_by ?? [];
+        if (is_array($preparedBy) && !empty($preparedBy)) {
+            $userIds = collect($preparedBy)
+                ->pluck('user_id')
+                ->filter()
+                ->unique()
+                ->values();
+            $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+            $coEditors = collect($preparedBy)->map(function ($entry) use ($users) {
+                $userId = $entry['user_id'] ?? null;
+                $user = $userId ? ($users[$userId] ?? null) : null;
+                return [
+                    'name' => $user?->full_name ?? $user?->name ?? '[Unknown User]',
+                    'role' => $entry['role'] ?? null,
+                    'description' => $entry['description'] ?? null,
+                ];
+            })->toArray();
+        }
+
         return view('livewire.client.syllabi.view-syllabus', [
             'syllabus' => $this->syllabus,
             'canEdit' => $canEdit,
             'canSubmit' => $canSubmit,
+            'prerequisites' => $prerequisites,
+            'coEditors' => $coEditors,
         ]);
     }
 }
