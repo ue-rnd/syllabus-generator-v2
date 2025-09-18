@@ -99,9 +99,9 @@
                         <span class="text-xs text-gray-500">{{ $syllabus->updated_at->diffForHumans() }}</span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <a href="{{ route('syllabus.edit', $syllabus) }}" wire:navigate class="text-gray-700 hover:text-gray-900 text-sm font-medium">
+                        {{-- <a href="{{ route('syllabus.edit', $syllabus) }}" wire:navigate class="text-gray-700 hover:text-gray-900 text-sm font-medium">
                             Edit
-                        </a>
+                        </a> --}}
                         <span class="text-gray-300">|</span>
                         <a href="{{ route('syllabus.pdf.view', $syllabus) }}" target="_blank" rel="noopener" class="text-red-700 hover:text-red-800 text-sm font-medium">
                             Open PDF

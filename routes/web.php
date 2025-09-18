@@ -43,11 +43,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('syllabus/create', CreateSyllabus::class)->name('syllabus');
 
-    // Edit existing syllabus using the same component
-    Route::get('syllabus/{syllabus}/edit', CreateSyllabus::class)
-        ->name('syllabus.edit')
-        ->whereNumber('syllabus');
-
     Route::get('profile', DashboardProfile::class)->name('profile');
 
     Route::get('notifications', Notifications::class)->name('notifications');

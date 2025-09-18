@@ -789,25 +789,24 @@
             @endif
         </div>
     </div>
-</div>
-
-<!-- Confirm Submit Modal (Alpine + Livewire) -->
-<div x-data="{ open: $wire.entangle('showConfirmModal') }" x-show="open" class="fixed inset-0 z-50 flex items-center justify-center" style="display: none;">
-    <div class="fixed inset-0 bg-black/40" x-on:click="open = false"></div>
-    <div class="relative bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6">
-        <h2 class="text-lg font-medium text-gray-900">Submit Syllabus for Approval</h2>
-        <p class="mt-2 text-sm text-gray-600">Are you sure you want to submit? You cannot edit until the review process is complete.</p>
-        <div class="mt-6 flex justify-end space-x-3">
-            <button type="button"
-                    x-on:click="open = false"
-                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
-                Cancel
-            </button>
-            <button type="button"
-                    x-on:click="open = false; $wire.submit()"
-                    class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">
-                Submit
-            </button>
+    <!-- Confirm Submit Modal (Alpine + Livewire) -->
+    <div x-data="{ open: $wire.entangle('showConfirmModal') }" x-show="open" class="fixed inset-0 z-50 flex items-center justify-center" style="display: none;">
+        <div class="fixed inset-0 bg-black/40" x-on:click="open = false"></div>
+        <div class="relative bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6">
+            <h2 class="text-lg font-medium text-gray-900">Submit Syllabus for Approval</h2>
+            <p class="mt-2 text-sm text-gray-600">Are you sure you want to submit? You cannot edit until the review process is complete.</p>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button"
+                        x-on:click="open = false"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
+                    Cancel
+                </button>
+                <button type="button"
+                        x-on:click="open = false; $wire.submit()"
+                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">
+                    Submit
+                </button>
+            </div>
         </div>
     </div>
 </div>
