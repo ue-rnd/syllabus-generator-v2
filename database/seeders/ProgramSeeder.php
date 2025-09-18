@@ -31,7 +31,7 @@ class ProgramSeeder extends Seeder
             [
                 'name' => 'Bachelor of Science in Computer Science',
                 'code' => 'BSCS',
-                'level' => 'BACHELOR',
+                'level' => 'bachelor',
                 'department_id' => $dcs->id,
                 'sort_order' => 1,
                 'description' => "<p>The Bachelor of Science in Computer Science program emphasizes comprehension of the principles and concepts needed for designing and formulating new systems and applications. It encourages the inquisitive pursuit and investigation of new ideas and developments to prepare the student for a subsequent Master’s degree program. It is assured that students entering this degree program have higher level mathematical foundations for abstract algebra, mathematical logic, calculus, discrete mathematics, and statistics.</p>",
@@ -41,7 +41,7 @@ class ProgramSeeder extends Seeder
             [
                 'name' => 'Bachelor of Science in Data Science',
                 'code' => 'BSDS',
-                'level' => 'BACHELOR',
+                'level' => 'bachelor',
                 'department_id' => $dcs->id,
                 'sort_order' => 2,
                 'description' => "<p>The BSDS program includes the study of data and the methodologies, processes, algorithms, and systems for collecting, refining, storing, and analyzing data to arrive at useful insights and knowledge. Data Science is a discipline in computing that benefits from developments in computer science, mathematics, statistics, business, and other disciplines.</p>",
@@ -53,7 +53,7 @@ class ProgramSeeder extends Seeder
             [
                 'name' => 'Bachelor of Science in Information Technology',
                 'code' => 'BSIT',
-                'level' => 'BACHELOR',
+                'level' => 'bachelor',
                 'department_id' => $dit->id,
                 'sort_order' => 3,
                 'description' => "<p>The Bachelor of Science in Information Technology program emphasizes the acquisition of concepts and technologies, preparing and enabling the student for the industrial practice of systems integration, systems administration, systems planning, systems implementation, and other activities that maintain the integrity and proper functionality of a system and its components. It is expected that a student graduating under this degree program had undergraduate or industry preparation that would have exposed him/her to programming concepts and skills as well as the operating environment of a network system.</p>",
@@ -65,7 +65,7 @@ class ProgramSeeder extends Seeder
             [
                 'name' => 'Bachelor of Science in Entertainment and Multimedia Computing with Specialization in Digital Animation',
                 'code' => 'BSEMC-DA',
-                'level' => 'BACHELOR',
+                'level' => 'bachelor',
                 'department_id' => $demc->id,
                 'sort_order' => 4,
                 'description' => "<p>With specialization in Digital Animation, the Bachelor of Science in Entertainment and Multimedia Computing (BSEMC) program, with specialization in Digital Animation, aims to prepare students to be digital animation professionals, who are equipped with creative and technical knowledge, skills and values in conceptualizing, designing, and producing animation products and solutions, and in managing such projects over different technology platforms.</p>",
@@ -75,7 +75,7 @@ class ProgramSeeder extends Seeder
             [
                 'name' => 'Bachelor of Science in Entertainment and Multimedia Computing with Specialization in Game Development',
                 'code' => 'BSEMC-GD',
-                'level' => 'BACHELOR',
+                'level' => 'bachelor',
                 'department_id' => $demc->id,
                 'sort_order' => 4,
                 'description' => '<p>With specialization in Game Development, the Bachelor of Science in Entertainment and Multimedia Computing (BSEMCG) program, with specialization n Game development professionals, who are equipped with creative and technical knowledge, skills and values in conceptualizing, designing, and producing digital games and tools, and in managing such projects over different technology platforms.</p>',
@@ -89,9 +89,9 @@ class ProgramSeeder extends Seeder
                 'name' => $program['name'],
                 'code' => $program['code'],
                 'level' => $program['level'],
-                'description' => "<p>$faker->paragraph(3)</p>",
-                'objectives' => "<p>$faker->sentence()</p>",
-                'outcomes' => "<ul><li>$faker->sentence()</li></ul>",
+                'description' => $program['description'],
+                'objectives' => $program['objectives'],
+                'outcomes' => $program['outcomes'],
                 'is_active' => true,
                 'sort_order' => $program['sort_order'],
                 'department_id' => $program['department_id'],

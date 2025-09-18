@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Widgets;
 
+use App\Constants\CourseConstants;
 use App\Models\Course;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -42,26 +43,13 @@ class ActiveCoursesWidget extends BaseWidget
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('units')
-                    ->label('Units')
-                    ->numeric()
-                    ->sortable(),
-
                 Tables\Columns\TextColumn::make('course_type')
                     ->label('Type')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'Core' => 'success',
-                        'Elective' => 'warning',
-                        'General Education' => 'info',
-                        'Major' => 'primary',
-                        default => 'gray',
+                    ->formatStateUsing(fn ($state) => CourseConstants::TYPES[$state])
+                    ->color(function ($state) {
+                        return CourseConstants::getTypeColor($state);
                     }),
-
-                Tables\Columns\TextColumn::make('year_level')
-                    ->label('Year Level')
-                    ->badge()
-                    ->color('gray'),
 
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Active')

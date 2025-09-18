@@ -62,12 +62,12 @@ class CourseSeeder extends Seeder
             $course = Course::create([
                 'name' => $courseData['name'],
                 'code' => $courseData['code'],
-                'description' => $faker->paragraph(3),
-                'outcomes' => [
-                    $faker->sentence(),
-                    $faker->sentence(),
-                    $faker->sentence(),
-                ],
+                'description' => $courseData['description'],
+                'outcomes' => $courseData['outcomes'],
+                'course_type' => $courseData['course_type'],
+                'prerequisite_courses' => $courseData['prerequisite_courses'],
+                'credit_units_lecture'=> $courseData['credit_units_lecture'],
+                'credit_units_laboratory'=> $courseData['credit_units_laboratory'],
                 'is_active' => true,
                 'sort_order' => $courseData['sort_order'],
                 'college_id' => $ccss->id,

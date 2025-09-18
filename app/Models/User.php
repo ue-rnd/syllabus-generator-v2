@@ -100,9 +100,6 @@ class User extends Authenticatable
     {
         if ($this->firstname && $this->lastname) {
             $name = $this->firstname;
-            if ($this->middlename) {
-                $name .= ' ' . $this->middlename;
-            }
             $name .= ' ' . $this->lastname;
             return $name;
         }

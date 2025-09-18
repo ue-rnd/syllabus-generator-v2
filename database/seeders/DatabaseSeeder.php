@@ -26,10 +26,10 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
         ]);
 
-        $ccss = College::where("code", "eq","CCSS")->first();
-        $dcs = Department::where("name", "eq", "Department of Computer Science")->first();
-        $dit = Department::where("name", "eq", "Department of Information Technology")->first();
-        $demc = Department::where("name", "eq", "Department of Entertainment and Multimedia Computing")->first();
+        $ccss = College::where("code", "CCSS")->first();
+        $dcs = Department::where("name", "Department of Computer Science")->first();
+        $dit = Department::where("name", "Department of Information Technology")->first();
+        $demc = Department::where("name", "Department of Entertainment and Multimedia Computing")->first();
 
         $superAdmin = User::factory()->create([
             'lastname' => 'Admin',
@@ -57,20 +57,6 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'materesa.borebor@ue.edu.ph',
             'password' => bcrypt('ccssdean'),
-        ]);
-
-        $ccssAssocDean = User::factory()->create([
-            'firstname' => 'Arne',
-            'middlename' => 'Rocero',
-            'lastname' => 'Bana',
-            'position' => 'associate_dean',
-            'college_id' => $ccss->id,
-            'department_id' => null,
-            'is_active' => true,
-            'last_login_at' => now(),
-            'last_login_ip' => request()->ip(),
-            'email' => 'arne.bana@ue.edu.ph',
-            'password' => bcrypt('ccssassociatedean'),
         ]);
 
         $ccssAssocDean = User::factory()->create([
@@ -121,7 +107,7 @@ class DatabaseSeeder extends Seeder
             'lastname' => 'Uy',
             'position' => 'department_chair',
             'college_id' => $ccss->id,
-            'department_id' => $dit->id,
+            'department_id' => $demc->id,
             'is_active' => true,
             'last_login_at' => now(),
             'last_login_ip' => request()->ip(),
@@ -141,6 +127,23 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'meliejim.sarmiento@ue.edu.ph',
             'password' => bcrypt('ccssfaculty'),
+        ]);
+
+        $ccss->update([
+            'dean_id' => $ccssDean->id,
+            'associate_dean_id'=> $ccssAssocDean->id,
+        ]);
+
+        $dcs->update([
+            'department_chair_id' => $ccssDC1->id,
+        ]);
+
+        $dit->update([
+            'department_chair_id' => $ccssDC2->id,
+        ]);
+
+        $demc->update([
+            'department_chair_id' => $ccssDC3->id,
         ]);
 
         // Assign superadmin role to the super admin user

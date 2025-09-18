@@ -16,7 +16,7 @@ class ProgramFactory extends Factory
      */
     public function definition(): array
     {
-        $levels = ['ASSOCIATE', 'BACHELOR', 'MASTERAL', 'DOCTORAL'];
+        $levels = ['associate', 'bachelor', 'masteral', 'doctoral'];
         
         return [
             'name' => $this->faker->unique()->words(3, true) . ' Program',
@@ -75,7 +75,7 @@ class ProgramFactory extends Factory
      */
     public function associate(): static
     {
-        return $this->level('ASSOCIATE');
+        return $this->level('associate');
     }
 
     /**
@@ -83,7 +83,7 @@ class ProgramFactory extends Factory
      */
     public function bachelor(): static
     {
-        return $this->level('BACHELOR');
+        return $this->level('bachelor');
     }
 
     /**
@@ -91,7 +91,7 @@ class ProgramFactory extends Factory
      */
     public function masteral(): static
     {
-        return $this->level('MASTERAL');
+        return $this->level('masteral');
     }
 
     /**
@@ -99,7 +99,7 @@ class ProgramFactory extends Factory
      */
     public function doctoral(): static
     {
-        return $this->level('DOCTORAL');
+        return $this->level('doctoral');
     }
 
     /**
