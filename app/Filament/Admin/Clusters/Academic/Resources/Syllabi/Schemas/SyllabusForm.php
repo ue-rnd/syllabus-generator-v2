@@ -465,7 +465,7 @@ class SyllabusForm
                         ]),
 
                     Step::make('Policies & Grading')
-                        ->description('These fields are pre-filled with default content. You may modify them as needed')
+                        ->description('Specify grading computations, classroom policies, and consultation hours for this course')
                         ->schema([
                             RichEditor::make('grading_system')
                                 ->label('Grading System')
@@ -474,11 +474,7 @@ class SyllabusForm
                                     ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
                                     ['table', 'attachFiles'],
                                     ['undo', 'redo']])
-                                ->default('Cumulative Grading System is prescribed by the University. As such, the following computations are applied:
-
-Midterm Grade = (Prelim Grade + 2 (Tentative Midterm Grade)) / 3
-
-Final Grade = (Midterm Grade + 2 (Tentative Final Grade)) / 3')
+                                ->default('<p>Cumulative Grading System is prescribed by the University. As such, the following computations are applied:</p><ol><li>Midterm Grade = (Prelim Grade + 2 (Tentative Midterm Grade)) / 3</li><li>Final Grade = (Midterm Grade + 2 (Tentative Final Grade)) / 3</li></ol>')
                                 ->columnSpanFull(),
 
                             RichEditor::make('classroom_policies')
@@ -488,9 +484,7 @@ Final Grade = (Midterm Grade + 2 (Tentative Final Grade)) / 3')
                                     ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
                                     ['table', 'attachFiles'],
                                     ['undo', 'redo']])
-                                ->default('See Student Manual
-
-See Canvas Course Page')
+                                ->default('<p>See Student Manual</p><p>See Canvas Course Page</p>')
                                 ->columnSpanFull(),
 
                             RichEditor::make('consultation_hours')
@@ -500,7 +494,7 @@ See Canvas Course Page')
                                     ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
                                     ['table', 'attachFiles'],
                                     ['undo', 'redo']])
-                                ->default('Monday to Friday: 2:00 PM - 4:00 PM<br>By appointment: Contact through official email<br>Response time: Within 24-48 hours for email inquiries')
+                                ->default('<p>N/A</p>')
                                 ->columnSpanFull(),
                         ]),
 
@@ -517,14 +511,15 @@ See Canvas Course Page')
                             ->default(auth()->id())
                             ->columnSpanFull(),
 
+                        TextInput::make('principal_prepared_by')
+                            ->label('')
+                            ->disabled()
+                            ->default('<h1>Note</h1><p>The second to the last additional preparer should be the <strong>Member of the Library Committee</strong>, while the last additional preparer should be the <strong>External Reviewer</strong>.')
+                            ->columnSpanFull(),
+
                         Repeater::make('prepared_by')
                             ->label('Additional Preparers')
                             ->schema([
-                                TextEntry::make('index')
-                                    ->label('No.')
-                                    ->default(fn ($index) => $index + 1)
-                                    ->live(),
-
                                 Select::make('user_id')
                                     ->label('Faculty Member')
                                     ->options(User::all()->pluck('full_name', 'id'))
@@ -547,21 +542,6 @@ See Canvas Course Page')
                                         ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
                                         ['table', 'attachFiles'],
                                         ['undo', 'redo']])
-                                    ->columnSpanFull(),
-
-                                Toggle::make('is_reviewer')
-                                    ->label('Is Reviewer?'),
-
-                                TextEntry::make('library_committee_note')
-                                    ->label(fn ($index) => $index)
-                                    ->default('Is a member of the library committee')
-                                    ->visible(fn ($get, $record, $index) => $get('index') === count($get('../') ?? []) - 2)
-                                    ->columnSpanFull(),
-
-                                TextEntry::make('external_reviewer_note')
-                                    ->label('')
-                                    ->default('Is an external reviewer')
-                                    ->visible(fn ($get, $record, $index) => $get('index') === count($get('../') ?? []) - 1)
                                     ->columnSpanFull(),
                             ])
                             ->addActionLabel('Add Preparer')

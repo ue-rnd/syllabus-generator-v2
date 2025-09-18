@@ -24,7 +24,7 @@ class DepartmentSeeder extends Seeder
             throw new \Exception('College of Computer Studies and Systems not found. Make sure to run CollegeSeeder first.');
         }
 
-                $departments = [
+        $departments = [
             [
                 'name' => 'Department of Computer Science',
                 'sort_order' => 1,
@@ -34,7 +34,7 @@ class DepartmentSeeder extends Seeder
                 'sort_order' => 2,
             ],
             [
-                'name' => 'Department of Information Systems',
+                'name' => 'Department of Entertainment and Multimedia Computing',
                 'sort_order' => 3,
             ],
         ];
@@ -45,7 +45,7 @@ class DepartmentSeeder extends Seeder
                 'description' => $faker->paragraph(3),
                 'is_active' => true,
                 'sort_order' => $department['sort_order'],
-                'college_id' => $ccss->id, // Link to CCSS
+                'college_id' => $ccss->id,
             ]);
         }
     }
