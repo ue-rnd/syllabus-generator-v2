@@ -8,6 +8,7 @@ use App\Models\Syllabus;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -409,9 +410,9 @@ class CreateSyllabus extends Component
                     $end = $item['week_range']['end'] ?? null;
                     if ($isRange) {
                         if ($end === null) {
-                            $this->addError("learning_matrix.$idx.week_range.end", 'Week end is required when using a range.');
+                            throw ValidationException::withMessages(["learning_matrix.$idx.week_range.end" => 'Week end is required when using a range.']);
                         } elseif ($start !== null && $end < $start) {
-                            $this->addError("learning_matrix.$idx.week_range.end", 'Week end must be greater than or equal to week start.');
+                            throw ValidationException::withMessages(["learning_matrix.$idx.week_range.end" => 'Week end must be greater than or equal to week start.']);
                         }
                     }
                 }
