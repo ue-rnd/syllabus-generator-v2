@@ -396,6 +396,8 @@ class CreateSyllabus extends Component
                     'learning_matrix.min' => 'Please add at least one learning matrix item.',
                     'learning_matrix.*.week_range.start.required' => 'Please specify the week (start).',
                     'learning_matrix.*.content.required' => 'Content is required for each matrix item.',
+                    'learning_matrix.*.week_range.start.max' => 'This field cannot be greater than 20',
+                    'learning_matrix.*.week_range.end.max' => 'This field cannot be greater than 20.'
                 ]);
 
                 // Additional validation: if is_range is true, end must be >= start
