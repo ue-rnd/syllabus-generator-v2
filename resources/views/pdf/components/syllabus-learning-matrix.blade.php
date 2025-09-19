@@ -38,11 +38,10 @@
             <tbody>
                 @foreach ($learning_matrix as $weekItem)
                     @php
-                        // Parse week range from the actual structure
-                        $weekRange = $weekItem['week_range'] ?? [];
-                        $isRange = $weekRange['is_range'] ?? false;
-                        $startWeek = (int) ($weekRange['start'] ?? 1);
-                        $endWeek = $isRange ? (int) ($weekRange['end'] ?? $startWeek) : $startWeek;
+                        // Use processed data from SyllabusPdfService
+                        $startWeek = (int) ($weekItem['start'] ?? 1);
+                        $endWeek = (int) ($weekItem['end'] ?? $startWeek);
+                        $weekDisplay = $weekItem['week_display'] ?? 'N/A';
 
                         // Calculate total activities to determine rowspan
                         $totalActivities = max(1, count($weekItem['learning_activities'] ?? []));
@@ -58,13 +57,7 @@
 
                     <tr>
                         <td rowspan="{{ $prelim || $midterm || $finals ? $maxRows + 1 : $maxRows }}" class="center">
-                            @if ($startWeek === $endWeek)
-                                {{ $startWeek }}<sup>{{ $startWeek === 1 ? 'st' : ($startWeek === 2 ? 'nd' : ($startWeek === 3 ? 'rd' : 'th')) }}</sup>
-                            @else
-                                {{ $startWeek }}<sup>{{ $startWeek === 1 ? 'st' : ($startWeek === 2 ? 'nd' : ($startWeek === 3 ? 'rd' : 'th')) }}</sup>
-                                -
-                                {{ $endWeek }}<sup>{{ $endWeek === 1 ? 'st' : ($endWeek === 2 ? 'nd' : ($endWeek === 3 ? 'rd' : 'th')) }}</sup>
-                            @endif
+                            {!! $weekDisplay !!}
                         </td>
                         <td rowspan="{{ $maxRows }}" class="center">
                             {{ $syllabus->default_lecture_hours * $weekMultiplier }}

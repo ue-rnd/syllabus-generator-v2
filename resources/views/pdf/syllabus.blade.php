@@ -54,6 +54,7 @@
         
         {{-- Learning Matrix --}}
         @include('pdf.components.syllabus-learning-matrix', [
+            'syllabus' => $syllabus,
             'week_prelim' => $syllabus->week_prelim,
             'week_midterm' => $syllabus->week_midterm,
             'week_finals' => $syllabus->week_final,

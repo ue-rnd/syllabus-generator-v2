@@ -1,6 +1,6 @@
 <div class="max-w-4xl mx-auto p-6">
-    <!-- Back Button -->
-    <div class="mb-6">
+    <!-- Back Button and Action Buttons -->
+    <div class="mb-6 flex items-center justify-between">
         <a href="{{ route('home') }}" 
            wire:navigate 
            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200">
@@ -9,12 +9,7 @@
             </svg>
             Back to Dashboard
         </a>
-    </div>
-
-    <!-- Main Content -->
-    <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h1 class="text-2xl font-bold text-gray-900">{{ $syllabus->name }}</h1>
+        
         <div class="flex items-center gap-3">
             @if(!empty($canEdit) && $canEdit)
                 <a href="{{ route('syllabus.edit', $syllabus) }}" wire:navigate class="px-3 py-1.5 text-sm font-medium bg-gray-800 text-white rounded hover:bg-gray-900">Edit</a>
@@ -24,6 +19,13 @@
             @if(!empty($canSubmit) && $canSubmit)
                 <button type="button" wire:click="confirmSubmitForApproval" class="px-3 py-1.5 text-sm font-medium bg-amber-500 text-white rounded hover:bg-amber-600 cursor-pointer transition-colors duration-200">Submit for Approval</button>
             @endif
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-2xl font-bold text-gray-900">{{ $syllabus->name }}</h1>
             <span class="px-2 py-1 text-xs rounded-full {{ 
             $syllabus->status === 'approved' ? 'bg-green-100 text-green-800' : 
             ($syllabus->status === 'under_review' ? 'bg-yellow-100 text-yellow-800' : 
@@ -31,7 +33,6 @@
             'bg-gray-100 text-gray-800')) 
         }}">{{ ucfirst(str_replace('_', ' ', $syllabus->status)) }}</span>
         </div>
-    </div>
 
     <div class="text-sm text-gray-600 mb-6">
         <div>Course: {{ $syllabus->course->name ?? 'N/A' }} ({{ $syllabus->course->code ?? 'N/A' }})</div>
