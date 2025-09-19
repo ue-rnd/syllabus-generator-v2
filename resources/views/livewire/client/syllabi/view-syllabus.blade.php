@@ -1,10 +1,26 @@
-<div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow">
-    <div class="flex items-center justify-between mb-4">
-        <h1 class="text-2xl font-bold text-gray-900">{{ $syllabus->name }}</h1>
+<div class="max-w-4xl mx-auto p-6">
+    <!-- Back Button -->
+    <div class="mb-6">
+        <a href="{{ route('home') }}" 
+           wire:navigate 
+           class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-2xl font-bold text-gray-900">{{ $syllabus->name }}</h1>
         <div class="flex items-center gap-3">
             @if(!empty($canEdit) && $canEdit)
                 <a href="{{ route('syllabus.edit', $syllabus) }}" wire:navigate class="px-3 py-1.5 text-sm font-medium bg-gray-800 text-white rounded hover:bg-gray-900">Edit</a>
             @endif
+
+            <button type="button" wire:click="duplicateSyllabus" class="px-3 py-1.5 text-sm font-medium bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer transition-colors duration-200">Duplicate</button>
             @if(!empty($canSubmit) && $canSubmit)
                 <button type="button" wire:click="confirmSubmitForApproval" class="px-3 py-1.5 text-sm font-medium bg-amber-500 text-white rounded hover:bg-amber-600 cursor-pointer transition-colors duration-200">Submit for Approval</button>
             @endif
@@ -107,9 +123,9 @@
                                 @php
                                     $activity = $activities[$r] ?? null;
                                     $modalities = $activity['modality'] ?? [];
-                                    $hasOnsite = in_array('onsite', $modalities ?? []);
-                                    $hasAsync = in_array('offsite_asynchronous', $modalities ?? []);
-                                    $hasSync = in_array('offsite_synchronous', $modalities ?? []);
+                                    $hasOnsite = in_array('Onsite', $modalities ?? []) || in_array('onsite', $modalities ?? []);
+                                    $hasAsync = in_array('Offsite Asynchronous', $modalities ?? []) || in_array('offsite_asynchronous', $modalities ?? []);
+                                    $hasSync = in_array('Offsite Synchronous', $modalities ?? []) || in_array('offsite_synchronous', $modalities ?? []);
                                     $assessments = $item['assessments'] ?? [];
                                 @endphp
                                 <tr class="border-t align-top">
@@ -237,6 +253,7 @@
                 <div class="text-sm text-gray-600">Dean</div>
             </div>
         </div>
+    </div>
     </div>
         
     <!-- Confirm Submit Modal -->

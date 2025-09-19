@@ -38,11 +38,11 @@
             <tbody>
                 @foreach ($learning_matrix as $weekItem)
                     @php
-                        // Parse week range
-                        $weekRange = $weekItem['week_display'] ?? 'N/A';
-                        preg_match('/(\d+)(?:-(\d+))?/', $weekRange, $matches);
-                        $startWeek = isset($matches[1]) ? (int) $matches[1] : 1;
-                        $endWeek = isset($matches[2]) ? (int) $matches[2] : $startWeek;
+                        // Parse week range from the actual structure
+                        $weekRange = $weekItem['week_range'] ?? [];
+                        $isRange = $weekRange['is_range'] ?? false;
+                        $startWeek = (int) ($weekRange['start'] ?? 1);
+                        $endWeek = $isRange ? (int) ($weekRange['end'] ?? $startWeek) : $startWeek;
 
                         // Calculate total activities to determine rowspan
                         $totalActivities = max(1, count($weekItem['learning_activities'] ?? []));
@@ -87,22 +87,23 @@
                         </td>
 
                         {{-- Content --}}
-                        <td rowspan="{{ $maxRows }}" class="center">
-                            No content
-                            {{-- @foreach ($weekItem['content'] as $content)
-                                {{ $content }}
-                            @endforeach --}}
+                        <td rowspan="{{ $maxRows }}">
+                            {!! $weekItem['content'] ?? '' !!}
                         </td>
 
                         @for ($row = 0; $row < $maxRows; $row++)
+                            @if ($row > 0)
+                                <tr>
+                            @endif
+                            
                             {{-- Teaching-Learning Activity --}}
                             @if (isset($weekItem['learning_activities'][$row]))
                                 @php
                                     $activity = $weekItem['learning_activities'][$row];
                                     $modalities = $activity['modality'] ?? [];
-                                    $hasOnsite = in_array('onsite', $modalities);
-                                    $hasAsync = in_array('offsite_asynchronous', $modalities);
-                                    $hasSync = in_array('offsite_synchronous', $modalities);
+                                    $hasOnsite = in_array('Onsite', $modalities) || in_array('onsite', $modalities);
+                                    $hasAsync = in_array('Offsite Asynchronous', $modalities) || in_array('offsite_asynchronous', $modalities);
+                                    $hasSync = in_array('Offsite Synchronous', $modalities) || in_array('offsite_synchronous', $modalities);
                                 @endphp
 
                                 <td class="center">
@@ -147,24 +148,28 @@
                                     @else
                                         No assessment
                                     @endif
-
                                 </td>
                             @endif
-                    </tr>
+                            
+                            @if ($row > 0)
+                                </tr>
+                            @endif
+                        @endfor
 
-                    {{-- if prelim or midterm or finals --}}
-                    
-                @endfor
-
-                <tr>
-                    @if ($prelim)
-                        <td colspan="11" class="center">Preliminary Examination</td>
-                    @elseif ($midterm)
-                        <td colspan="11" class="center">Midterm Examination</td>
-                    @elseif ($finals)
-                        <td colspan="11" class="center">Final Examination</td>
-                    @endif
-                </tr>
+                        {{-- Examination rows --}}
+                        @if ($prelim || $midterm || $finals)
+                            <tr>
+                                <td colspan="11" class="center">
+                                    @if ($prelim)
+                                        Preliminary Examination
+                                    @elseif ($midterm)
+                                        Midterm Examination
+                                    @elseif ($finals)
+                                        Final Examination
+                                    @endif
+                                </td>
+                            </tr>
+                        @endif
 @endforeach
 </tbody>
 </table>

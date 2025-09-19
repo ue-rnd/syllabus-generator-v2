@@ -302,6 +302,7 @@ class SyllabusPdfService
                 'start' => $start,
                 'end'=> $end,
                 'week_display' => $weekDisplay,
+                'content' => $item['content'] ?? '',
                 'learning_outcomes' => $learningOutcomes,
                 'learning_activities' => $learningActivities,
                 'assessments' => $assessments,
