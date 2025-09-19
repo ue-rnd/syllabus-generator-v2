@@ -13,6 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('syllabi', function (Blueprint $table) {
+            // Drop foreign key constraint first
+            $table->dropForeign(['course_id']);
+            
             // Drop indexes that reference the columns we're dropping
             $table->dropIndex(['course_id', 'version']);
             $table->dropIndex(['course_id', 'is_active']);
@@ -31,6 +34,9 @@ return new class extends Migration
             
             // Add new index for course_id only
             $table->index(['course_id']);
+            
+            // Recreate the foreign key constraint
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
 
         // Set default values for the new policy fields
@@ -47,6 +53,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('syllabi', function (Blueprint $table) {
+            // Drop foreign key constraint first
+            $table->dropForeign(['course_id']);
+            
             // Remove the new index
             $table->dropIndex(['course_id']);
             
@@ -66,6 +75,9 @@ return new class extends Migration
             // Add back the original indexes
             $table->index(['course_id', 'is_active']);
             $table->index(['course_id', 'version']);
+            
+            // Recreate the foreign key constraint
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
 };
