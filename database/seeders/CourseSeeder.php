@@ -6,7 +6,6 @@ use App\Models\Course;
 use App\Models\College;
 use App\Models\Program;
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
 
 class CourseSeeder extends Seeder
 {
@@ -15,7 +14,6 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
 
         // Find the College of Computer Studies and Systems
         $ccss = College::where('code', 'CCSS')->first();

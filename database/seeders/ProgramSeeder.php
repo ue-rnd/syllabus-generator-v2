@@ -6,7 +6,6 @@ use App\Models\Program;
 use App\Models\Department;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
 
 class ProgramSeeder extends Seeder
 {
@@ -15,7 +14,6 @@ class ProgramSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
 
         // Get departments
         $dcs = Department::where('name', 'Department of Computer Science')->first();
