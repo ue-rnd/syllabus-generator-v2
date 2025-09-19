@@ -30,7 +30,10 @@ class EditSyllabus extends CreateSyllabus
 
         $this->course_id = $this->syllabus->course_id;
         $this->name = $this->syllabus->name;
-        $this->description = $this->syllabus->description;
+        // For editing, preserve HTML formatting but clean whitespace
+        $rawDescription = $this->syllabus->description ?? '';
+        // Remove leading/trailing whitespace and normalize excessive whitespace while preserving HTML structure
+        $this->description = preg_replace('/\s+/', ' ', trim($rawDescription));
 
         $this->course = $this->syllabus->course;
         $this->program_outcomes = $this->syllabus->program_outcomes ?? [];
