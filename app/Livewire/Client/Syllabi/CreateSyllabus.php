@@ -132,8 +132,8 @@ class CreateSyllabus extends Component
     {
         if ($value) {
             $this->course = Course::with(['programs.department', 'college'])->find($value);
-            
-            if ($this->course) {                
+
+            if ($this->course) {
                 // Auto-fill description from course description (preserve HTML formatting but clean whitespace)
                 $rawDescription = $this->course->description ?? '';
                 // Remove leading/trailing whitespace and normalize excessive whitespace while preserving HTML structure

@@ -92,6 +92,10 @@ class SyllabusPolicy
                    $syllabus->college_id === $user->college_id;
         }
 
+        if ($user->position === 'faculty') {
+            return $syllabus->created_by === $user->id;
+        }
+
         return $user->hasPermissionTo('delete syllabi');
     }
 

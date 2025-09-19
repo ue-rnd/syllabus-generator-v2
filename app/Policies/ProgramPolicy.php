@@ -12,7 +12,7 @@ class ProgramPolicy
 
     public function viewAny(User $user): bool
     {
-        return in_array($user->position, ['superadmin', 'dean', 'associate_dean', 'department_chair']) ||
+        return in_array($user->position, ['superadmin', 'dean', 'associate_dean', 'department_chair', 'faculty']) ||
                $user->hasPermissionTo('view programs');
     }
 
@@ -27,6 +27,10 @@ class ProgramPolicy
         }
 
         if ($user->position === 'department_chair') {
+            return true;
+        }
+
+        if ($user->position === 'faculty') {
             return true;
         }
 

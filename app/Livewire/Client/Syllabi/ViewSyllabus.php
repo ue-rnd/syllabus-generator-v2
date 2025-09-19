@@ -94,10 +94,10 @@ class ViewSyllabus extends Component
         try {
             // Create a new syllabus based on the current one
             $newSyllabus = $this->syllabus->replicate();
-            
+
             // Update the name to indicate it's a copy
-            $newSyllabus->name = $this->syllabus->name . ' (Copy)';
-            
+            $newSyllabus->name = $this->syllabus->name.' (Copy)';
+
             // Reset status and approval fields for the duplicate
             $newSyllabus->status = 'draft';
             $newSyllabus->submitted_at = null;
@@ -111,26 +111,27 @@ class ViewSyllabus extends Component
             $newSyllabus->reviewed_by = null;
             $newSyllabus->recommending_approval = null;
             $newSyllabus->approved_by = null;
-            
+
             // Set the principal preparer to the current user
             $newSyllabus->principal_prepared_by = Auth::id();
-            
+
             // Clear the prepared_by array to avoid conflicts
             $newSyllabus->prepared_by = [];
-            
+
             // Set parent_syllabus_id to track the original
             $newSyllabus->parent_syllabus_id = $this->syllabus->id;
-            
+
             // Save the duplicate
             $newSyllabus->save();
-            
+
             session()->flash('success', 'Syllabus duplicated successfully. You can now edit the copy.');
-            
+
             // Redirect to the edit page of the new syllabus
             return $this->redirectRoute('syllabus.edit', $newSyllabus);
-            
+
         } catch (\Exception $e) {
-            session()->flash('error', 'Failed to duplicate syllabus: ' . $e->getMessage());
+            session()->flash('error', 'Failed to duplicate syllabus: '.$e->getMessage());
+
             return;
         }
     }

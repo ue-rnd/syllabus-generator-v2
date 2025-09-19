@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Clusters\Academic\Resources\Departments\Schemas;
 
-use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;

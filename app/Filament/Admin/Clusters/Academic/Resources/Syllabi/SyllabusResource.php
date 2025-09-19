@@ -79,6 +79,21 @@ class SyllabusResource extends Resource
             return $query;
         }
 
+        if (in_array($user->position, ['dean', 'associate_dean'])) {
+            // Dean and Associate Dean can view all syllabi but only edit their college's
+            return $query;
+        }
+
+        if ($user->position === 'department_chair') {
+            // Department Chair can view all syllabi but only edit their college's
+            return $query;
+        }
+
+        if ($user->position === 'faculty') {
+            // Faculty can view all syllabi but only create/edit/delete their own
+            return $query;
+        }
+
         return $query;
     }
 

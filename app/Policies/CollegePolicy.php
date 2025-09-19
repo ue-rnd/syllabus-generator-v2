@@ -12,7 +12,7 @@ class CollegePolicy
 
     public function viewAny(User $user): bool
     {
-        return in_array($user->position, ['superadmin', 'dean', 'associate_dean']) ||
+        return in_array($user->position, ['superadmin', 'dean', 'associate_dean', 'department_chair', 'faculty']) ||
                $user->hasPermissionTo('view colleges');
     }
 
@@ -22,7 +22,7 @@ class CollegePolicy
             return true;
         }
 
-        if (in_array($user->position, ['dean', 'associate_dean'])) {
+        if (in_array($user->position, ['dean', 'associate_dean', 'department_chair', 'faculty'])) {
             return true;
         }
 

@@ -43,12 +43,12 @@ class SyllabusForm
 
     protected static function filterPreparersForCourse($courseId = null)
     {
-        if (!$courseId) {
+        if (! $courseId) {
             return User::whereRaw('0 = 1');
         }
 
         $course = Course::find($courseId);
-        if (!$course) {
+        if (! $course) {
             return User::whereRaw('0 = 1');
         }
 
@@ -57,47 +57,47 @@ class SyllabusForm
 
     protected static function filterDepartmentChairsForCourse($courseId = null)
     {
-        if (!$courseId) {
+        if (! $courseId) {
             return User::whereRaw('0 = 1');
         }
 
         $course = Course::find($courseId);
-        if (!$course) {
+        if (! $course) {
             return User::whereRaw('0 = 1');
         }
 
         return User::where('position', 'department_chair')
-                   ->where('college_id', $course->college_id);
+            ->where('college_id', $course->college_id);
     }
 
     protected static function filterAssociateDeansForCourse($courseId = null)
     {
-        if (!$courseId) {
+        if (! $courseId) {
             return User::whereRaw('0 = 1');
         }
 
         $course = Course::find($courseId);
-        if (!$course) {
+        if (! $course) {
             return User::whereRaw('0 = 1');
         }
 
         return User::where('position', 'associate_dean')
-                   ->where('college_id', $course->college_id);
+            ->where('college_id', $course->college_id);
     }
 
     protected static function filterDeansForCourse($courseId = null)
     {
-        if (!$courseId) {
+        if (! $courseId) {
             return User::whereRaw('0 = 1');
         }
 
         $course = Course::find($courseId);
-        if (!$course) {
+        if (! $course) {
             return User::whereRaw('0 = 1');
         }
 
         return User::where('position', 'dean')
-                   ->where('college_id', $course->college_id);
+            ->where('college_id', $course->college_id);
     }
 
     public static function configure(Schema $schema): Schema
@@ -612,6 +612,7 @@ class SyllabusForm
                                         ->label('Faculty Member')
                                         ->options(function ($get) {
                                             $courseId = $get('../../course_id');
+
                                             return self::filterPreparersForCourse($courseId)->pluck('full_name', 'id');
                                         })
                                         ->searchable()

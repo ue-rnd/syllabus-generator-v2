@@ -82,6 +82,12 @@ class CollegeResource extends Resource
         }
 
         if (in_array($user->position, ['dean', 'associate_dean'])) {
+            // Dean and Associate Dean can view all colleges but only edit their own
+            return $query;
+        }
+
+        if (in_array($user->position, ['department_chair', 'faculty'])) {
+            // Department Chair and Faculty can view all colleges (read-only for most)
             return $query;
         }
 

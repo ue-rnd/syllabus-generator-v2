@@ -77,16 +77,28 @@ class CourseResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $user = auth()->user();
+        $query = parent::getEloquentQuery();
 
         if ($user->position === 'superadmin') {
-            return parent::getEloquentQuery();
+            return $query;
         }
 
-        if (in_array($user->position, ['dean', 'associate_dean', 'department_chair'])) {
-            return parent::getEloquentQuery();
+        if (in_array($user->position, ['dean', 'associate_dean'])) {
+            // Dean and Associate Dean can view all courses but only edit their college's
+            return $query;
         }
 
-        return parent::getEloquentQuery()->whereRaw('0 = 1');
+        if ($user->position === 'department_chair') {
+            // Department Chair can view all courses but only edit their college's
+            return $query;
+        }
+
+        if ($user->position === 'faculty') {
+            // Faculty can view all courses (read-only)
+            return $query;
+        }
+
+        return $query->whereRaw('0 = 1');
     }
 
     public static function canViewAny(): bool
