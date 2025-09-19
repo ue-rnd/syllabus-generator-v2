@@ -31,7 +31,8 @@ class DatabaseSeeder extends Seeder
         $dit = Department::where("name", "Department of Information Technology")->first();
         $demc = Department::where("name", "Department of Entertainment and Multimedia Computing")->first();
 
-        $superAdmin = User::factory()->create([
+        $superAdmin = User::create([
+            'name' => 'Super Admin',
             'lastname' => 'Admin',
             'firstname' => 'Super',
             'middlename' => '',
@@ -43,9 +44,11 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'rnd_admin@ue.edu.ph',
             'password' => bcrypt('password'),
+            'email_verified_at' => now(),
         ]);
 
-        $ccssDean = User::factory()->create([
+        $ccssDean = User::create([
+            'name' => 'Ma. Teresa Francisco Borebor',
             'firstname' => 'Ma. Teresa',
             'middlename' => 'Francisco',
             'lastname' => 'Borebor',
@@ -57,9 +60,11 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'materesa.borebor@ue.edu.ph',
             'password' => bcrypt('ccssdean'),
+            'email_verified_at' => now(),
         ]);
 
-        $ccssAssocDean = User::factory()->create([
+        $ccssAssocDean = User::create([
+            'name' => 'Arne Rocero Bana',
             'firstname' => 'Arne',
             'middlename' => 'Rocero',
             'lastname' => 'Bana',
@@ -71,9 +76,11 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'arne.bana@ue.edu.ph',
             'password' => bcrypt('ccssassociatedean'),
+            'email_verified_at' => now(),
         ]);
 
-        $ccssDC1 = User::factory()->create([
+        $ccssDC1 = User::create([
+            'name' => 'Sheila Marasigan Geronimo',
             'firstname' => 'Sheila',
             'middlename' => 'Marasigan',
             'lastname' => 'Geronimo',
@@ -85,9 +92,11 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'sheila.geronimo@ue.edu.ph',
             'password' => bcrypt('ccssdccs'),
+            'email_verified_at' => now(),
         ]);
 
-        $ccssDC2 = User::factory()->create([
+        $ccssDC2 = User::create([
+            'name' => 'Marc Rodin C Ligas',
             'firstname' => 'Marc Rodin',
             'middlename' => 'C',
             'lastname' => 'Ligas',
@@ -99,9 +108,11 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'marcrodin.ligas@ue.edu.ph',
             'password' => bcrypt('ccssdcit'),
+            'email_verified_at' => now(),
         ]);
 
-        $ccssDC3 = User::factory()->create([
+        $ccssDC3 = User::create([
+            'name' => 'Mark Anthony Uy',
             'firstname' => 'Mark Anthony',
             'middlename' => '',
             'lastname' => 'Uy',
@@ -113,9 +124,11 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'markanthony.uy@ue.edu.ph',
             'password' => bcrypt('ccssdcemc'),
+            'email_verified_at' => now(),
         ]);
 
-        $ccssFaculty = User::factory()->create([
+        $ccssFaculty = User::create([
+            'name' => 'Melie Jim Flores Sarmiento',
             'firstname' => 'Melie Jim',
             'middlename' => 'Flores',
             'lastname' => 'Sarmiento',
@@ -127,6 +140,7 @@ class DatabaseSeeder extends Seeder
             'last_login_ip' => request()->ip(),
             'email' => 'meliejim.sarmiento@ue.edu.ph',
             'password' => bcrypt('ccssfaculty'),
+            'email_verified_at' => now(),
         ]);
 
         $ccss->update([
