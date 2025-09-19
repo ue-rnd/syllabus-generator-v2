@@ -831,6 +831,22 @@
             </div>
         @endif
 
+        <!-- Error Message Display -->
+        @if (session()->has('error'))
+            <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-800">{{ session('error') }}</p>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Navigation Buttons -->
         <div class="flex justify-between mt-8 pt-6 border-t border-gray-200">
             <button type="button" 
@@ -842,10 +858,36 @@
             
             <div class="flex space-x-2">
                 @for($i = 1; $i <= $totalSteps; $i++)
+                    @php
+                        $isCurrentStep = $i == $currentStep;
+                        $isValidated = in_array($i, $validatedSteps);
+                        $isAccessible = $i <= $currentStep || $isValidated;
+                        $isCompleted = $i < $currentStep;
+                        
+                        $buttonClasses = 'w-8 h-8 text-xs font-medium rounded-full transition-colors duration-200 ';
+                        
+                        if ($isCurrentStep) {
+                            $buttonClasses .= 'bg-red-600 text-white';
+                        } elseif ($isCompleted) {
+                            $buttonClasses .= 'bg-red-600 text-white';
+                        } elseif ($isAccessible) {
+                            $buttonClasses .= 'bg-gray-200 text-gray-500 hover:bg-gray-300';
+                        } else {
+                            $buttonClasses .= 'bg-gray-100 text-gray-400 cursor-not-allowed';
+                        }
+                    @endphp
                     <button type="button" 
                             wire:click="goToStep({{ $i }})"
-                            class="w-8 h-8 text-xs font-medium rounded-full {{ $i == $currentStep ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-500 hover:bg-gray-300' }} transition-colors duration-200">
-                        {{ $i }}
+                            class="{{ $buttonClasses }} flex items-center justify-center"
+                            @if(!$isAccessible) disabled @endif
+                            title="{{ $isCurrentStep ? 'Current Step' : ($isCompleted ? 'Completed Step' : ($isAccessible ? 'Go to Step ' . $i : 'Complete previous steps first')) }}">
+                        @if($isCompleted)
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        @else
+                            {{ $i }}
+                        @endif
                     </button>
                 @endfor
             </div>

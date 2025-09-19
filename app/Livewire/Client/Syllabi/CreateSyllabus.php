@@ -17,6 +17,7 @@ class CreateSyllabus extends Component
 {
     public $currentStep = 1;
     public $totalSteps = 7;
+    public $validatedSteps = [1]; // Track which steps have been validated
     
     // Step 1: Basic Information and Curricular Details
     #[Validate('required|numeric')]
@@ -307,6 +308,12 @@ class CreateSyllabus extends Component
     {
         $this->validateStep();
         $this->currentStep++;
+        
+        // Mark the current step as validated
+        if (!in_array($this->currentStep, $this->validatedSteps)) {
+            $this->validatedSteps[] = $this->currentStep;
+        }
+        
         $this->dispatch('step-changed');
     }
     
@@ -321,8 +328,14 @@ class CreateSyllabus extends Component
     public function goToStep($step)
     {
         if ($step >= 1 && $step <= $this->totalSteps) {
-            $this->currentStep = $step;
-            $this->dispatch('step-changed');
+            // Allow going to previous steps or current step
+            if ($step <= $this->currentStep || in_array($step, $this->validatedSteps)) {
+                $this->currentStep = $step;
+                $this->dispatch('step-changed');
+            } else {
+                // Prevent jumping to unvalidated future steps
+                session()->flash('error', 'Please complete the current step before proceeding to step ' . $step . '.');
+            }
         }
     }
     
