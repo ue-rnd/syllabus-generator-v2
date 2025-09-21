@@ -10,10 +10,9 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LatestSyllabiWidget extends BaseWidget
 {
-
     protected static ?int $sort = 4;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
@@ -35,11 +34,10 @@ class LatestSyllabiWidget extends BaseWidget
                     ->searchable()
                     ->sortable(),
 
-            
                 Tables\Columns\TextColumn::make('name')
                     ->label('Academic Year')
                     ->formatStateUsing(function ($record) {
-                        return $record->ay_start . '-' . $record->ay_end;
+                        return $record->ay_start.'-'.$record->ay_end;
                     })
                     ->sortable(),
 

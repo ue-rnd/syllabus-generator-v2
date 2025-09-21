@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class College extends Model
@@ -48,6 +48,7 @@ class College extends Model
         if (is_array($this->objectives)) {
             return implode("\n", $this->objectives);
         }
+
         return $this->objectives;
     }
 
@@ -84,7 +85,7 @@ class College extends Model
      */
     public function getLogoUrlAttribute()
     {
-        return $this->logo_path ? asset('storage/' . $this->logo_path) : null;
+        return $this->logo_path ? asset('storage/'.$this->logo_path) : null;
     }
 
     /**

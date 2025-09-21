@@ -27,7 +27,7 @@ class SyllabusFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->sentence(3) . ' Syllabus',
+            'name' => $this->faker->sentence(3).' Syllabus',
             'description' => $this->faker->paragraph(2),
             'course_id' => Course::factory(),
             'default_lecture_hours' => $this->faker->randomFloat(1, 1, 4),
@@ -53,17 +53,17 @@ class SyllabusFactory extends Factory
                         [
                             'verb' => $this->faker->randomElement(['understand', 'identify', 'describe']),
                             'content' => $this->faker->sentence(),
-                        ]
+                        ],
                     ],
                     'learning_activities' => [
                         [
                             'modality' => [$this->faker->randomElement(['onsite', 'offsite_asynchronous', 'offsite_synchronous'])],
                             'reference' => $this->faker->sentence(4),
                             'description' => $this->faker->sentence(6),
-                        ]
+                        ],
                     ],
                     'assessments' => [$this->faker->randomElement(['quiz', 'assignment', 'project'])],
-                ]
+                ],
             ],
             'textbook_references' => $this->faker->paragraph(),
             'adaptive_digital_solutions' => $this->faker->paragraph(),
@@ -86,7 +86,7 @@ class SyllabusFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'course_id' => $course->id,
-            'name' => $course->name . ' Syllabus',
+            'name' => $course->name.' Syllabus',
         ]);
     }
 

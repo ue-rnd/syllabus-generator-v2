@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('lastname')->nullable();
             $table->string('firstname')->nullable();
             $table->string('middlename')->nullable();
-            $table->string('position')->nullable(); 
+            $table->string('position')->nullable();
             $table->boolean('is_active')->default(true); // Account status
             $table->timestamp('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();
@@ -32,13 +32,13 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
                 'lastname',
-                'firstname', 
+                'firstname',
                 'middlename',
                 'position',
                 'is_active',
                 'last_login_at',
                 'last_login_ip',
-                'deleted_at'
+                'deleted_at',
             ]);
         });
     }

@@ -8,7 +8,7 @@ class UserProfileWidget extends Widget
 {
     protected string $view = 'filament.admin.widgets.user-profile-widget';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected static ?int $sort = 1;
 

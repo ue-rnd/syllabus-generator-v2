@@ -13,10 +13,15 @@ use Livewire\Component;
 class ViewSyllabus extends Component
 {
     public Syllabus $syllabus;
+
     public bool $showConfirmModal = false;
+
     public bool $showResultModal = false;
+
     public bool $resultSuccess = false;
+
     public ?string $resultMessage = null;
+
     public array $resultErrors = [];
 
     public function mount(Syllabus $syllabus): void
@@ -27,14 +32,15 @@ class ViewSyllabus extends Component
     public function submitForApproval()
     {
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             return null;
         }
 
         // Strict validation before allowing submission
         $errors = $this->validateForApproval();
-        if (!empty($errors)) {
-            session()->flash('error', 'Please complete all required fields before submitting for approval. ' . implode(' ', array_slice($errors, 0, 3)));
+        if (! empty($errors)) {
+            session()->flash('error', 'Please complete all required fields before submitting for approval. '.implode(' ', array_slice($errors, 0, 3)));
+
             return null;
         }
 
@@ -45,6 +51,7 @@ class ViewSyllabus extends Component
         }
 
         $this->syllabus->refresh();
+
         return $this->redirectRoute('syllabus.view', $this->syllabus);
     }
 
@@ -61,10 +68,11 @@ class ViewSyllabus extends Component
         $this->showConfirmModal = false;
         $this->resultErrors = $this->validateForApproval();
 
-        if (!empty($this->resultErrors)) {
+        if (! empty($this->resultErrors)) {
             $this->resultSuccess = false;
             $this->resultMessage = 'Please address the following issues before submitting:';
             $this->showResultModal = true;
+
             return;
         }
 
@@ -86,10 +94,10 @@ class ViewSyllabus extends Component
         try {
             // Create a new syllabus based on the current one
             $newSyllabus = $this->syllabus->replicate();
-            
+
             // Update the name to indicate it's a copy
-            $newSyllabus->name = $this->syllabus->name . ' (Copy)';
-            
+            $newSyllabus->name = $this->syllabus->name.' (Copy)';
+
             // Reset status and approval fields for the duplicate
             $newSyllabus->status = 'draft';
             $newSyllabus->submitted_at = null;
@@ -103,26 +111,27 @@ class ViewSyllabus extends Component
             $newSyllabus->reviewed_by = null;
             $newSyllabus->recommending_approval = null;
             $newSyllabus->approved_by = null;
-            
+
             // Set the principal preparer to the current user
             $newSyllabus->principal_prepared_by = Auth::id();
-            
+
             // Clear the prepared_by array to avoid conflicts
             $newSyllabus->prepared_by = [];
-            
+
             // Set parent_syllabus_id to track the original
             $newSyllabus->parent_syllabus_id = $this->syllabus->id;
-            
+
             // Save the duplicate
             $newSyllabus->save();
-            
+
             session()->flash('success', 'Syllabus duplicated successfully. You can now edit the copy.');
-            
+
             // Redirect to the edit page of the new syllabus
             return $this->redirectRoute('syllabus.edit', $newSyllabus);
-            
+
         } catch (\Exception $e) {
-            session()->flash('error', 'Failed to duplicate syllabus: ' . $e->getMessage());
+            session()->flash('error', 'Failed to duplicate syllabus: '.$e->getMessage());
+
             return;
         }
     }
@@ -235,20 +244,20 @@ class ViewSyllabus extends Component
             foreach (($data['learning_matrix'] ?? []) as $idx => $item) {
                 $range = $item['week_range'] ?? [];
                 $start = isset($range['start']) ? intval($range['start']) : null;
-                $isRange = (bool)($range['is_range'] ?? false);
+                $isRange = (bool) ($range['is_range'] ?? false);
                 $end = $isRange ? intval($range['end'] ?? 0) : $start;
 
                 if ($start !== null) {
                     if ($start < 1 || $start > $weekFinal) {
-                        $errors[] = "Learning matrix item ".($idx+1).": Week start must be between 1 and {$weekFinal}.";
+                        $errors[] = 'Learning matrix item '.($idx + 1).": Week start must be between 1 and {$weekFinal}.";
                     }
                 }
                 if ($isRange) {
                     if ($end < $start) {
-                        $errors[] = "Learning matrix item ".($idx+1).": Week end must be greater than or equal to week start.";
+                        $errors[] = 'Learning matrix item '.($idx + 1).': Week end must be greater than or equal to week start.';
                     }
                     if ($end > $weekFinal) {
-                        $errors[] = "Learning matrix item ".($idx+1).": Week end must not exceed {$weekFinal}.";
+                        $errors[] = 'Learning matrix item '.($idx + 1).": Week end must not exceed {$weekFinal}.";
                     }
                 }
 
@@ -263,12 +272,12 @@ class ViewSyllabus extends Component
             // Coverage completeness from week 1 to week_final
             $missing = [];
             for ($w = 1; $w <= $weekFinal; $w++) {
-                if (!isset($covered[$w])) {
+                if (! isset($covered[$w])) {
                     $missing[] = $w;
                 }
             }
-            if (!empty($missing)) {
-                $errors[] = 'Learning matrix must cover all weeks from 1 to ' . $weekFinal . '. Missing weeks: ' . implode(', ', array_slice($missing, 0, 10)) . (count($missing) > 10 ? '…' : '');
+            if (! empty($missing)) {
+                $errors[] = 'Learning matrix must cover all weeks from 1 to '.$weekFinal.'. Missing weeks: '.implode(', ', array_slice($missing, 0, 10)).(count($missing) > 10 ? '…' : '');
             }
         }
 
@@ -305,7 +314,7 @@ class ViewSyllabus extends Component
         // Build co-editor display data
         $coEditors = [];
         $preparedBy = $this->syllabus->prepared_by ?? [];
-        if (is_array($preparedBy) && !empty($preparedBy)) {
+        if (is_array($preparedBy) && ! empty($preparedBy)) {
             $userIds = collect($preparedBy)
                 ->pluck('user_id')
                 ->filter()
@@ -315,6 +324,7 @@ class ViewSyllabus extends Component
             $coEditors = collect($preparedBy)->map(function ($entry) use ($users) {
                 $userId = $entry['user_id'] ?? null;
                 $user = $userId ? ($users[$userId] ?? null) : null;
+
                 return [
                     'name' => $user?->full_name ?? $user?->name ?? '[Unknown User]',
                     'role' => $entry['role'] ?? null,
@@ -332,5 +342,3 @@ class ViewSyllabus extends Component
         ]);
     }
 }
-
-

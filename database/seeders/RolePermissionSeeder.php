@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -26,31 +26,31 @@ class RolePermissionSeeder extends Seeder
             'approve syllabi as dean',
             'reject syllabi',
             'export syllabi pdf',
-            
+
             // College permissions
             'create colleges',
             'edit colleges',
             'view colleges',
             'delete colleges',
-            
+
             // Department permissions
             'create departments',
             'edit departments',
             'view departments',
             'delete departments',
-            
+
             // Program permissions
             'create programs',
             'edit programs',
             'view programs',
             'delete programs',
-            
+
             // Course permissions
             'create courses',
             'edit courses',
             'view courses',
             'delete courses',
-            
+
             // User management permissions
             'create users',
             'edit users',

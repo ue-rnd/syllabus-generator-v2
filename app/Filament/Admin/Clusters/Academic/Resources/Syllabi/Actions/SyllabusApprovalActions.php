@@ -3,12 +3,10 @@
 namespace App\Filament\Admin\Clusters\Academic\Resources\Syllabi\Actions;
 
 use App\Models\Syllabus;
-use App\Models\User;
 use App\Services\SyllabusPdfService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
-use Filament\Support\Colors\Color;
 
 class SyllabusApprovalActions
 {
@@ -21,8 +19,7 @@ class SyllabusApprovalActions
             ->label('Submit for Approval')
             ->icon('heroicon-o-paper-airplane')
             ->color('warning')
-            ->visible(fn (Syllabus $record): bool => 
-                $record->canSubmitForApproval(auth()->user())
+            ->visible(fn (Syllabus $record): bool => $record->canSubmitForApproval(auth()->user())
             )
             ->requiresConfirmation()
             ->modalHeading('Submit Syllabus for Approval')
@@ -52,8 +49,7 @@ class SyllabusApprovalActions
             ->label('Approve')
             ->icon('heroicon-o-check-circle')
             ->color('success')
-            ->visible(fn (Syllabus $record): bool => 
-                $record->canApprove(auth()->user())
+            ->visible(fn (Syllabus $record): bool => $record->canApprove(auth()->user())
             )
             ->form([
                 Textarea::make('comments')
@@ -89,8 +85,7 @@ class SyllabusApprovalActions
             ->label('Reject')
             ->icon('heroicon-o-x-circle')
             ->color('danger')
-            ->visible(fn (Syllabus $record): bool => 
-                $record->canReject(auth()->user())
+            ->visible(fn (Syllabus $record): bool => $record->canReject(auth()->user())
             )
             ->form([
                 Textarea::make('comments')
@@ -128,9 +123,8 @@ class SyllabusApprovalActions
             ->label('Create Revision')
             ->icon('heroicon-o-document-duplicate')
             ->color('primary')
-            ->visible(fn (Syllabus $record): bool => 
-                $record->status === 'rejected' && 
-                ($record->principal_prepared_by === auth()->id() || 
+            ->visible(fn (Syllabus $record): bool => $record->status === 'rejected' &&
+                ($record->principal_prepared_by === auth()->id() ||
                  collect($record->prepared_by)->contains('user_id', auth()->id()))
             )
             ->requiresConfirmation()
@@ -139,7 +133,7 @@ class SyllabusApprovalActions
             ->modalSubmitActionLabel('Create Revision')
             ->action(function (Syllabus $record) {
                 $revision = $record->createRevision();
-                
+
                 Notification::make()
                     ->title('Revision created')
                     ->body('You can now edit and resubmit the revised syllabus.')
@@ -163,10 +157,10 @@ class SyllabusApprovalActions
             ->modalHeading('Approval History')
             ->modalContent(function (Syllabus $record) {
                 $history = $record->approval_history ?? [];
-                
+
                 if (empty($history)) {
                     return view('filament.components.empty-state', [
-                        'message' => 'No approval history available.'
+                        'message' => 'No approval history available.',
                     ]);
                 }
 
@@ -190,19 +184,20 @@ class SyllabusApprovalActions
             ->color('primary')
             ->action(function (Syllabus $record) {
                 try {
-                    $pdfService = new SyllabusPdfService();
+                    $pdfService = new SyllabusPdfService;
+
                     return $pdfService->downloadPdf($record);
                 } catch (\Exception $e) {
                     Notification::make()
                         ->title('PDF Export Failed')
-                        ->body('Error: ' . $e->getMessage())
+                        ->body('Error: '.$e->getMessage())
                         ->danger()
                         ->send();
-                        
+
                     \Log::error('PDF Export Error', [
                         'syllabus_id' => $record->id,
                         'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
+                        'trace' => $e->getTraceAsString(),
                     ]);
                 }
             });

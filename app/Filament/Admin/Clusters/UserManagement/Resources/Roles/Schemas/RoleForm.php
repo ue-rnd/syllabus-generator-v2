@@ -2,8 +2,8 @@
 
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\Roles\Schemas;
 
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\MultiSelect;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class RoleForm

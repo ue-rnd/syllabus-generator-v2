@@ -26,7 +26,7 @@ test('new users can register and are redirected to home', function () {
         ->assertRedirect(route('home', absolute: false));
 
     $this->assertAuthenticated();
-    
+
     // Verify the user was created with correct name fields
     $user = \App\Models\User::where('email', 'test@example.com')->first();
     expect($user->firstname)->toBe('Test');

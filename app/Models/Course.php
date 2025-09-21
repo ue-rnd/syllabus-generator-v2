@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Course extends Model
@@ -63,7 +63,7 @@ class Course extends Model
     {
         return $this->is_active;
     }
-    
+
     /**
      * Get the college that owns this course.
      */
@@ -112,7 +112,7 @@ class Course extends Model
         if (empty($this->prerequisite_courses)) {
             return collect();
         }
-        
+
         return Course::whereIn('id', $this->prerequisite_courses)->get();
     }
 
@@ -137,7 +137,7 @@ class Course extends Model
      */
     public function hasPrerequisites()
     {
-        return !empty($this->prerequisite_courses);
+        return ! empty($this->prerequisite_courses);
     }
 
     /**

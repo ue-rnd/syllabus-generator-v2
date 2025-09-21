@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::table('syllabi', function (Blueprint $table) {
             // Add status enum field - Draft, Pending Approval, Rejected, For Revisions, Approved
             $table->enum('status', ['draft', 'pending_approval', 'rejected', 'for_revisions', 'approved'])
-                  ->default('draft')
-                  ->after('sort_order');
+                ->default('draft')
+                ->after('sort_order');
         });
     }
 

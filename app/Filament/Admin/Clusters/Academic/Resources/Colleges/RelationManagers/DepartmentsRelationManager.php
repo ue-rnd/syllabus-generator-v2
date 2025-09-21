@@ -3,8 +3,8 @@
 namespace App\Filament\Admin\Clusters\Academic\Resources\Colleges\RelationManagers;
 
 use App\Filament\Admin\Clusters\Academic\Resources\Departments\DepartmentResource;
-use Filament\Actions\CreateAction;
 use Filament\Actions\AttachAction;
+use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 

@@ -48,14 +48,14 @@ class PermissionsTable
                             'delete permissions',
                             'assign permissions',
                         ];
-                        
+
                         if (in_array($record->name, $protectedPermissions)) {
                             Notification::make()
                                 ->title('Cannot Delete Essential Permission')
                                 ->body("The '{$record->name}' permission is essential for system operation and cannot be deleted.")
                                 ->warning()
                                 ->send();
-                            
+
                             return false;
                         }
                     }),
@@ -81,9 +81,9 @@ class PermissionsTable
                                 'delete permissions',
                                 'assign permissions',
                             ];
-                            
+
                             $protectedRecords = $records->filter(fn ($record) => in_array($record->name, $protectedPermissions));
-                            
+
                             if ($protectedRecords->count() > 0) {
                                 $permissionNames = $protectedRecords->pluck('name')->join(', ');
                                 Notification::make()
@@ -91,7 +91,7 @@ class PermissionsTable
                                     ->body("The following permissions are essential for system operation and cannot be deleted: {$permissionNames}")
                                     ->warning()
                                     ->send();
-                                
+
                                 return false;
                             }
                         }),

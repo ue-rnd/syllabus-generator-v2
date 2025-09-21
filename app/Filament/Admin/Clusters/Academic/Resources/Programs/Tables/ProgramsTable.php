@@ -25,8 +25,8 @@ class ProgramsTable
                 TextColumn::make('level')
                     ->searchable()
                     ->badge()
-                    ->color(fn($state): string => is_string($state) ? ProgramConstants::getLevelColor($state) : 'gray')
-                    ->formatStateUsing(fn(string $state): string => ProgramConstants::getLevelOptions()[$state]),
+                    ->color(fn ($state): string => is_string($state) ? ProgramConstants::getLevelColor($state) : 'gray')
+                    ->formatStateUsing(fn (string $state): string => ProgramConstants::getLevelOptions()[$state]),
                 TextColumn::make('code')
                     ->searchable(),
                 TextColumn::make('department.name')
