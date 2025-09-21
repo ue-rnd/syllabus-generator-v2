@@ -290,13 +290,8 @@ class SyllabusInfolist
                                     ]),
 
                                 TextEntry::make('assessments')
-                                    ->badge()
-                                    ->formatStateUsing(function ($state) {
-                                        return SyllabusConstants::getAssessmentTypeOptions()[$state];
-                                    })
-                                    ->color(function ($state) {
-                                        return SyllabusConstants::getAssessmentTypeColor($state);
-                                    })
+                                    ->label('Weekly Assessments')
+                                    ->html()
                                     ->placeholder('-'),
                             ])
                             ->columnSpanFull()

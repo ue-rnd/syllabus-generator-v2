@@ -80,9 +80,10 @@ class PendingSyllabiWidget extends BaseWidget
                     ->color('success')
                     ->visible(fn (Syllabus $record) => $record->canApprove($user))
                     ->form(function (Syllabus $record) use ($user) {
-                        // Show comments field for associate dean, dean, and superadmin
+                        // Show comments field for associate dean, dean, QA, and superadmin
                         if ($user->position === 'associate_dean' ||
                             $user->position === 'dean' ||
+                            $user->position === 'qa_representative' ||
                             $user->position === 'superadmin') {
                             return [
                                 Forms\Components\Textarea::make('comments')
@@ -141,7 +142,10 @@ class PendingSyllabiWidget extends BaseWidget
         // Filter based on user's position and approval permissions
         if ($user->position === 'superadmin') {
             // Superadmin can see all pending syllabi
-            $query->whereIn('status', ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review']);
+            $query->whereIn('status', ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review', 'qa_review']);
+        } elseif ($user->position === 'qa_representative') {
+            // QA representatives see syllabi in qa_review status
+            $query->where('status', 'qa_review');
         } elseif ($user->position === 'department_chair') {
             // Department chairs see syllabi pending initial review and their department's syllabi
             $query->whereIn('status', ['pending_approval', 'dept_chair_review'])
@@ -166,7 +170,7 @@ class PendingSyllabiWidget extends BaseWidget
         } else {
             // Regular faculty see only syllabi they prepared that are pending
             $query->where('principal_prepared_by', $user->id)
-                ->whereIn('status', ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review']);
+                ->whereIn('status', ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review', 'qa_review']);
         }
 
         return $query;
@@ -182,6 +186,11 @@ class PendingSyllabiWidget extends BaseWidget
                 'dept_chair_review' => 'Department Chair Review',
                 'assoc_dean_review' => 'Associate Dean Review',
                 'dean_review' => 'Dean Review',
+                'qa_review' => 'QA Quality Check',
+            ];
+        } elseif ($user->position === 'qa_representative') {
+            return [
+                'qa_review' => 'QA Quality Check',
             ];
         } elseif ($user->position === 'department_chair') {
             return [
@@ -211,6 +220,8 @@ class PendingSyllabiWidget extends BaseWidget
             return 'assoc_dean_review';
         } elseif ($user->position === 'dean') {
             return 'dean_review';
+        } elseif ($user->position === 'qa_representative') {
+            return 'qa_review';
         }
 
         return null;

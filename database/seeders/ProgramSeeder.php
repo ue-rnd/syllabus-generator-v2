@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Department;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Program;
-use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
 class ProgramSeeder extends Seeder

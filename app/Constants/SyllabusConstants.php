@@ -413,7 +413,9 @@ class SyllabusConstants
         'dept_chair_review' => 'Department Chair Review',
         'assoc_dean_review' => 'Associate Dean Review',
         'dean_review' => 'Dean Review',
+        'qa_review' => 'QA Quality Check',
         'approved' => 'Approved',
+        'published' => 'Published',
         'rejected' => 'Rejected',
         'for_revisions' => 'For Revisions',
         'archived' => 'Archived',
@@ -427,6 +429,7 @@ class SyllabusConstants
         'department_chair' => 'Department Chair',
         'associate_dean' => 'Associate Dean',
         'dean' => 'Dean',
+        'qa_representative' => 'QA Representative',
         'superadmin' => 'Super Admin',
     ];
 
@@ -438,8 +441,10 @@ class SyllabusConstants
         'pending_approval' => ['dept_chair_review', 'for_revisions'],
         'dept_chair_review' => ['assoc_dean_review', 'rejected'],
         'assoc_dean_review' => ['dean_review', 'rejected'],
-        'dean_review' => ['approved', 'rejected'],
-        'approved' => ['archived'],
+        'dean_review' => ['qa_review', 'rejected'],
+        'qa_review' => ['approved', 'rejected'],
+        'approved' => ['published', 'archived'],
+        'published' => ['archived'],
         'rejected' => ['for_revisions'],
         'for_revisions' => ['pending_approval'],
         'archived' => [],
@@ -456,7 +461,9 @@ class SyllabusConstants
             'dept_chair_review' => 'info',
             'assoc_dean_review' => 'primary',
             'dean_review' => 'purple',
+            'qa_review' => 'indigo',
             'approved' => 'success',
+            'published' => 'emerald',
             'rejected' => 'danger',
             'for_revisions' => 'orange',
             'archived' => 'gray',
@@ -484,6 +491,7 @@ class SyllabusConstants
             'department_chair' => 'success',
             'associate_dean' => 'warning',
             'dean' => 'danger',
+            'qa_representative' => 'indigo',
             'superadmin' => 'purple',
             default => 'gray',
         };
@@ -926,7 +934,13 @@ class SyllabusConstants
                 'assoc_dean_review' => 'dean_review',
             ],
             'dean' => [
-                'dean_review' => 'approved',
+                'dean_review' => 'qa_review',
+            ],
+            'qa_representative' => [
+                'qa_review' => 'approved',
+            ],
+            'superadmin' => [
+                'approved' => 'published',
             ],
         ];
 
@@ -938,8 +952,16 @@ class SyllabusConstants
      */
     public static function getActionVerbOptions(): array
     {
-        $flattened = [];
+        // Use database if available, fallback to constants
+        if (class_exists(\App\Models\BloomsTaxonomyVerb::class)) {
+            try {
+                return \App\Models\BloomsTaxonomyVerb::getOptions();
+            } catch (\Exception $e) {
+                // Fall back to constants if database is not available
+            }
+        }
 
+        $flattened = [];
         foreach (self::ACTION_VERBS as $category => $verbs) {
             foreach ($verbs as $key => $value) {
                 $flattened[$key] = $value;
@@ -947,6 +969,23 @@ class SyllabusConstants
         }
 
         return $flattened;
+    }
+
+    /**
+     * Get action verbs grouped by category for select fields
+     */
+    public static function getActionVerbOptionsGrouped(): array
+    {
+        // Use database if available, fallback to constants
+        if (class_exists(\App\Models\BloomsTaxonomyVerb::class)) {
+            try {
+                return \App\Models\BloomsTaxonomyVerb::getOptionsGrouped();
+            } catch (\Exception $e) {
+                // Fall back to constants if database is not available
+            }
+        }
+
+        return self::ACTION_VERBS;
     }
 
     public static function getApprovalRoleOptions(): array

@@ -40,6 +40,8 @@ class Syllabus extends Model
         'dept_chair_reviewed_at',
         'assoc_dean_reviewed_at',
         'dean_approved_at',
+        'qa_reviewed_at',
+        'qa_reviewed_by',
         'approval_history',
         'rejection_comments',
         'rejected_by_role',
@@ -76,6 +78,8 @@ class Syllabus extends Model
         'dept_chair_reviewed_at' => 'datetime',
         'assoc_dean_reviewed_at' => 'datetime',
         'dean_approved_at' => 'datetime',
+        'qa_reviewed_at' => 'datetime',
+        'qa_reviewed_by' => 'integer',
         'rejected_at' => 'datetime',
         'week_prelim' => 'integer',
         'week_midterm' => 'integer',
@@ -250,6 +254,14 @@ class Syllabus extends Model
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * Get the QA reviewer.
+     */
+    public function qaReviewer()
+    {
+        return $this->belongsTo(User::class, 'qa_reviewed_by');
     }
 
     /**
@@ -591,13 +603,14 @@ class Syllabus extends Model
     {
         // Check for superadmin position first
         if ($user->position === 'superadmin') {
-            return in_array($this->status, ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review']);
+            return in_array($this->status, ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review', 'qa_review', 'approved']);
         }
 
         $roleStatusMap = [
             'department_chair' => ['pending_approval', 'dept_chair_review'],
             'associate_dean' => ['assoc_dean_review'],
             'dean' => ['dean_review'],
+            'qa_representative' => ['qa_review'],
         ];
 
         $userRole = $user->primary_role;
@@ -625,7 +638,9 @@ class Syllabus extends Model
                 'pending_approval' => 'dept_chair_review',
                 'dept_chair_review' => 'assoc_dean_review',
                 'assoc_dean_review' => 'dean_review',
-                'dean_review' => 'approved',
+                'dean_review' => 'qa_review',
+                'qa_review' => 'approved',
+                'approved' => 'published',
             ];
 
             return $superadminTransitions[$this->status] ?? $this->status;
@@ -640,7 +655,10 @@ class Syllabus extends Model
                 'assoc_dean_review' => 'dean_review',
             ],
             'dean' => [
-                'dean_review' => 'approved',
+                'dean_review' => 'qa_review',
+            ],
+            'qa_representative' => [
+                'qa_review' => 'approved',
             ],
         ];
 
@@ -658,6 +676,7 @@ class Syllabus extends Model
                 'pending_approval' => 'dept_chair_reviewed_at',
                 'dept_chair_review' => 'assoc_dean_reviewed_at',
                 'assoc_dean_review' => 'dean_approved_at',
+                'dean_review' => 'qa_reviewed_at',
                 default => null,
             };
         }
@@ -666,6 +685,7 @@ class Syllabus extends Model
             'department_chair' => 'dept_chair_reviewed_at',
             'associate_dean' => 'assoc_dean_reviewed_at',
             'dean' => 'dean_approved_at',
+            'qa_representative' => 'qa_reviewed_at',
             default => null,
         };
     }
@@ -681,6 +701,7 @@ class Syllabus extends Model
                 'pending_approval' => 'reviewed_by',
                 'dept_chair_review' => 'recommending_approval',
                 'assoc_dean_review' => 'approved_by',
+                'dean_review' => 'qa_reviewed_by',
                 default => null,
             };
         }
@@ -689,6 +710,7 @@ class Syllabus extends Model
             'department_chair' => 'reviewed_by',
             'associate_dean' => 'recommending_approval',
             'dean' => 'approved_by',
+            'qa_representative' => 'qa_reviewed_by',
             default => null,
         };
     }

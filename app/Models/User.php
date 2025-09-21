@@ -181,6 +181,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if the user is a QA Representative
+     */
+    public function isQARepresentative(): bool
+    {
+        return $this->position === 'qa_representative';
+    }
+
+    /**
      * Get user's primary role name
      */
     public function getPrimaryRoleAttribute(): string

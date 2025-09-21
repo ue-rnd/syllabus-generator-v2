@@ -1,76 +1,82 @@
 <?php
 
-namespace App\Filament\Admin\Clusters\Academic\Resources\Colleges\Tables;
+namespace App\Filament\Admin\Clusters\Academic\Resources\BloomsTaxonomyVerbs\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\ReplicateAction;
-use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class CollegesTable
+class BloomsTaxonomyVerbsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                ImageColumn::make('logo_path')
-                    ->label('Logo')
-                    ->disk('public')
-                    ->visibility('public')
-                    ->height(50)
-                    ->width(50),
-                TextColumn::make('name')
+                TextColumn::make('label')
+                    ->label('Verb')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('code')
-                    ->searchable()
+
+                BadgeColumn::make('category')
+                    ->label('Category')
+                    ->color(fn ($record) => $record->category_color)
                     ->sortable(),
-                TextColumn::make('dean.name')
-                    ->label('Dean')
+
+                TextColumn::make('key')
+                    ->label('Key')
                     ->searchable()
                     ->sortable()
-                    ->placeholder('-'),
-                TextColumn::make('associateDean.name')
-                    ->label('Associate Dean')
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('-'),
-                IconColumn::make('is_active')
-                    ->label('Status')
-                    ->boolean()
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('sort_order')
                     ->label('Sort Order')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('deleted_at')
-                    ->label('Deleted At')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
+                IconColumn::make('is_active')
+                    ->label('Status')
+                    ->boolean()
+                    ->sortable(),
+
                 TextColumn::make('created_at')
-                    ->label('Created At')
+                    ->label('Created')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('updated_at')
-                    ->label('Updated At')
+                    ->label('Updated')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('sort_order')
+            ->defaultSort('category')
             ->filters([
-                TrashedFilter::make(),
+                SelectFilter::make('category')
+                    ->options([
+                        'Remember' => 'Remember',
+                        'Understand' => 'Understand',
+                        'Apply' => 'Apply',
+                        'Analyze' => 'Analyze',
+                        'Evaluate' => 'Evaluate',
+                        'Create' => 'Create',
+                    ])
+                    ->multiple(),
+
+                SelectFilter::make('is_active')
+                    ->label('Status')
+                    ->options([
+                        1 => 'Active',
+                        0 => 'Inactive',
+                    ]),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -78,8 +84,8 @@ class CollegesTable
                 ReplicateAction::make('duplicate')
                     ->label('Duplicate')
                     ->beforeReplicaSaved(function (array $data): array {
-                        $data['name'] = $data['name'].' (Copy)';
-                        $data['code'] = $data['code'].'_copy_'.now()->timestamp;
+                        $data['key'] = $data['key'].'_copy_'.now()->timestamp;
+                        $data['label'] = $data['label'].' (Copy)';
 
                         return $data;
                     }),
@@ -87,8 +93,6 @@ class CollegesTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
                 ]),
             ]);
     }

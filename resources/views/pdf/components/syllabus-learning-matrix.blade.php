@@ -124,20 +124,24 @@
                             @if ($row === 0)
                                 <td rowspan="{{ $maxRows }}">
                                     @if (!empty($weekItem['assessments']))
-                                        <ul>
-                                            @foreach ($weekItem['assessments'] as $assessment)
-                                                @php
-                                                    $options = SyllabusConstants::getAssessmentTypeOptions();
-                                                    $label = $options[$assessment] ?? null;
-                                                    if (!$label) {
-                                                        // If $assessment is a label, try to find its key (case-insensitive)
-                                                        $match = array_search(strtolower($assessment), array_map('strtolower', array_values($options)), true);
-                                                        $label = $match !== false ? array_values($options)[$match] : $assessment;
-                                                    }
-                                                @endphp
-                                                <li>{{ $label }}</li>
-                                            @endforeach
-                                        </ul>
+                                        @if (is_array($weekItem['assessments']))
+                                            <ul>
+                                                @foreach ($weekItem['assessments'] as $assessment)
+                                                    @php
+                                                        $options = SyllabusConstants::getAssessmentTypeOptions();
+                                                        $label = $options[$assessment] ?? null;
+                                                        if (!$label) {
+                                                            // If $assessment is a label, try to find its key (case-insensitive)
+                                                            $match = array_search(strtolower($assessment), array_map('strtolower', array_values($options)), true);
+                                                            $label = $match !== false ? array_values($options)[$match] : $assessment;
+                                                        }
+                                                    @endphp
+                                                    <li>{{ $label }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            {!! $weekItem['assessments'] !!}
+                                        @endif
                                     @else
                                         No assessment
                                     @endif

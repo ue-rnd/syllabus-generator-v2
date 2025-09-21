@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\College;
 use App\Models\Department;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
 class DepartmentSeeder extends Seeder
