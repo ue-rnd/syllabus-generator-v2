@@ -63,8 +63,11 @@ class Dashboard extends BaseDashboard
         return [
             \App\Filament\Admin\Widgets\NotificationsWidget::class,
             \App\Filament\Admin\Widgets\UserProfileWidget::class,
+            \App\Filament\Admin\Widgets\PendingSuggestionsWidget::class,
             \App\Filament\Admin\Widgets\PendingSyllabiWidget::class,
             \App\Filament\Admin\Widgets\StatsOverviewWidget::class,
+            \App\Filament\Admin\Widgets\QualityMetricsWidget::class,
+            \App\Filament\Admin\Widgets\ComplianceOverviewWidget::class,
             \App\Filament\Admin\Widgets\SyllabiGenerationChartWidget::class,
             \App\Filament\Admin\Widgets\CollegesChartWidget::class,
             \App\Filament\Admin\Widgets\LatestSyllabiWidget::class,

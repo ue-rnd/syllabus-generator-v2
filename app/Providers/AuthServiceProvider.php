@@ -38,7 +38,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('access-settings', function ($user) {
-            return $user->position === 'superadmin';
+            return $user->can('manage system settings');
         });
     }
 }

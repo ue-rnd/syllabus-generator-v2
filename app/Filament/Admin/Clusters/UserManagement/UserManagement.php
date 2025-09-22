@@ -19,6 +19,9 @@ class UserManagement extends Cluster
 
     public static function canAccess(): bool
     {
-        return auth()->user()->position === 'superadmin';
+        return auth()->user()->can('view users') ||
+               auth()->user()->can('assign roles') ||
+               auth()->user()->can('manage permissions') ||
+               auth()->user()->can('view system logs');
     }
 }
