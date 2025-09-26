@@ -14,7 +14,9 @@ use Livewire\Component;
 class Register extends Component
 {
     public string $firstname = '';
+
     public string $lastname = '';
+
     public string $middlename = '';
 
     public string $email = '';
@@ -38,11 +40,11 @@ class Register extends Component
 
         // Build full name from components
         $name = $validated['firstname'];
-        if (!empty($validated['middlename'])) {
-            $name .= ' ' . $validated['middlename'];
+        if (! empty($validated['middlename'])) {
+            $name .= ' '.$validated['middlename'];
         }
-        $name .= ' ' . $validated['lastname'];
-        
+        $name .= ' '.$validated['lastname'];
+
         $validated['name'] = $name;
         $validated['password'] = Hash::make($validated['password']);
 

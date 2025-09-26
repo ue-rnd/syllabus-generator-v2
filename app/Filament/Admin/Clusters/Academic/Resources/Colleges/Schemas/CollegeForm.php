@@ -3,12 +3,12 @@
 namespace App\Filament\Admin\Clusters\Academic\Resources\Colleges\Schemas;
 
 use App\Models\User;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -75,31 +75,34 @@ class CollegeForm
                     ->schema([
                         RichEditor::make('mission')
                             ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-        ['table', 'attachFiles'],
-        ['undo', 'redo']])
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
                         RichEditor::make('vision')
                             ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-        ['table', 'attachFiles'],
-        ['undo', 'redo']])
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
                         RichEditor::make('core_values')
                             ->label('Core Values')
                             ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-        ['table', 'attachFiles'],
-        ['undo', 'redo']])
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
-                        Textarea::make('objectives_text')
+                        RichEditor::make('objectives')
                             ->label('Objectives')
-                            ->columnSpanFull()
-                            ->rows(4)
-                            ->helperText('Enter each objective on a new line'),
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
+                            ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
 

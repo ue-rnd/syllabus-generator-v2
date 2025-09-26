@@ -2,8 +2,8 @@
 
 namespace App\Filament\Admin\Widgets;
 
-use App\Models\Syllabus;
 use App\Constants\SyllabusConstants;
+use App\Models\Syllabus;
 use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Tables;
@@ -15,7 +15,7 @@ class PendingSyllabiWidget extends BaseWidget
 {
     protected static ?string $heading = 'Syllabi Pending Your Approval';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected static ?int $sort = 2;
 
@@ -91,9 +91,10 @@ class PendingSyllabiWidget extends BaseWidget
                                     ->placeholder('Add any comments about this approval...'),
                             ];
                         }
+
                         return [];
                     })
-                    ->modalHeading(fn (Syllabus $record) => 'Approve Syllabus: ' . $record->name)
+                    ->modalHeading(fn (Syllabus $record) => 'Approve Syllabus: '.$record->name)
                     ->modalDescription('Please review and approve this syllabus.')
                     ->modalSubmitActionLabel('Approve')
                     ->action(function (Syllabus $record, array $data) use ($user) {
@@ -114,7 +115,7 @@ class PendingSyllabiWidget extends BaseWidget
                             ->rows(3)
                             ->placeholder('Please provide reasons for rejection...'),
                     ])
-                    ->modalHeading(fn (Syllabus $record) => 'Reject Syllabus: ' . $record->name)
+                    ->modalHeading(fn (Syllabus $record) => 'Reject Syllabus: '.$record->name)
                     ->modalDescription('Please provide clear reasons for rejecting this syllabus.')
                     ->modalSubmitActionLabel('Reject')
                     ->action(function (Syllabus $record, array $data) use ($user) {
@@ -144,28 +145,28 @@ class PendingSyllabiWidget extends BaseWidget
         } elseif ($user->position === 'department_chair') {
             // Department chairs see syllabi pending initial review and their department's syllabi
             $query->whereIn('status', ['pending_approval', 'dept_chair_review'])
-                  ->where(function ($q) use ($user) {
-                      // Syllabi from courses in their department
-                      $q->whereHas('course.programs.department', function ($deptQuery) use ($user) {
-                          $deptQuery->where('department_chair_id', $user->id);
-                      });
-                  });
+                ->where(function ($q) use ($user) {
+                    // Syllabi from courses in their department
+                    $q->whereHas('course.programs.department', function ($deptQuery) use ($user) {
+                        $deptQuery->where('department_chair_id', $user->id);
+                    });
+                });
         } elseif ($user->position === 'associate_dean') {
             // Associate deans see syllabi in assoc_dean_review status from their college
             $query->where('status', 'assoc_dean_review')
-                  ->whereHas('course.college', function ($collegeQuery) use ($user) {
-                      $collegeQuery->where('associate_dean_id', $user->id);
-                  });
+                ->whereHas('course.college', function ($collegeQuery) use ($user) {
+                    $collegeQuery->where('associate_dean_id', $user->id);
+                });
         } elseif ($user->position === 'dean') {
             // Deans see syllabi in dean_review status from their college
             $query->where('status', 'dean_review')
-                  ->whereHas('course.college', function ($collegeQuery) use ($user) {
-                      $collegeQuery->where('dean_id', $user->id);
-                  });
+                ->whereHas('course.college', function ($collegeQuery) use ($user) {
+                    $collegeQuery->where('dean_id', $user->id);
+                });
         } else {
             // Regular faculty see only syllabi they prepared that are pending
             $query->where('principal_prepared_by', $user->id)
-                  ->whereIn('status', ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review']);
+                ->whereIn('status', ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review']);
         }
 
         return $query;

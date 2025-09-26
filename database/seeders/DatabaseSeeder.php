@@ -26,10 +26,10 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
         ]);
 
-        $ccss = College::where("code", "CCSS")->first();
-        $dcs = Department::where("name", "Department of Computer Science")->first();
-        $dit = Department::where("name", "Department of Information Technology")->first();
-        $demc = Department::where("name", "Department of Entertainment and Multimedia Computing")->first();
+        $ccss = College::where('code', 'CCSS')->first();
+        $dcs = Department::where('name', 'Department of Computer Science')->first();
+        $dit = Department::where('name', 'Department of Information Technology')->first();
+        $demc = Department::where('name', 'Department of Entertainment and Multimedia Computing')->first();
 
         $superAdmin = User::create([
             'name' => 'Super Admin',
@@ -145,7 +145,7 @@ class DatabaseSeeder extends Seeder
 
         $ccss->update([
             'dean_id' => $ccssDean->id,
-            'associate_dean_id'=> $ccssAssocDean->id,
+            'associate_dean_id' => $ccssAssocDean->id,
         ]);
 
         $dcs->update([

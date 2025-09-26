@@ -14,10 +14,11 @@ class SyllabusPdfController extends Controller
     public function view(Syllabus $syllabus): Response
     {
         try {
-            $pdfService = new SyllabusPdfService();
+            $pdfService = new SyllabusPdfService;
+
             return $pdfService->streamPdf($syllabus);
         } catch (\Exception $e) {
-            abort(500, 'Error generating PDF: ' . $e->getMessage());
+            abort(500, 'Error generating PDF: '.$e->getMessage());
         }
     }
 
@@ -27,10 +28,11 @@ class SyllabusPdfController extends Controller
     public function download(Syllabus $syllabus): Response
     {
         try {
-            $pdfService = new SyllabusPdfService();
+            $pdfService = new SyllabusPdfService;
+
             return $pdfService->downloadPdf($syllabus);
         } catch (\Exception $e) {
-            abort(500, 'Error generating PDF: ' . $e->getMessage());
+            abort(500, 'Error generating PDF: '.$e->getMessage());
         }
     }
 }

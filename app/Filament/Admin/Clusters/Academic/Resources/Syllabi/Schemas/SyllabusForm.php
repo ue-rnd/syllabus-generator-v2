@@ -12,15 +12,94 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Wizard;
-use Filament\Schemas\Components\Wizard\Step;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
 
 class SyllabusForm
 {
+    protected static function filterCoursesForUser($query)
+    {
+        $user = auth()->user();
+
+        if ($user->position === 'superadmin') {
+            return $query;
+        }
+
+        if (in_array($user->position, ['dean', 'associate_dean'])) {
+            return $user->getAccessibleCourses();
+        }
+
+        if ($user->position === 'department_chair') {
+            // Department chairs can create syllabi for courses in their college
+            return $query->where('college_id', $user->college_id);
+        }
+
+        // Faculty can create syllabi for any course (general permission)
+        return $query;
+    }
+
+    protected static function filterPreparersForCourse($courseId = null)
+    {
+        if (! $courseId) {
+            return User::whereRaw('0 = 1');
+        }
+
+        $course = Course::find($courseId);
+        if (! $course) {
+            return User::whereRaw('0 = 1');
+        }
+
+        return User::where('college_id', $course->college_id);
+    }
+
+    protected static function filterDepartmentChairsForCourse($courseId = null)
+    {
+        if (! $courseId) {
+            return User::whereRaw('0 = 1');
+        }
+
+        $course = Course::find($courseId);
+        if (! $course) {
+            return User::whereRaw('0 = 1');
+        }
+
+        return User::where('position', 'department_chair')
+            ->where('college_id', $course->college_id);
+    }
+
+    protected static function filterAssociateDeansForCourse($courseId = null)
+    {
+        if (! $courseId) {
+            return User::whereRaw('0 = 1');
+        }
+
+        $course = Course::find($courseId);
+        if (! $course) {
+            return User::whereRaw('0 = 1');
+        }
+
+        return User::where('position', 'associate_dean')
+            ->where('college_id', $course->college_id);
+    }
+
+    protected static function filterDeansForCourse($courseId = null)
+    {
+        if (! $courseId) {
+            return User::whereRaw('0 = 1');
+        }
+
+        $course = Course::find($courseId);
+        if (! $course) {
+            return User::whereRaw('0 = 1');
+        }
+
+        return User::where('position', 'dean')
+            ->where('college_id', $course->college_id);
+    }
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -33,7 +112,11 @@ class SyllabusForm
                                 ->schema([
                                     Select::make('course_id')
                                         ->label('Course')
-                                        ->relationship('course', 'name')
+                                        ->relationship(
+                                            name: 'course',
+                                            titleAttribute: 'name',
+                                            modifyQueryUsing: fn ($query) => self::filterCoursesForUser($query)
+                                        )
                                         ->getOptionLabelFromRecordUsing(function ($record) {
                                             if ($record) {
                                                 return "[$record->code] $record->name";
@@ -215,210 +298,210 @@ class SyllabusForm
                         ->schema([
                             Section::make()
                                 ->schema([
-                                TextInput::make('default_lecture_hours')
-                                    ->label('Default Lecture Hours per Week')
-                                    ->numeric()
-                                    ->step(0.5)
-                                    ->default(3.0)
-                                    ->required()
-                                    ->suffix('hours'),
+                                    TextInput::make('default_lecture_hours')
+                                        ->label('Default Lecture Hours per Week')
+                                        ->numeric()
+                                        ->step(0.5)
+                                        ->default(3.0)
+                                        ->required()
+                                        ->suffix('hours'),
 
-                                TextInput::make('default_laboratory_hours')
-                                    ->label('Default Laboratory Hours per Week')
-                                    ->numeric()
-                                    ->step(0.5)
-                                    ->default(0.0)
-                                    ->required()
-                                    ->suffix('hours'),
-                            ])
-                            ->columns(2),
-                        Repeater::make('learning_matrix')
-                            ->label('Items')
-                            ->schema([
-                                Grid::make(2)
-                                    ->schema([
-                                        Toggle::make('week_range.is_range')
-                                            ->label('Week Range')
-                                            ->helperText('Toggle to specify a range of weeks instead of a single week')
-                                            ->live()
-                                            ->default(false)
-                                            ->columnSpanFull(),
+                                    TextInput::make('default_laboratory_hours')
+                                        ->label('Default Laboratory Hours per Week')
+                                        ->numeric()
+                                        ->step(0.5)
+                                        ->default(0.0)
+                                        ->required()
+                                        ->suffix('hours'),
+                                ])
+                                ->columns(2),
+                            Repeater::make('learning_matrix')
+                                ->label('Items')
+                                ->schema([
+                                    Grid::make(2)
+                                        ->schema([
+                                            Toggle::make('week_range.is_range')
+                                                ->label('Week Range')
+                                                ->helperText('Toggle to specify a range of weeks instead of a single week')
+                                                ->live()
+                                                ->default(false)
+                                                ->columnSpanFull(),
 
-                                        TextInput::make('week_range.start')
-                                            ->label(fn ($get) => $get('week_range.is_range') ? 'Week Start' : 'Week')
-                                            ->numeric()
-                                            ->required()
-                                            ->minValue(1)
-                                            ->maxValue(20),
+                                            TextInput::make('week_range.start')
+                                                ->label(fn ($get) => $get('week_range.is_range') ? 'Week Start' : 'Week')
+                                                ->numeric()
+                                                ->required()
+                                                ->minValue(1)
+                                                ->maxValue(20),
 
-                                        TextInput::make('week_range.end')
-                                            ->label('Week End')
-                                            ->numeric()
-                                            ->required(fn ($get) => $get('week_range.is_range'))
-                                            ->visible(fn ($get) => $get('week_range.is_range'))
-                                            ->minValue(fn ($get) => $get('week_range.start') ?? 1)
-                                            ->maxValue(20),
-                                    ]),
+                                            TextInput::make('week_range.end')
+                                                ->label('Week End')
+                                                ->numeric()
+                                                ->required(fn ($get) => $get('week_range.is_range'))
+                                                ->visible(fn ($get) => $get('week_range.is_range'))
+                                                ->minValue(fn ($get) => $get('week_range.start') ?? 1)
+                                                ->maxValue(20),
+                                        ]),
 
-                                RichEditor::make('content')
-                                    ->label('Content')
-                                    ->placeholder('Add item content...')
-                                    ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-                                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-                                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                                        ['table', 'attachFiles'],
-                                        ['undo', 'redo']])
-                                    ->required()
-                                    ->columnSpanFull(),
+                                    RichEditor::make('content')
+                                        ->label('Content')
+                                        ->placeholder('Add item content...')
+                                        ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                            ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                            ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                            ['table', 'attachFiles'],
+                                            ['undo', 'redo']])
+                                        ->required()
+                                        ->columnSpanFull(),
 
-                                Repeater::make('learning_outcomes')
-                                    ->label('Learning Outcomes for this Week/Range')
-                                    ->schema([
-                                        Select::make('verb')
-                                            ->label('Action Verb')
-                                            ->options(SyllabusConstants::ACTION_VERBS)
-                                            ->searchable()
-                                            ->required()
-                                            ->placeholder('Select an action verb'),
+                                    Repeater::make('learning_outcomes')
+                                        ->label('Learning Outcomes for this Week/Range')
+                                        ->schema([
+                                            Select::make('verb')
+                                                ->label('Action Verb')
+                                                ->options(SyllabusConstants::ACTION_VERBS)
+                                                ->searchable()
+                                                ->required()
+                                                ->placeholder('Select an action verb'),
 
-                                        RichEditor::make('content')
-                                            ->label('Outcome Description')
-                                            ->placeholder('Complete the outcome statement...')
-                                            ->required()
-                                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-                                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-                                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                                                ['table', 'attachFiles'],
-                                                ['undo', 'redo']])
-                                            ->columnSpanFull(),
-                                    ])
-                                    ->addActionLabel('Add Learning Outcome')
-                                    ->collapsible()
-                                    ->hiddenLabel()
-                                    ->columnSpanFull(),
+                                            RichEditor::make('content')
+                                                ->label('Outcome Description')
+                                                ->placeholder('Complete the outcome statement...')
+                                                ->required()
+                                                ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                                    ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                                    ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                                    ['table', 'attachFiles'],
+                                                    ['undo', 'redo']])
+                                                ->columnSpanFull(),
+                                        ])
+                                        ->addActionLabel('Add Learning Outcome')
+                                        ->collapsible()
+                                        ->hiddenLabel()
+                                        ->columnSpanFull(),
 
-                                Repeater::make('learning_activities')
-                                    ->label('Learning Activities')
-                                    ->schema([
-                                        RichEditor::make('description')
-                                            ->label('Activity Description')
-                                            ->required()
-                                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-                                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-                                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                                                ['table', 'attachFiles'],
-                                                ['undo', 'redo']])
-                                            ->columnSpanFull(),
+                                    Repeater::make('learning_activities')
+                                        ->label('Learning Activities')
+                                        ->schema([
+                                            RichEditor::make('description')
+                                                ->label('Activity Description')
+                                                ->required()
+                                                ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                                    ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                                    ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                                    ['table', 'attachFiles'],
+                                                    ['undo', 'redo']])
+                                                ->columnSpanFull(),
 
-                                        Select::make('modality')
-                                            ->multiple()
-                                            ->options(SyllabusConstants::getLearningModalityOptions())
-                                            ->required(),
+                                            Select::make('modality')
+                                                ->multiple()
+                                                ->options(SyllabusConstants::getLearningModalityOptions())
+                                                ->required(),
 
-                                        RichEditor::make('reference')
-                                            ->label('Reference/Resource')
-                                            ->placeholder('Add reference or resource details...')
-                                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-                                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-                                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                                                ['table', 'attachFiles'],
-                                                ['undo', 'redo']])
-                                            ->columnSpanFull(),
-                                    ])
-                                    ->addActionLabel('Add Learning Activity')
-                                    ->collapsible()
-                                    ->columnSpanFull(),
+                                            RichEditor::make('reference')
+                                                ->label('Reference/Resource')
+                                                ->placeholder('Add reference or resource details...')
+                                                ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                                    ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                                    ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                                    ['table', 'attachFiles'],
+                                                    ['undo', 'redo']])
+                                                ->columnSpanFull(),
+                                        ])
+                                        ->addActionLabel('Add Learning Activity')
+                                        ->collapsible()
+                                        ->columnSpanFull(),
 
-                                Select::make('assessments')
-                                    ->label('Weekly Assessments')
-                                    ->options(SyllabusConstants::getAssessmentTypeOptions())
-                                    ->multiple()
-                                    ->searchable()
-                                    ->columnSpanFull(),
-                            ])
-                            ->columnSpanFull()
-                            ->addActionLabel('Add Item')
-                            ->collapsible()
-                            ->itemLabel(function (array $state): ?string {
-                                if (! isset($state['week_range'])) {
-                                    return 'New Week';
-                                }
+                                    Select::make('assessments')
+                                        ->label('Weekly Assessments')
+                                        ->options(SyllabusConstants::getAssessmentTypeOptions())
+                                        ->multiple()
+                                        ->searchable()
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull()
+                                ->addActionLabel('Add Item')
+                                ->collapsible()
+                                ->itemLabel(function (array $state): ?string {
+                                    if (! isset($state['week_range'])) {
+                                        return 'New Week';
+                                    }
 
-                                $weekRange = $state['week_range'];
-                                $start = $weekRange['start'] ?? null;
-                                $end = $weekRange['end'] ?? null;
-                                $isRange = $weekRange['is_range'] ?? false;
+                                    $weekRange = $state['week_range'];
+                                    $start = $weekRange['start'] ?? null;
+                                    $end = $weekRange['end'] ?? null;
+                                    $isRange = $weekRange['is_range'] ?? false;
 
-                                if (! $start) {
-                                    return 'New Week';
-                                }
+                                    if (! $start) {
+                                        return 'New Week';
+                                    }
 
-                                if ($isRange && $end && $end != $start) {
-                                    return "Weeks {$start}-{$end}";
-                                }
+                                    if ($isRange && $end && $end != $start) {
+                                        return "Weeks {$start}-{$end}";
+                                    }
 
-                                return "Week {$start}";
-                            })
-                            ->rules([
-                                function () {
-                                    return function (string $attribute, $value, \Closure $fail) {
-                                        if (empty($value)) {
-                                            return;
-                                        }
-
-                                        $occupiedWeeks = [];
-                                        $errors = [];
-
-                                        foreach ($value as $index => $item) {
-                                            if (empty($item['week_range'])) {
-                                                continue;
+                                    return "Week {$start}";
+                                })
+                                ->rules([
+                                    function () {
+                                        return function (string $attribute, $value, \Closure $fail) {
+                                            if (empty($value)) {
+                                                return;
                                             }
 
-                                            $weekRange = $item['week_range'];
+                                            $occupiedWeeks = [];
+                                            $errors = [];
 
-                                            $start = $weekRange['start'] ?? null;
-                                            $end = $weekRange['end'] ?? $start;
-                                            $isRange = $weekRange['is_range'] ?? false;
+                                            foreach ($value as $index => $item) {
+                                                if (empty($item['week_range'])) {
+                                                    continue;
+                                                }
 
-                                            // Ensure $start and $end are numeric
-                                            if (! is_null($start) && ! is_numeric($start)) {
-                                                $start = preg_replace('/[^\d.]/', '', (string) $start);
-                                            }
-                                            if (! is_null($end) && ! is_numeric($end)) {
-                                                $end = preg_replace('/[^\d.]/', '', (string) $end);
-                                            }
-                                            $start = is_numeric($start) ? (int) $start : null;
-                                            $end = is_numeric($end) ? (int) $end : $start;
+                                                $weekRange = $item['week_range'];
 
-                                            if (! $start) {
-                                                $errors[] = 'Item '.($index + 1).': Week is required';
+                                                $start = $weekRange['start'] ?? null;
+                                                $end = $weekRange['end'] ?? $start;
+                                                $isRange = $weekRange['is_range'] ?? false;
 
-                                                continue;
-                                            }
+                                                // Ensure $start and $end are numeric
+                                                if (! is_null($start) && ! is_numeric($start)) {
+                                                    $start = preg_replace('/[^\d.]/', '', (string) $start);
+                                                }
+                                                if (! is_null($end) && ! is_numeric($end)) {
+                                                    $end = preg_replace('/[^\d.]/', '', (string) $end);
+                                                }
+                                                $start = is_numeric($start) ? (int) $start : null;
+                                                $end = is_numeric($end) ? (int) $end : $start;
 
-                                            if ($isRange && $start > $end) {
-                                                $errors[] = 'Item '.($index + 1).': Start week must be less than or equal to end week';
+                                                if (! $start) {
+                                                    $errors[] = 'Item '.($index + 1).': Week is required';
 
-                                                continue;
-                                            }
+                                                    continue;
+                                                }
 
-                                            // Check for overlaps
-                                            for ($week = $start; $week <= $end; $week++) {
-                                                if (isset($occupiedWeeks[$week])) {
-                                                    $errors[] = "Week {$week} is used in multiple items (Item ".($index + 1).')';
-                                                } else {
-                                                    $occupiedWeeks[$week] = true;
+                                                if ($isRange && $start > $end) {
+                                                    $errors[] = 'Item '.($index + 1).': Start week must be less than or equal to end week';
+
+                                                    continue;
+                                                }
+
+                                                // Check for overlaps
+                                                for ($week = $start; $week <= $end; $week++) {
+                                                    if (isset($occupiedWeeks[$week])) {
+                                                        $errors[] = "Week {$week} is used in multiple items (Item ".($index + 1).')';
+                                                    } else {
+                                                        $occupiedWeeks[$week] = true;
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                        if (! empty($errors)) {
-                                            $fail('Week validation errors: '.implode('; ', $errors));
-                                        }
-                                    };
-                                },
-                            ])
-                            ->columnSpanFull(),
+                                            if (! empty($errors)) {
+                                                $fail('Week validation errors: '.implode('; ', $errors));
+                                            }
+                                        };
+                                    },
+                                ])
+                                ->columnSpanFull(),
                         ]),
 
                     Step::make('References & Resources')
@@ -503,96 +586,104 @@ class SyllabusForm
                         ->description('Designate preparers and approval workflow')
                         ->schema([
                             Select::make('principal_prepared_by')
-                            ->label('Principal Prepared By')
-                            ->relationship('principalPreparer', 'name')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
-                            ->searchable(['firstname', 'lastname', 'middlename', 'name'])
-                            ->preload()
-                            ->required()
-                            ->default(auth()->id())
-                            ->columnSpanFull(),
+                                ->label('Principal Prepared By')
+                                ->relationship(
+                                    name: 'principalPreparer',
+                                    titleAttribute: 'name',
+                                    modifyQueryUsing: fn ($query, $get) => self::filterPreparersForCourse($get('course_id'))
+                                )
+                                ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
+                                ->searchable(['firstname', 'lastname', 'middlename', 'name'])
+                                ->preload()
+                                ->required()
+                                ->default(auth()->id())
+                                ->columnSpanFull(),
 
-                        RichEditor::make('note')
-                            ->hiddenLabel()
-                            ->disabled()
-                            ->default('<h1>Note</h1><p>The second to the last additional preparer should be the <strong>Member of the Library Committee</strong>, while the last additional preparer should be the <strong>External Reviewer</strong>.')
-                            ->columnSpanFull(),
+                            RichEditor::make('note')
+                                ->hiddenLabel()
+                                ->disabled()
+                                ->default('<h1>Note</h1><p>The second to the last additional preparer should be the <strong>Member of the Library Committee</strong>, while the last additional preparer should be the <strong>External Reviewer</strong>.')
+                                ->columnSpanFull(),
 
-                        Repeater::make('prepared_by')
-                            ->label('Additional Preparers')
-                            ->schema([
-                                Select::make('user_id')
-                                    ->label('Faculty Member')
-                                    ->options(User::all()->pluck('full_name', 'id'))
-                                    ->searchable()
-                                    ->required()
-                                    ->preload()
-                                    ->distinct()
-                                    ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
+                            Repeater::make('prepared_by')
+                                ->label('Additional Preparers')
+                                ->schema([
+                                    Select::make('user_id')
+                                        ->label('Faculty Member')
+                                        ->options(function ($get) {
+                                            $courseId = $get('../../course_id');
 
-                                TextInput::make('role')
-                                    ->label('Role/Position')
-                                    ->placeholder('e.g., Faculty, Distinguished Faculty, Library Officer')
-                                    ->maxLength(255),
+                                            return self::filterPreparersForCourse($courseId)->pluck('full_name', 'id');
+                                        })
+                                        ->searchable()
+                                        ->required()
+                                        ->preload()
+                                        ->distinct()
+                                        ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
 
-                                RichEditor::make('description')
-                                    ->label('Description')
-                                    ->placeholder('Additional details about their contribution')
-                                    ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-                                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-                                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                                        ['table', 'attachFiles'],
-                                        ['undo', 'redo']])
-                                    ->columnSpanFull(),
-                            ])
-                            ->addActionLabel('Add Preparer')
-                            ->collapsible()
-                            ->columnSpanFull()
-                            ->live(),
+                                    TextInput::make('role')
+                                        ->label('Role/Position')
+                                        ->placeholder('e.g., Faculty, Distinguished Faculty, Library Officer')
+                                        ->maxLength(255),
 
-                        Select::make('reviewed_by')
-                            ->label('Verified By (Department Chair)')
-                            ->relationship('reviewer', 'name')
-                            ->options(
-                                User::where('position', 'department_chair')
-                                    ->pluck('name', 'id')
-                            )
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
-                            ->searchable(['firstname', 'lastname', 'middlename', 'name'])
-                            ->preload()
-                            ->columnSpanFull(),
+                                    RichEditor::make('description')
+                                        ->label('Description')
+                                        ->placeholder('Additional details about their contribution')
+                                        ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                            ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                            ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                            ['table', 'attachFiles'],
+                                            ['undo', 'redo']])
+                                        ->columnSpanFull(),
+                                ])
+                                ->addActionLabel('Add Preparer')
+                                ->collapsible()
+                                ->columnSpanFull()
+                                ->live(),
 
-                        Select::make('recommending_approval')
-                            ->label('Recommending Approval (Associate Dean)')
-                            ->relationship('recommendingApprover', 'name')
-                            ->options(
-                                User::where('position', 'associate_dean')
-                                    ->pluck('name', 'id')
-                            )
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
-                            ->searchable(['firstname', 'lastname', 'middlename', 'name'])
-                            ->preload(),
+                            Select::make('reviewed_by')
+                                ->label('Verified By (Department Chair)')
+                                ->relationship(
+                                    name: 'reviewer',
+                                    titleAttribute: 'name',
+                                    modifyQueryUsing: fn ($query, $get) => self::filterDepartmentChairsForCourse($get('course_id'))
+                                )
+                                ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
+                                ->searchable(['firstname', 'lastname', 'middlename', 'name'])
+                                ->preload()
+                                ->columnSpanFull(),
 
-                        Select::make('approved_by')
-                            ->label('Approved By (Dean)')
-                            ->relationship('approver', 'name')
-                            ->options(
-                                User::where('position', 'dean')
-                                    ->pluck('name', 'id')
-                            )
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
-                            ->searchable(['firstname', 'lastname', 'middlename', 'name'])
-                            ->preload(),
+                            Select::make('recommending_approval')
+                                ->label('Recommending Approval (Associate Dean)')
+                                ->relationship(
+                                    name: 'recommendingApprover',
+                                    titleAttribute: 'name',
+                                    modifyQueryUsing: fn ($query, $get) => self::filterAssociateDeansForCourse($get('course_id'))
+                                )
+                                ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
+                                ->searchable(['firstname', 'lastname', 'middlename', 'name'])
+                                ->preload(),
 
-                        TextInput::make('sort_order')
-                            ->label('Sort Order')
-                            ->numeric()
-                            ->default(0)
-                            ->columnSpanFull(),
+                            Select::make('approved_by')
+                                ->label('Approved By (Dean)')
+                                ->relationship(
+                                    name: 'approver',
+                                    titleAttribute: 'name',
+                                    modifyQueryUsing: fn ($query, $get) => self::filterDeansForCourse($get('course_id'))
+                                )
+                                ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->name)
+                                ->searchable(['firstname', 'lastname', 'middlename', 'name'])
+                                ->preload(),
+
+                            TextInput::make('sort_order')
+                                ->label('Sort Order')
+                                ->numeric()
+                                ->default(0)
+                                ->columnSpanFull(),
                         ])
                         ->columns(2),
                 ])
-                ->columnSpanFull(),
+                    ->columnSpanFull(),
             ]);
     }
 }

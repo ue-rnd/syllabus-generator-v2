@@ -14,19 +14,19 @@ return new class extends Migration
             ->chunkById(100, function ($rows) {
                 foreach ($rows as $row) {
                     $data = json_decode($row->program_outcomes, true);
-                    if (!is_array($data)) {
+                    if (! is_array($data)) {
                         continue;
                     }
 
                     $changed = false;
 
                     foreach ($data as $index => $outcome) {
-                        if (!is_array($outcome)) {
+                        if (! is_array($outcome)) {
                             continue;
                         }
 
                         $addressed = $outcome['addressed'] ?? [];
-                        if (!is_array($addressed)) {
+                        if (! is_array($addressed)) {
                             continue;
                         }
 
@@ -91,24 +91,25 @@ return new class extends Migration
             ->chunkById(100, function ($rows) {
                 foreach ($rows as $row) {
                     $data = json_decode($row->program_outcomes, true);
-                    if (!is_array($data)) {
+                    if (! is_array($data)) {
                         continue;
                     }
 
                     $changed = false;
 
                     foreach ($data as $index => $outcome) {
-                        if (!is_array($outcome)) {
+                        if (! is_array($outcome)) {
                             continue;
                         }
 
                         $addressed = $outcome['addressed'] ?? [];
-                        if (!is_array($addressed)) {
+                        if (! is_array($addressed)) {
                             continue;
                         }
 
                         $reverted = array_map(function ($value) {
                             $lv = is_string($value) ? strtolower($value) : $value;
+
                             return match ($lv) {
                                 'introduced' => 'Introduced',
                                 'enhanced' => 'Enhanced',
@@ -132,6 +133,3 @@ return new class extends Migration
             });
     }
 };
-
-
-

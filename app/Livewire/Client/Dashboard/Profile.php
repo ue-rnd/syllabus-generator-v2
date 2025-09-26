@@ -2,25 +2,30 @@
 
 namespace App\Livewire\Client\Dashboard;
 
-use Livewire\Component;
-use Livewire\Attributes\Layout;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use App\Models\User;
 use Illuminate\Validation\Rules\Password as PasswordRule;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('livewire.client.dashboard.base')]
 class Profile extends Component
 {
     public string $firstname = '';
+
     public string $lastname = '';
+
     public string $middlename = '';
+
     public string $email = '';
 
     public bool $saved = false;
 
     public string $current_password = '';
+
     public string $password = '';
+
     public string $password_confirmation = '';
 
     protected function user(): User
@@ -56,11 +61,11 @@ class Profile extends Component
         ]);
 
         $name = $validated['firstname'];
-        if (!empty($validated['middlename'])) {
-            $name .= ' ' . $validated['middlename'];
+        if (! empty($validated['middlename'])) {
+            $name .= ' '.$validated['middlename'];
         }
-        $name .= ' ' . $validated['lastname'];
-        
+        $name .= ' '.$validated['lastname'];
+
         $validated['name'] = $name;
 
         $user->fill($validated);
@@ -103,6 +108,7 @@ class Profile extends Component
         session()->flash('status', 'password-updated');
         $this->dispatch('password-updated');
     }
+
     public function render()
     {
         return view('livewire.client.dashboard.profile');

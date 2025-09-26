@@ -3,14 +3,10 @@
 namespace App\Filament\Admin\Widgets;
 
 use App\Models\College;
-use App\Models\Department;
-use App\Models\Program;
-use App\Models\Course;
 use Filament\Widgets\ChartWidget;
 
 class CollegesChartWidget extends ChartWidget
 {
-
     protected static ?int $sort = 2;
 
     protected function getData(): array

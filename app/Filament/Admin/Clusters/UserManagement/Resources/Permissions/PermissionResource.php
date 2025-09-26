@@ -2,18 +2,18 @@
 
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\Permissions;
 
-use App\Filament\Admin\Clusters\UserManagement\UserManagement;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Permissions\Pages\CreatePermission;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Permissions\Pages\EditPermission;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Permissions\Pages\ListPermissions;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Permissions\Schemas\PermissionForm;
 use App\Filament\Admin\Clusters\UserManagement\Resources\Permissions\Tables\PermissionsTable;
-use Spatie\Permission\Models\Permission;
+use App\Filament\Admin\Clusters\UserManagement\UserManagement;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Spatie\Permission\Models\Permission;
 
 class PermissionResource extends Resource
 {
@@ -51,5 +51,35 @@ class PermissionResource extends Resource
             'create' => CreatePermission::route('/create'),
             'edit' => EditPermission::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canView($record): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()->position === 'superadmin';
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return auth()->user()->position === 'superadmin';
     }
 }

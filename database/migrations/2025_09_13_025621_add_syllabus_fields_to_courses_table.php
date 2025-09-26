@@ -15,10 +15,10 @@ return new class extends Migration
             // Credit units
             $table->decimal('credit_units_lecture', 3, 1)->default(0)->after('description');
             $table->decimal('credit_units_laboratory', 3, 1)->default(0)->after('credit_units_lecture');
-            
+
             // Course type
             $table->string('course_type')->default('pure_onsite')->after('credit_units_laboratory');
-            
+
             // Prerequisite courses (JSON array of course IDs)
             $table->json('prerequisite_courses')->nullable()->after('course_type');
         });
@@ -34,7 +34,7 @@ return new class extends Migration
                 'credit_units_lecture',
                 'credit_units_laboratory',
                 'course_type',
-                'prerequisite_courses'
+                'prerequisite_courses',
             ]);
         });
     }

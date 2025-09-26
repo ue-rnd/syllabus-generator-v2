@@ -11,7 +11,7 @@ return [
     */
 
     'timeout' => env('BROWSERSHOT_TIMEOUT', 60),
-    
+
     'pdf' => [
         'format' => env('BROWSERSHOT_PDF_FORMAT', 'A4'),
         'orientation' => env('BROWSERSHOT_PDF_ORIENTATION', 'landscape'),

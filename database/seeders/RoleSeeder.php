@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
 {
@@ -24,38 +24,38 @@ class RoleSeeder extends Seeder
             'create users',
             'edit users',
             'delete users',
-            
+
             // Role Management
             'view roles',
             'create roles',
             'edit roles',
             'delete roles',
             'assign roles',
-            
+
             // Permission Management
             'view permissions',
             'create permissions',
             'edit permissions',
             'delete permissions',
             'assign permissions',
-            
+
             // Syllabus Management
             'view syllabus',
             'create syllabus',
             'edit syllabus',
             'delete syllabus',
             'publish syllabus',
-            
+
             // Course Management
             'view courses',
             'create courses',
             'edit courses',
             'delete courses',
-            
+
             // Settings Management
             'view settings',
             'edit settings',
-            
+
             // Dashboard Access
             'view dashboard',
             'view analytics',
@@ -66,7 +66,7 @@ class RoleSeeder extends Seeder
         }
 
         // Create roles and assign permissions
-        
+
         // Superadmin (IT Department) - Full system access including user/role management
         $superadminRole = Role::create(['name' => 'superadmin']);
         $superadminRole->givePermissionTo(Permission::all());
@@ -80,16 +80,16 @@ class RoleSeeder extends Seeder
             'edit syllabus',
             'delete syllabus',
             'publish syllabus',
-            
+
             // Course Management
             'view courses',
             'create courses',
             'edit courses',
             'delete courses',
-            
+
             // Settings Management (limited)
             'view settings',
-            
+
             // Dashboard Access
             'view dashboard',
             'view analytics',

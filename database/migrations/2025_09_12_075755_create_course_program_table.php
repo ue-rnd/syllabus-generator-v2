@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('course_program', function (Blueprint $table) {
             $table->id();
-            
+
             // Foreign keys
             $table->foreignId('course_id')->constrained('courses', 'id')->onDelete('cascade');
             $table->foreignId('program_id')->constrained('programs', 'id')->onDelete('cascade');
-            
+
             // Ensure unique combination
             $table->unique(['course_id', 'program_id']);
-            
+
             $table->timestamps();
         });
     }

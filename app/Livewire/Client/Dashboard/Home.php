@@ -3,10 +3,10 @@
 namespace App\Livewire\Client\Dashboard;
 
 use App\Models\Syllabus;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\Auth;
 
 #[Layout('livewire.client.dashboard.base')]
 class Home extends Component
@@ -14,6 +14,7 @@ class Home extends Component
     use WithPagination;
 
     public $search = '';
+
     public $statusFilter = '';
 
     protected $queryString = [
@@ -46,21 +47,21 @@ class Home extends Component
     public function render()
     {
         $user = Auth::user();
-        
+
         // Get syllabi where user is the principal preparer or assigned in prepared_by
         $syllabiQuery = Syllabus::with(['course.college', 'principalPreparer'])
             ->where(function ($query) use ($user) {
                 $query->where('principal_prepared_by', $user->id)
-                      ->orWhereJsonContains('prepared_by', [['user_id' => $user->id]]);
+                    ->orWhereJsonContains('prepared_by', [['user_id' => $user->id]]);
             });
 
         // Apply search filter
         if ($this->search) {
             $syllabiQuery->where(function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
+                $query->where('name', 'like', '%'.$this->search.'%')
                     ->orWhereHas('course', function ($q) {
-                        $q->where('name', 'like', '%' . $this->search . '%')
-                          ->orWhere('code', 'like', '%' . $this->search . '%');
+                        $q->where('name', 'like', '%'.$this->search.'%')
+                            ->orWhere('code', 'like', '%'.$this->search.'%');
                     });
             });
         }

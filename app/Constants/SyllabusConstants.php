@@ -6,8 +6,6 @@
 
 namespace App\Constants;
 
-
-
 class SyllabusConstants
 {
     /**
@@ -45,7 +43,7 @@ class SyllabusConstants
             'study' => 'Study',
             'tabulate' => 'Tabulate',
             'trace' => 'Trace',
-            'write' => 'Write'
+            'write' => 'Write',
         ],
         'Understand' => [
             'understand' => 'Understand',
@@ -89,7 +87,7 @@ class SyllabusConstants
             'subtract' => 'Subtract',
             'summarize' => 'Summarize',
             'translate' => 'Translate',
-            'visualize' => 'Visualize'
+            'visualize' => 'Visualize',
         ],
         'Apply' => [
             'apply' => 'Apply',
@@ -154,7 +152,7 @@ class SyllabusConstants
             'tabulate' => 'Tabulate',
             'transcribe' => 'Transcribe',
             'translate' => 'Translate',
-            'use' => 'Use'
+            'use' => 'Use',
         ],
         'Analyze' => [
             'analyze' => 'Analyze',
@@ -205,7 +203,7 @@ class SyllabusConstants
             'separate' => 'Separate',
             'subdivide' => 'Subdivide',
             'train' => 'Train',
-            'transform' => 'Transform'
+            'transform' => 'Transform',
         ],
         'Evaluate' => [
             'evaluate' => 'Evaluate',
@@ -239,7 +237,7 @@ class SyllabusConstants
             'support' => 'Support',
             'test' => 'Test',
             'validate' => 'Validate',
-            'verify' => 'Verify'
+            'verify' => 'Verify',
         ],
         'Create' => [
             'create' => 'Create',
@@ -297,8 +295,8 @@ class SyllabusConstants
             'revise' => 'Revise',
             'rewrite' => 'Rewrite',
             'specify' => 'Specify',
-            'summarize' => 'Summarize'
-        ]
+            'summarize' => 'Summarize',
+        ],
     ];
 
     /**
@@ -307,7 +305,7 @@ class SyllabusConstants
     public const LEARNING_MODALITIES = [
         'onsite' => 'Onsite',
         'offsite_asynchronous' => 'Offsite Asynchronous',
-        'offsite_synchronous' => 'Offsite Synchronous'
+        'offsite_synchronous' => 'Offsite Synchronous',
     ];
 
     public const OUTCOMES_ADDRESSED = [
@@ -319,7 +317,7 @@ class SyllabusConstants
     public const APPROVAL_STATUSES = [
         'submitted' => 'Submitted',
         'approved' => 'Approved',
-        'rejected' => 'Rejected'
+        'rejected' => 'Rejected',
     ];
 
     /**
@@ -338,7 +336,7 @@ class SyllabusConstants
             'self_assessment' => 'Self Assessment',
             'reflection' => 'Reflection',
             'journal' => 'Journal',
-            'portfolio_entry' => 'Portfolio Entry'
+            'portfolio_entry' => 'Portfolio Entry',
         ],
         'Practical Assessments' => [
             'laboratory_exercise' => 'Laboratory Exercise',
@@ -347,7 +345,7 @@ class SyllabusConstants
             'simulation' => 'Simulation',
             'case_study' => 'Case Study',
             'problem_solving' => 'Problem Solving',
-            'hands_on_activity' => 'Hands-on Activity'
+            'hands_on_activity' => 'Hands-on Activity',
         ],
         'Project Based Assessments' => [
             'project' => 'Project',
@@ -356,7 +354,7 @@ class SyllabusConstants
             'research_project' => 'Research Project',
             'presentation' => 'Presentation',
             'poster_presentation' => 'Poster Presentation',
-            'oral_presentation' => 'Oral Presentation'
+            'oral_presentation' => 'Oral Presentation',
         ],
         'Formal Assessments' => [
             'midterm_exam' => 'Midterm Exam',
@@ -364,46 +362,46 @@ class SyllabusConstants
             'comprehensive_exam' => 'Comprehensive Exam',
             'oral_exam' => 'Oral Exam',
             'written_exam' => 'Written Exam',
-            'take_home_exam' => 'Take-home Exam'
+            'take_home_exam' => 'Take-home Exam',
         ],
         'Performance Assessments' => [
             'performance_task' => 'Performance Task',
             'skill_demonstration' => 'Skill Demonstration',
             'competency_assessment' => 'Competency Assessment',
             'authentic_assessment' => 'Authentic Assessment',
-            'rubric_based_assessment' => 'Rubric-based Assessment'
+            'rubric_based_assessment' => 'Rubric-based Assessment',
         ],
         'Collaborative Assessments' => [
             'group_work' => 'Group Work',
             'collaborative_project' => 'Collaborative Project',
             'team_presentation' => 'Team Presentation',
-            'peer_evaluation' => 'Peer Evaluation'
+            'peer_evaluation' => 'Peer Evaluation',
         ],
         'Creative Assessments' => [
             'creative_work' => 'Creative Work',
             'artistic_creation' => 'Artistic Creation',
             'design_project' => 'Design Project',
-            'innovation_challenge' => 'Innovation Challenge'
+            'innovation_challenge' => 'Innovation Challenge',
         ],
         'Field Based Assessments' => [
             'field_work' => 'Field Work',
             'internship_evaluation' => 'Internship Evaluation',
             'practicum_assessment' => 'Practicum Assessment',
-            'service_learning' => 'Service Learning'
+            'service_learning' => 'Service Learning',
         ],
         'Technology Enhanced Assessments' => [
             'e_portfolio' => 'E-Portfolio',
             'digital_storytelling' => 'Digital Storytelling',
             'multimedia_project' => 'Multimedia Project',
             'online_simulation' => 'Online Simulation',
-            'virtual_lab' => 'Virtual Lab'
+            'virtual_lab' => 'Virtual Lab',
         ],
         'Other Assessments' => [
             'attendance' => 'Attendance',
             'participation' => 'Participation',
             'engagement' => 'Engagement',
-            'no_assessment' => 'No Assessment'
-        ]
+            'no_assessment' => 'No Assessment',
+        ],
     ];
 
     /**
@@ -528,7 +526,7 @@ class SyllabusConstants
             'study',
             'tabulate',
             'trace',
-            'write'
+            'write',
         ];
 
         // Understand - Green shades
@@ -574,7 +572,7 @@ class SyllabusConstants
             'subtract',
             'summarize',
             'translate',
-            'visualize'
+            'visualize',
         ];
 
         // Apply - Yellow/Orange shades
@@ -641,7 +639,7 @@ class SyllabusConstants
             'tabulate',
             'transcribe',
             'translate',
-            'use'
+            'use',
         ];
 
         // Analyze - Purple shades
@@ -694,7 +692,7 @@ class SyllabusConstants
             'separate',
             'subdivide',
             'train',
-            'transform'
+            'transform',
         ];
 
         // Evaluate - Red shades
@@ -730,7 +728,7 @@ class SyllabusConstants
             'support',
             'test',
             'validate',
-            'verify'
+            'verify',
         ];
 
         // Create - Pink shades
@@ -790,24 +788,30 @@ class SyllabusConstants
             'revise',
             'rewrite',
             'specify',
-            'summarize'
+            'summarize',
         ];
 
         // Convert verb to lowercase for comparison
         $lowerVerb = strtolower($verb);
 
-        if (in_array($lowerVerb, $remember))
+        if (in_array($lowerVerb, $remember)) {
             return 'primary';
-        if (in_array($lowerVerb, $understand))
+        }
+        if (in_array($lowerVerb, $understand)) {
             return 'success';
-        if (in_array($lowerVerb, $apply))
+        }
+        if (in_array($lowerVerb, $apply)) {
             return 'warning';
-        if (in_array($lowerVerb, $analyze))
+        }
+        if (in_array($lowerVerb, $analyze)) {
             return 'purple';
-        if (in_array($lowerVerb, $evaluate))
+        }
+        if (in_array($lowerVerb, $evaluate)) {
             return 'danger';
-        if (in_array($lowerVerb, $create))
+        }
+        if (in_array($lowerVerb, $create)) {
             return 'pink';
+        }
 
         return 'gray';
     }
@@ -870,26 +874,36 @@ class SyllabusConstants
         // Other Assessments - Gray colors
         $other = ['attendance', 'participation', 'engagement', 'no_assessment'];
 
-        if (in_array($assessment, $formative))
+        if (in_array($assessment, $formative)) {
             return 'primary';
-        if (in_array($assessment, $practical))
+        }
+        if (in_array($assessment, $practical)) {
             return 'success';
-        if (in_array($assessment, $project))
+        }
+        if (in_array($assessment, $project)) {
             return 'purple';
-        if (in_array($assessment, $formal))
+        }
+        if (in_array($assessment, $formal)) {
             return 'danger';
-        if (in_array($assessment, $performance))
+        }
+        if (in_array($assessment, $performance)) {
             return 'warning';
-        if (in_array($assessment, $collaborative))
+        }
+        if (in_array($assessment, $collaborative)) {
             return 'teal';
-        if (in_array($assessment, $creative))
+        }
+        if (in_array($assessment, $creative)) {
             return 'pink';
-        if (in_array($assessment, $fieldBased))
+        }
+        if (in_array($assessment, $fieldBased)) {
             return 'indigo';
-        if (in_array($assessment, $technologyEnhanced))
+        }
+        if (in_array($assessment, $technologyEnhanced)) {
             return 'cyan';
-        if (in_array($assessment, $other))
+        }
+        if (in_array($assessment, $other)) {
             return 'gray';
+        }
 
         return 'gray';
     }
@@ -925,13 +939,13 @@ class SyllabusConstants
     public static function getActionVerbOptions(): array
     {
         $flattened = [];
-    
+
         foreach (self::ACTION_VERBS as $category => $verbs) {
             foreach ($verbs as $key => $value) {
                 $flattened[$key] = $value;
             }
         }
-        
+
         return $flattened;
     }
 
@@ -964,13 +978,13 @@ class SyllabusConstants
     public static function getAssessmentTypeOptions(): array
     {
         $flattened = [];
-    
+
         foreach (self::ASSESSMENT_TYPES as $category => $types) {
             foreach ($types as $key => $value) {
                 $flattened[$key] = $value;
             }
         }
-        
+
         return $flattened;
     }
 
