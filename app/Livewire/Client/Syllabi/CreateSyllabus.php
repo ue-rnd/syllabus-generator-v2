@@ -7,6 +7,8 @@ use App\Models\Setting;
 use App\Models\Syllabus;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -411,6 +413,10 @@ class CreateSyllabus extends Component
                     'learning_matrix.min' => 'Please add at least one learning matrix item.',
                     'learning_matrix.*.week_range.start.required' => 'Please specify the week (start).',
                     'learning_matrix.*.content.required' => 'Content is required for each matrix item.',
+                    'learning_matrix.*.week_range.start.max' => 'This field cannot be greater than 20',
+                    'learning_matrix.*.week_range.end.max' => 'This field cannot be greater than 20.',
+                    'learning_matrix.*.week_range.start.min' => 'This field cannot be lesser than 1',
+                    'learning_matrix.*.week_range.end.min' => 'This field cannot be lesser than 1.'
                 ]);
 
                 // Additional validation: if is_range is true, end must be >= start
@@ -420,9 +426,9 @@ class CreateSyllabus extends Component
                     $end = $item['week_range']['end'] ?? null;
                     if ($isRange) {
                         if ($end === null) {
-                            $this->addError("learning_matrix.$idx.week_range.end", 'Week end is required when using a range.');
+                            throw ValidationException::withMessages(["learning_matrix.$idx.week_range.end" => 'Week end is required when using a range.']);
                         } elseif ($start !== null && $end < $start) {
-                            $this->addError("learning_matrix.$idx.week_range.end", 'Week end must be greater than or equal to week start.');
+                            throw ValidationException::withMessages(["learning_matrix.$idx.week_range.end" => 'Week end must be greater than or equal to week start.']);
                         }
                     }
                 }
