@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Clusters\Academic\Resources\BloomsTaxonomyVerbs\Schemas;
 
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -54,7 +54,8 @@ class BloomsTaxonomyVerbForm
                         ->default(true)
                         ->helperText('Inactive verbs will not appear in form options'),
                 ])
-                ->columns(2),
+                ->columns(2)
+                ->columnSpanFull(),
         ]);
     }
 }

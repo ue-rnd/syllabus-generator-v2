@@ -11,21 +11,19 @@
                 </x-slot>
             @endif
 
-            <x-filament-panels::form wire:submit="save">
+            <form wire:submit="save">
                 {{ $this->form }}
 
-                <x-slot name="footer">
-                    <div class="flex justify-between">
-                        <div class="flex space-x-3">
-                            {{ $this->getFormActions()[1] ?? '' }}
-                            {{ $this->getFormActions()[2] ?? '' }}
-                        </div>
-                        <div>
-                            {{ $this->getFormActions()[0] ?? '' }}
-                        </div>
+                <div class="flex justify-between mt-6">
+                    <div class="flex space-x-3">
+                        {{ $this->getFormActions()[1] ?? '' }}
+                        {{ $this->getFormActions()[2] ?? '' }}
                     </div>
-                </x-slot>
-            </x-filament-panels::form>
+                    <div>
+                        {{ $this->getFormActions()[0] ?? '' }}
+                    </div>
+                </div>
+            </form>
         </x-filament::section>
 
         <x-filament::section class="mt-6">
