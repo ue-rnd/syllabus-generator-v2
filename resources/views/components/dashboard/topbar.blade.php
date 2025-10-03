@@ -1,4 +1,4 @@
-<div class="p-4 ml-16 bg-white flex justify-between items-center border-b">
+<div class="sticky top-0 z-70 backdrop-blur-md p-4 ml-16 bg-white/90 flex justify-between items-center border-b">
     <div class="flex items-center space-x-4">
         @php($college = auth()->user()?->college)
         @if($college?->logo_url)
