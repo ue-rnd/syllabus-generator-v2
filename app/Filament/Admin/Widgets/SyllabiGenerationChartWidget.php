@@ -64,7 +64,12 @@ class SyllabiGenerationChartWidget extends ChartWidget
             'scales' => [
                 'y' => [
                     'beginAtZero' => true,
+                    'ticks' => [
+                        'stepSize' => 1,
+                        'maxTicksLimit' => 6,
+                    ]
                 ],
+
             ],
         ];
     }
