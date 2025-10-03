@@ -36,6 +36,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 // Widgets are now managed by the custom Dashboard page
             ])
+            ->sidebarCollapsibleOnDesktop()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
