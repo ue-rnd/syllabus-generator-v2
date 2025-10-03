@@ -44,9 +44,9 @@
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-4">
+        <div class="max-w-7xl mx-auto mt-4 pt-3">
             <div class="flex items-center justify-between mb-4">
-                <h4 class="text-xl">My Syllabi</h4>
+                <h4 class="text-xl font-bold">My Syllabi</h4>
                 <nav class="flex items-center text-sm text-gray-600" aria-label="Breadcrumb">
                     <a href="{{ route('home') }}" wire:navigate class="flex items-center hover:text-gray-800">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"

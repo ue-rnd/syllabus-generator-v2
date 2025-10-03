@@ -1,5 +1,5 @@
 <aside class="w-16 z-70 h-screen fixed top-0 left-0 flex flex-col items-center py-4 space-y-6 bg-white border-r">
-	<h2 class="text-red-600 text-2xl font-bold">UE</h2>
+	<a class="text-red-600 text-2xl font-bold" href="{{ route('home') }}">UE</a>
 	<a href="{{ route('profile') }}" class="hover:bg-gray-200 p-2 rounded-xl ease duration-200 group relative">
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
 			<path
