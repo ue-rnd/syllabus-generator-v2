@@ -93,7 +93,7 @@
     </div>
     
     <!-- Edit Profile Modal -->
-    <div x-cloak x-show="profileOpen" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center">
+    <div x-cloak x-show="profileOpen" x-transition.opacity class="fixed inset-0 z-80 flex items-center justify-center">
         <div @click="profileOpen = false" class="absolute inset-0 bg-black/40"></div>
         <div class="relative bg-white rounded-xl shadow-lg w-full max-w-xl p-6">
             <div class="flex items-center justify-between mb-4">
@@ -130,7 +130,7 @@
     </div>
 
     <!-- Change Password Modal -->
-    <div x-cloak x-show="passwordOpen" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center">
+    <div x-cloak x-show="passwordOpen" x-transition.opacity class="fixed inset-0 z-80 flex items-center justify-center">
         <div @click="passwordOpen = false" class="absolute inset-0 bg-black/40"></div>
         <div class="relative bg-white rounded-xl shadow-lg w-full max-w-xl p-6">
             <div class="flex items-center justify-between mb-4">
