@@ -49,8 +49,8 @@
                 <div class="flex items-center justify-between">
                     <h3 class="text-base font-semibold text-gray-900">Account</h3>
                     <div class="flex items-center gap-2">
-                        <button type="button" @click="profileOpen = true" class="px-3 py-1.5 rounded border border-gray-300 text-sm text-gray-700 hover:bg-gray-50">Edit profile</button>
-                        <button type="button" @click="passwordOpen = true" class="px-3 py-1.5 rounded bg-red-700 text-white text-sm hover:bg-red-800">Change password</button>
+                        <button type="button" @click="profileOpen = true" class="px-3 py-1.5 rounded-xl border border-gray-300 text-sm text-gray-700 hover:bg-gray-50">Edit profile</button>
+                        <button type="button" @click="passwordOpen = true" class="px-3 py-1.5 rounded-xl bg-red-700 text-white text-sm hover:bg-red-800">Change password</button>
                     </div>
                 </div>
 
@@ -93,7 +93,7 @@
     </div>
     
     <!-- Edit Profile Modal -->
-    <div x-cloak x-show="profileOpen" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center">
+    <div x-cloak x-show="profileOpen" x-transition.opacity class="fixed inset-0 z-80 flex items-center justify-center">
         <div @click="profileOpen = false" class="absolute inset-0 bg-black/40"></div>
         <div class="relative bg-white rounded-xl shadow-lg w-full max-w-xl p-6">
             <div class="flex items-center justify-between mb-4">
@@ -103,34 +103,34 @@
             <form wire:submit.prevent="updateProfileInformation" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="space-y-1">
                     <label class="text-xs uppercase tracking-wide text-gray-500">First name</label>
-                    <input type="text" wire:model.defer="firstname" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" />
+                    <input type="text" wire:model.defer="firstname" class="w-full border px-3 py-2 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400" />
                     @error('firstname') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="text-xs uppercase tracking-wide text-gray-500">Last name</label>
-                    <input type="text" wire:model.defer="lastname" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" />
+                    <input type="text" wire:model.defer="lastname" class="w-full border px-3 py-2 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400" />
                     @error('lastname') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="text-xs uppercase tracking-wide text-gray-500">Middle name</label>
-                    <input type="text" wire:model.defer="middlename" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" />
+                    <input type="text" wire:model.defer="middlename" class="w-full border px-3 py-2 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400" />
                     @error('middlename') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="text-xs uppercase tracking-wide text-gray-500">Email</label>
-                    <input type="email" wire:model.defer="email" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" />
+                    <input type="email" wire:model.defer="email" class="w-full border px-3 py-2 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400" />
                     @error('email') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
                 </div>
                 <div class="md:col-span-2 flex items-center justify-end gap-2 pt-2">
-                    <button type="button" @click="profileOpen = false" class="px-3 py-2 rounded border border-gray-300 text-gray-700 text-sm hover:bg-gray-50">Cancel</button>
-                    <button type="submit" class="px-3 py-2 rounded bg-red-700 text-white text-sm hover:bg-red-800">Save changes</button>
+                    <button type="button" @click="profileOpen = false" class="px-3 py-2 rounded-xl border border-gray-300 text-gray-700 text-sm hover:bg-gray-50">Cancel</button>
+                    <button type="submit" class="px-3 py-2 rounded-xl bg-red-700 text-white text-sm hover:bg-red-800">Save changes</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Change Password Modal -->
-    <div x-cloak x-show="passwordOpen" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center">
+    <div x-cloak x-show="passwordOpen" x-transition.opacity class="fixed inset-0 z-80 flex items-center justify-center">
         <div @click="passwordOpen = false" class="absolute inset-0 bg-black/40"></div>
         <div class="relative bg-white rounded-xl shadow-lg w-full max-w-xl p-6">
             <div class="flex items-center justify-between mb-4">
@@ -140,21 +140,21 @@
             <form wire:submit.prevent="updatePassword" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="space-y-1 md:col-span-2">
                     <label class="text-xs uppercase tracking-wide text-gray-500">Current password</label>
-                    <input type="password" wire:model.defer="current_password" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" />
+                    <input type="password" wire:model.defer="current_password" class="w-full border px-3 py-2 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400" />
                     @error('current_password') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="text-xs uppercase tracking-wide text-gray-500">New password</label>
-                    <input type="password" wire:model.defer="password" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" />
+                    <input type="password" wire:model.defer="password" class="w-full border px-3 py-2 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400" />
                     @error('password') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
                 </div>
                 <div class="space-y-1">
                     <label class="text-xs uppercase tracking-wide text-gray-500">Confirm password</label>
-                    <input type="password" wire:model.defer="password_confirmation" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-red-400" />
+                    <input type="password" wire:model.defer="password_confirmation" class="w-full border px-3 py-2 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400" />
                 </div>
                 <div class="md:col-span-2 flex items-center justify-end gap-2 pt-2">
-                    <button type="button" @click="passwordOpen = false" class="px-3 py-2 rounded border border-gray-300 text-gray-700 text-sm hover:bg-gray-50">Cancel</button>
-                    <button type="submit" class="px-3 py-2 rounded bg-red-700 text-white text-sm hover:bg-red-800">Update password</button>
+                    <button type="button" @click="passwordOpen = false" class="px-3 py-2 rounded-xl border border-gray-300 text-gray-700 text-sm hover:bg-gray-50">Cancel</button>
+                    <button type="submit" class="px-3 py-2 rounded-xl bg-red-700 text-white text-sm hover:bg-red-800">Update password</button>
                 </div>
             </form>
         </div>

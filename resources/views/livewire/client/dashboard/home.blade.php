@@ -9,10 +9,10 @@
                             d="M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z">
                         </path>
                     </svg>
-                    <h4 class="text-4xl font-medium">Syllabus Generator</h4>
+                    <h4 class="text-4xl font-bold">Syllabus Generator</h4>
                 </div>
                 <a href="{{ route('syllabus') }}" wire:navigate aria-label="Create Syllabus"
-                    class="inline-flex items-center bg-red-700 text-white px-4 py-2 space-x-2 rounded hover:bg-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 w-auto max-w-fit">
+                    class="inline-flex items-center bg-red-700 text-white px-4 py-2 space-x-2 rounded-xl hover:bg-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 w-auto max-w-fit">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
                         <path fill-rule="evenodd"
                             d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v2.5h-2.5a.75.75 0 0 0 0 1.5h2.5v2.5a.75.75 0 0 0 1.5 0v-2.5h2.5a.75.75 0 0 0 0-1.5h-2.5v-2.5Z"
@@ -100,11 +100,11 @@
                                     <span class="text-sm font-medium text-gray-600">Syllabus #{{ $syllabus->id }}</span>
                                 </div>
                                 <span class="px-2 py-1 text-xs rounded-full {{ 
-                                                                        $syllabus->status === 'approved' ? 'bg-green-100 text-green-800' :
+                                                                                                $syllabus->status === 'approved' ? 'bg-green-100 text-green-800' :
                 ($syllabus->status === 'under_review' ? 'bg-yellow-100 text-yellow-800' :
                     ($syllabus->status === 'rejected' ? 'bg-red-100 text-red-800' :
                         'bg-gray-100 text-gray-800')) 
-                                                                    }}">
+                                                                                            }}">
                                     {{ ucfirst(str_replace('_', ' ', $syllabus->status)) }}
                                 </span>
                             </div>
@@ -123,11 +123,13 @@
 
                             <div class="flex items-center justify-between pt-3 border-t">
                                 <div class="flex items-center space-x-2">
-                                    <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor"
-                                        aria-hidden="true">
-                                        <path d="M12 6v6h5a1 1 0 010 2H11a1 1 0 01-1-1V6a1 1 0 112 0z" />
-                                        <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill-opacity=".1" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="size-5 text-gray-400">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z"
+                                            clip-rule="evenodd" />
                                     </svg>
+
                                     <span class="text-xs text-gray-500">{{ $syllabus->updated_at->diffForHumans() }}</span>
                                 </div>
                                 <div class="flex items-center gap-4">
