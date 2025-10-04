@@ -19,9 +19,9 @@ class BackupRecoveryCluster extends Cluster
 
     protected static ?string $slug = 'backup-recovery';
 
-    public static function canAccess(): bool
-    {
-        return auth()->user()->can('manage system settings') ||
-               auth()->user()->can('manage backups');
-    }
+    // public static function canAccess(): bool
+    // {
+    //     return auth()->user()->can('manage system settings') ||
+    //            auth()->user()->can('manage backups');
+    // }
 }

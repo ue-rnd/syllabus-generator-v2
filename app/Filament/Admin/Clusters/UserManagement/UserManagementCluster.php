@@ -19,11 +19,11 @@ class UserManagementCluster extends Cluster
 
     protected static ?string $slug = 'user-management';
 
-    public static function canAccess(): bool
-    {
-        return auth()->user()->can('view users') ||
-               auth()->user()->can('assign roles') ||
-               auth()->user()->can('manage permissions') ||
-               auth()->user()->can('view system logs');
-    }
+    // public static function canAccess(): bool
+    // {
+    //     return auth()->user()->can('view users') ||
+    //            auth()->user()->can('assign roles') ||
+    //            auth()->user()->can('manage permissions') ||
+    //            auth()->user()->can('view system logs');
+    // }
 }
