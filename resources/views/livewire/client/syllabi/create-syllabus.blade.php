@@ -3,7 +3,7 @@
     <div class="mb-6">
         <a href="{{ route('home') }}" 
            wire:navigate 
-           class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200">
+           class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -61,7 +61,7 @@
     </div>
 
     <!-- Form Content -->
-    <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="bg-white rounded-xl shadow-md p-6">
         @if($currentStep == 1)
             <!-- Step 1: Basic Information and Curricular Details -->
             <div class="space-y-6">
@@ -71,7 +71,7 @@
                 </div>
 
                 <!-- Curricular Details -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl">
                     <h3 class="col-span-full text-md font-medium text-gray-900 mb-3">Academic Year and Schedule</h3>
                     
                     <div>
@@ -79,7 +79,7 @@
                         <input type="number" 
                                wire:model="ay_start" 
                                id="ay_start"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('ay_start') border-red-500 @enderror">
+                               class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('ay_start') border-red-500 @enderror">
                         @error('ay_start') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     
@@ -88,7 +88,7 @@
                         <input type="number" 
                                wire:model="ay_end" 
                                id="ay_end"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('ay_end') border-red-500 @enderror">
+                               class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('ay_end') border-red-500 @enderror">
                         @error('ay_end') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     
@@ -100,7 +100,7 @@
                                wire:model="week_prelim" 
                                id="week_prelim"
                                min="1" max="20"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_prelim') border-red-500 @enderror">
+                               class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_prelim') border-red-500 @enderror">
                         @error('week_prelim') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     
@@ -110,7 +110,7 @@
                                wire:model="week_midterm" 
                                id="week_midterm"
                                min="1" max="20"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_midterm') border-red-500 @enderror">
+                               class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_midterm') border-red-500 @enderror">
                         @error('week_midterm') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     
@@ -120,7 +120,7 @@
                                wire:model="week_final" 
                                id="week_final"
                                min="1" max="20"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_final') border-red-500 @enderror">
+                               class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_final') border-red-500 @enderror">
                         @error('week_final') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                             <label for="course_id" class="block text-sm font-medium text-gray-700 mb-1">Course <span class="text-red-500">*</span></label>
                             <select wire:model.live="course_id" 
                                     id="course_id"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('course_id') border-red-500 @enderror">
+                                    class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('course_id') border-red-500 @enderror">
                                 <option value="">Select a course...</option>
                                 @foreach($courses as $course)
                                     <option value="{{ $course->id }}">{{ $course->name }} ({{ $course->code }})</option>
@@ -148,14 +148,14 @@
                             <input type="text" 
                                    wire:model="name" 
                                    id="name"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('name') border-red-500 @enderror">
+                                   class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('name') border-red-500 @enderror">
                             @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     
                     <div>
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description (Auto-filled from course)</label>
-                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 min-h-[100px]">
+                        <div class="w-full px-3 py-2 border rounded-xl bg-gray-50 text-gray-700 min-h-[100px]">
                             {!! $description ?: 'No description available for this course.' !!}
                         </div>
                         <input type="hidden" wire:model="description" />
@@ -171,7 +171,7 @@
                     <p class="text-sm text-gray-600 mb-6">Identify the program outcomes that this course fulfills and specify how each outcome is addressed.</p>
                     
                     @error('program_outcomes')
-                        <div class="p-4 bg-red-50 border border-red-200 rounded-lg mb-4">
+                        <div class="p-4 bg-red-50 border border-red-200 rounded-xl mb-4">
                             <div class="flex">
                                 <div class="flex-shrink-0">
                                     <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -190,7 +190,7 @@
                 </div>
 
                 @if(empty($program_outcomes))
-                    <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
                         <div class="flex">
                             <div class="flex-shrink-0">
                                 <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
@@ -208,12 +208,12 @@
                 @else
                     <div class="space-y-4">
                         @foreach($program_outcomes as $index => $outcome)
-                            <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                            <div class="p-4 border border-gray-200 rounded-xl bg-gray-50">
                                 <div class="mb-3">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">
                                         Program Outcome {{ $index + 1 }}
                                     </label>
-                                    <div class="p-3 bg-white border border-gray-300 rounded-md text-sm text-gray-700">
+                                    <div class="p-3 bg-white border border-gray-300 rounded-xl text-sm text-gray-700">
                                         {{ $outcome['content'] }}
                                     </div>
                                 </div>
@@ -264,7 +264,7 @@
                     <p class="text-sm text-gray-600 mb-6">Define the learning outcomes for this course. Each outcome should start with an action verb and clearly describe what students will be able to do.</p>
                     
                     @error('course_outcomes')
-                        <div class="p-4 bg-red-50 border border-red-200 rounded-lg mb-4">
+                        <div class="p-4 bg-red-50 border border-red-200 rounded-xl mb-4">
                             <div class="flex">
                                 <div class="flex-shrink-0">
                                     <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -284,7 +284,7 @@
 
                 <div class="space-y-4">
                     @forelse($course_outcomes as $index => $outcome)
-                        <div class="p-4 border border-gray-200 rounded-lg bg-gray-50" wire:key="course-outcome-{{ $index }}">
+                        <div class="p-4 border border-gray-200 rounded-xl bg-gray-50" wire:key="course-outcome-{{ $index }}">
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-sm font-medium text-gray-900">Course Outcome {{ $index + 1 }}</h4>
                                 <button type="button" 
@@ -329,7 +329,7 @@
                             </div>
                             
                             @if($outcome['verb'] && $outcome['content'] && config('app.debug'))
-                                <div class="mt-3 p-3 bg-white border border-gray-200 rounded-md">
+                                <div class="mt-3 p-3 bg-white border border-gray-200 rounded-xl">
                                     <h5 class="text-sm font-medium text-gray-700 mb-1">Preview:</h5>
                                     <div class="text-sm text-gray-600">
                                         <span class="font-medium capitalize">{{ $outcome['verb'] }}</span> {!! strip_tags($outcome['content'], '<strong><em><u><s><a><ul><ol><li>') !!}
@@ -350,7 +350,7 @@
                     <div class="flex justify-center">
                         <button type="button" 
                                 wire:click="addCourseOutcome"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
@@ -367,7 +367,7 @@
                     <p class="text-sm text-gray-600 mb-6">Define the learning activities, outcomes, and assessments for each week or week range.</p>
                     
                     @error('learning_matrix')
-                        <div class="p-4 bg-red-50 border border-red-200 rounded-lg mb-4">
+                        <div class="p-4 bg-red-50 border border-red-200 rounded-xl mb-4">
                             <div class="flex">
                                 <div class="flex-shrink-0">
                                     <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -386,7 +386,7 @@
                 </div>
 
                 <!-- Default Hours -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl">
                     <h3 class="col-span-full text-md font-medium text-gray-900 mb-3">Default Hours per Week</h3>
                     
                     <div>
@@ -396,7 +396,7 @@
                                id="default_lecture_hours"
                                step="0.5"
                                min="0"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('default_lecture_hours') border-red-500 @enderror">
+                               class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('default_lecture_hours') border-red-500 @enderror">
                         @error('default_lecture_hours') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     
@@ -407,7 +407,7 @@
                                id="default_laboratory_hours"
                                step="0.5"
                                min="0"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('default_laboratory_hours') border-red-500 @enderror">
+                               class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('default_laboratory_hours') border-red-500 @enderror">
                         @error('default_laboratory_hours') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -415,7 +415,7 @@
                 <!-- Learning Matrix Items -->
                 <div class="space-y-4">
                     @forelse($learning_matrix as $index => $item)
-                        <div class="p-4 border border-gray-200 rounded-lg bg-gray-50" wire:key="learning-matrix-{{ $index }}">
+                        <div class="p-4 border border-gray-200 rounded-xl bg-gray-50" wire:key="learning-matrix-{{ $index }}">
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-sm font-medium text-gray-900">
                                     Learning Matrix Item {{ $index + 1 }}
@@ -448,7 +448,7 @@
                                     <input type="number" 
                                            wire:model.live="learning_matrix.{{ $index }}.week_range.start"
                                            min="1" max="20"
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('learning_matrix.'.$index.'.week_range.start') border-red-500 @enderror">
+                                           class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('learning_matrix.'.$index.'.week_range.start') border-red-500 @enderror">
                                     @error('learning_matrix.'.$index.'.week_range.start') 
                                         <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
                                     @enderror
@@ -460,7 +460,7 @@
                                         <input type="number" 
                                                wire:model.live="learning_matrix.{{ $index }}.week_range.end"
                                                min="{{ $item['week_range']['start'] ?? 1 }}" max="20"
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('learning_matrix.'.$index.'.week_range.end') border-red-500 @enderror">
+                                               class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('learning_matrix.'.$index.'.week_range.end') border-red-500 @enderror">
                                         @error('learning_matrix.'.$index.'.week_range.end') 
                                             <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
                                         @enderror
@@ -496,7 +496,7 @@
                                 </div>
                                 
                                 @forelse($item['learning_outcomes'] as $outcomeIndex => $outcome)
-                                    <div class="p-3 bg-white border border-gray-200 rounded-md mb-2" wire:key="learning-outcome-{{ $index }}-{{ $outcomeIndex }}">
+                                    <div class="p-3 bg-white border border-gray-200 rounded-xl mb-2" wire:key="learning-outcome-{{ $index }}-{{ $outcomeIndex }}">
                                         <div class="flex justify-between items-center mb-2">
                                             <span class="text-xs text-gray-500">Outcome {{ $outcomeIndex + 1 }}</span>
                                             <button type="button" 
@@ -543,7 +543,7 @@
                                 </div>
                                 
                                 @forelse($item['learning_activities'] as $activityIndex => $activity)
-                                    <div class="p-3 bg-white border border-gray-200 rounded-md mb-2" wire:key="learning-activity-{{ $index }}-{{ $activityIndex }}">
+                                    <div class="p-3 bg-white border border-gray-200 rounded-xl mb-2" wire:key="learning-activity-{{ $index }}-{{ $activityIndex }}">
                                         <div class="flex justify-between items-center mb-2">
                                             <span class="text-xs text-gray-500">Activity {{ $activityIndex + 1 }}</span>
                                             <button type="button" 
@@ -614,7 +614,7 @@
                     <div class="flex justify-center">
                         <button type="button" 
                                 wire:click="addLearningMatrixItem"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
@@ -728,7 +728,7 @@
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Principal Prepared By</label>
-                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-700">
                             {{ $principalPreparerName ?? 'Auto-selected: current user' }}
                         </div>
                         <input type="hidden" wire:model="principal_prepared_by">
@@ -737,7 +737,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Verified By (Department Chair)</label>
-                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-700">
                             {{ $reviewerName ?? 'Auto-selected from department' }}
                         </div>
                         <input type="hidden" wire:model="reviewed_by">
@@ -746,7 +746,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Recommending Approval (Associate Dean)</label>
-                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-700">
                             {{ $recommendingName ?? 'Auto-selected from college' }}
                         </div>
                         <input type="hidden" wire:model="recommending_approval">
@@ -755,7 +755,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Approved By (Dean)</label>
-                        <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700">
+                        <div class="w-full px-3 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-700">
                             {{ $approverName ?? 'Auto-selected from college' }}
                         </div>
                         <input type="hidden" wire:model="approved_by">
@@ -773,7 +773,7 @@
                         </div>
 
                         @forelse($prepared_by as $index => $preparer)
-                            <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 mb-3" wire:key="preparer-{{ $index }}">
+                            <div class="p-4 border border-gray-200 rounded-xl bg-gray-50 mb-3" wire:key="preparer-{{ $index }}">
                                 <div class="flex justify-between items-start mb-3">
                                     <div class="text-xs text-gray-500">No. {{ $index + 1 }}</div>
                                     <button type="button"
@@ -801,7 +801,7 @@
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Role/Position</label>
                                         <input type="text"
                                                wire:model="prepared_by.{{ $index }}.role"
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                                                placeholder="e.g., Faculty, Distinguished Faculty, Library Officer">
                                         @error('prepared_by.'.$index.'.role') 
                                             <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
@@ -833,7 +833,7 @@
 
         <!-- Error Message Display -->
         @if (session()->has('error'))
-            <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -851,7 +851,7 @@
         <div class="flex justify-between mt-8 pt-6 border-t border-gray-200">
             <button type="button" 
                     wire:click="previousStep"
-                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     @if($currentStep == 1) disabled @endif>
                 Previous
             </button>
@@ -895,22 +895,22 @@
             @if($currentStep == $totalSteps)
                 <button type="button" 
                         wire:click="{{ (isset($isEdit) && $isEdit) ? 'confirmUpdate' : 'confirmSubmit' }}"
-                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
                     {{ (isset($isEdit) && $isEdit) ? 'Save Changes' : 'Save Draft' }}
                 </button>
             @else
                 <button type="button" 
                         wire:click="nextStep"
-                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
                     Next
                 </button>
             @endif
         </div>
     </div>
     <!-- Confirm Submit Modal (Alpine + Livewire) -->
-    <div x-data="{ open: $wire.entangle('showConfirmModal') }" x-show="open" class="fixed inset-0 z-50 flex items-center justify-center" style="display: none;">
+    <div x-data="{ open: $wire.entangle('showConfirmModal') }" x-show="open" class="fixed inset-0 z-90 flex items-center justify-center" style="display: none;">
         <div class="fixed inset-0 bg-black/40" x-on:click="open = false"></div>
-        <div class="relative bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6">
+        <div class="relative bg-white rounded-xl shadow-lg w-full max-w-md mx-4 p-6">
             <h2 class="text-lg font-medium text-gray-900">{{ (isset($isEdit) && $isEdit) ? 'Save Changes' : 'Save Draft' }}</h2>
             <p class="mt-2 text-sm text-gray-600">
                 {{ (isset($isEdit) && $isEdit)
@@ -920,12 +920,12 @@
             <div class="mt-6 flex justify-end space-x-3">
                 <button type="button"
                         x-on:click="open = false"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-xl hover:bg-gray-300">
                     Cancel
                 </button>
                 <button type="button"
                         x-on:click="open = false; {{ (isset($isEdit) && $isEdit) ? '$wire.update()' : '$wire.submit()' }}"
-                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">
+                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700">
                     {{ (isset($isEdit) && $isEdit) ? 'Save' : 'Save Draft' }}
                 </button>
             </div>
