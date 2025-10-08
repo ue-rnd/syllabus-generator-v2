@@ -11,14 +11,14 @@ class EditSyllabus extends CreateSyllabus
 {
     public Syllabus $syllabus;
 
-    public function mount(): void
+    public function mount(?int $syllabusId = null): void
     {
-        // Call parent to set defaults, then override with actual values
-        parent::mount();
+        // Call parent to set defaults with syllabus ID for draft persistence, then override with actual values
+        parent::mount($this->syllabus->id);
 
         $this->syllabus = $this->syllabus->load(['course.programs.department', 'course.college']);
 
-        if (! $this->canEdit($this->syllabus)) {
+        if (!$this->canEdit($this->syllabus)) {
             abort(403, 'You are not allowed to edit this syllabus.');
         }
 
@@ -63,7 +63,7 @@ class EditSyllabus extends CreateSyllabus
     {
         $userId = Auth::id();
 
-        if (! in_array($syllabus->status, ['draft', 'for_revisions'])) {
+        if (!in_array($syllabus->status, ['draft', 'for_revisions'])) {
             return false;
         }
 
@@ -72,7 +72,6 @@ class EditSyllabus extends CreateSyllabus
         }
 
         $preparedBy = collect($syllabus->prepared_by ?? []);
-
         return $preparedBy->contains(function ($item) use ($userId) {
             return isset($item['user_id']) && intval($item['user_id']) === intval($userId);
         });
@@ -117,8 +116,10 @@ class EditSyllabus extends CreateSyllabus
             'program_outcomes' => $this->program_outcomes,
         ]);
 
+        // Delete the draft after successful update
+        $this->deleteDraft();
+        
         session()->flash('success', 'Syllabus updated successfully.');
-
         return $this->redirectRoute('home');
     }
 
@@ -186,7 +187,8 @@ class EditSyllabus extends CreateSyllabus
         // Reuse parent's render variables but swap view
         $view = parent::render();
         $data = $view->getData();
-
         return view('livewire.client.syllabi.edit-syllabus', $data);
     }
 }
+
+

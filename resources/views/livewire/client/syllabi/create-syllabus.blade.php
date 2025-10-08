@@ -1,4 +1,18 @@
-<div class="max-w-4xl mx-auto p-6">
+<div class="max-w-4xl mx-auto p-6" 
+     x-data="{ 
+         form: @entangle('form'), 
+         currentStep: @entangle('currentStep'),
+         formKey: '{{ $formKey }}'
+     }"
+     x-init="
+         // Initialize localStorage with server data
+         const k = formKey;
+         localStorage.setItem(k, JSON.stringify({ form, step: currentStep }));
+         
+         // Watch for changes and update localStorage
+         $watch('form', v => localStorage.setItem(k, JSON.stringify({ form: v, step: currentStep })));
+         $watch('currentStep', v => localStorage.setItem(k, JSON.stringify({ form, step: v })));
+     ">
     <!-- Back Button -->
     <div class="mb-6">
         <a href="{{ route('home') }}" 
@@ -77,7 +91,7 @@
                     <div>
                         <label for="ay_start" class="block text-sm font-medium text-gray-700 mb-1">Academic Year Start</label>
                         <input type="number" 
-                               wire:model="ay_start" 
+                               wire:model.live.debounce.1000ms="ay_start" 
                                id="ay_start"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('ay_start') border-red-500 @enderror">
                         @error('ay_start') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -86,7 +100,7 @@
                     <div>
                         <label for="ay_end" class="block text-sm font-medium text-gray-700 mb-1">Academic Year End</label>
                         <input type="number" 
-                               wire:model="ay_end" 
+                               wire:model.live.debounce.1000ms="ay_end" 
                                id="ay_end"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('ay_end') border-red-500 @enderror">
                         @error('ay_end') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -97,7 +111,7 @@
                     <div>
                         <label for="week_prelim" class="block text-sm font-medium text-gray-700 mb-1">Prelims Exam Week</label>
                         <input type="number" 
-                               wire:model="week_prelim" 
+                               wire:model.live.debounce.1000ms="week_prelim" 
                                id="week_prelim"
                                min="1" max="20"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_prelim') border-red-500 @enderror">
@@ -107,7 +121,7 @@
                     <div>
                         <label for="week_midterm" class="block text-sm font-medium text-gray-700 mb-1">Midterms Exam Week</label>
                         <input type="number" 
-                               wire:model="week_midterm" 
+                               wire:model.live.debounce.1000ms="week_midterm" 
                                id="week_midterm"
                                min="1" max="20"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_midterm') border-red-500 @enderror">
@@ -117,7 +131,7 @@
                     <div>
                         <label for="week_final" class="block text-sm font-medium text-gray-700 mb-1">Finals Exam Week</label>
                         <input type="number" 
-                               wire:model="week_final" 
+                               wire:model.live.debounce.1000ms="week_final" 
                                id="week_final"
                                min="1" max="20"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('week_final') border-red-500 @enderror">
@@ -137,7 +151,7 @@
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('course_id') border-red-500 @enderror">
                                 <option value="">Select a course...</option>
                                 @foreach($courses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->name }} ({{ $course->code }})</option>
+                                    <option value="{{ (string) $course->id }}" wire:key="course-{{ $course->id }}">{{ $course->name }} ({{ $course->code }})</option>
                                 @endforeach
                             </select>
                             @error('course_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -146,7 +160,7 @@
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Syllabus Name <span class="text-red-500">*</span></label>
                             <input type="text" 
-                                   wire:model="name" 
+                                   wire:model.live.debounce.1000ms="name" 
                                    id="name"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('name') border-red-500 @enderror">
                             @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -224,24 +238,27 @@
                                     </label>
                                     <div class="space-y-2">
                                         <label class="flex items-center">
-                                            <input type="checkbox" 
+                                            <input type="radio" 
                                                    wire:model.live="program_outcomes.{{ $index }}.addressed" 
                                                    value="introduced"
-                                                   class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                                   wire:key="program-outcome-{{ $index }}-introduced"
+                                                   class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300">
                                             <span class="ml-2 text-sm text-gray-700">Introduced</span>
                                         </label>
                                         <label class="flex items-center">
-                                            <input type="checkbox" 
+                                            <input type="radio" 
                                                    wire:model.live="program_outcomes.{{ $index }}.addressed" 
                                                    value="enhanced"
-                                                   class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                                   wire:key="program-outcome-{{ $index }}-enhanced"
+                                                   class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300">
                                             <span class="ml-2 text-sm text-gray-700">Enhanced</span>
                                         </label>
                                         <label class="flex items-center">
-                                            <input type="checkbox" 
+                                            <input type="radio" 
                                                    wire:model.live="program_outcomes.{{ $index }}.addressed" 
                                                    value="demonstrated"
-                                                   class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                                   wire:key="program-outcome-{{ $index }}-demonstrated"
+                                                   class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300">
                                             <span class="ml-2 text-sm text-gray-700">Demonstrated</span>
                                         </label>
                                     </div>
@@ -304,6 +321,7 @@
                                         :options="array_values($actionVerbs)"
                                         placeholder="Select an action verb..."
                                         searchable
+                                        wire:key="course-outcome-verb-{{ $index }}"
                                         class="@error('course_outcomes.'.$index.'.verb') border-red-500 @enderror" />
                                     @error('course_outcomes.'.$index.'.verb') 
                                         <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
@@ -392,7 +410,7 @@
                     <div>
                         <label for="default_lecture_hours" class="block text-sm font-medium text-gray-700 mb-1">Default Lecture Hours per Week</label>
                         <input type="number" 
-                               wire:model="default_lecture_hours" 
+                               wire:model.live.debounce.1000ms="default_lecture_hours" 
                                id="default_lecture_hours"
                                step="0.5"
                                min="0"
@@ -403,7 +421,7 @@
                     <div>
                         <label for="default_laboratory_hours" class="block text-sm font-medium text-gray-700 mb-1">Default Laboratory Hours per Week</label>
                         <input type="number" 
-                               wire:model="default_laboratory_hours" 
+                               wire:model.live.debounce.1000ms="default_laboratory_hours" 
                                id="default_laboratory_hours"
                                step="0.5"
                                min="0"
@@ -437,6 +455,7 @@
                                 <div class="flex items-center">
                                     <input type="checkbox" 
                                            wire:model.live="learning_matrix.{{ $index }}.week_range.is_range"
+                                           wire:key="learning-matrix-range-{{ $index }}"
                                            class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                                     <label class="ml-2 text-sm text-gray-700">Week Range</label>
                                 </div>
@@ -446,7 +465,7 @@
                                         {{ $item['week_range']['is_range'] ? 'Week Start' : 'Week' }} <span class="text-red-500">*</span>
                                     </label>
                                     <input type="number" 
-                                           wire:model.live="learning_matrix.{{ $index }}.week_range.start"
+                                           wire:model.live.debounce.1000ms="learning_matrix.{{ $index }}.week_range.start"
                                            min="1" max="20"
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('learning_matrix.'.$index.'.week_range.start') border-red-500 @enderror">
                                     @error('learning_matrix.'.$index.'.week_range.start') 
@@ -458,7 +477,7 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Week End <span class="text-red-500">*</span></label>
                                         <input type="number" 
-                                               wire:model.live="learning_matrix.{{ $index }}.week_range.end"
+                                               wire:model.live.debounce.1000ms="learning_matrix.{{ $index }}.week_range.end"
                                                min="{{ $item['week_range']['start'] ?? 1 }}" max="20"
                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent @error('learning_matrix.'.$index.'.week_range.end') border-red-500 @enderror">
                                         @error('learning_matrix.'.$index.'.week_range.end') 
@@ -513,6 +532,7 @@
                                                     :options="array_values($actionVerbs)"
                                                     placeholder="Select verb..."
                                                     searchable
+                                                    wire:key="learning-outcome-verb-{{ $index }}-{{ $outcomeIndex }}"
                                                     class="text-sm" />
                                             </div>
                                             <div>
@@ -570,6 +590,7 @@
                                                         :options="array_values($learningModalities)"
                                                         placeholder="Select modalities..."
                                                         multiselect
+                                                        wire:key="learning-activity-modality-{{ $index }}-{{ $activityIndex }}"
                                                         class="text-sm" />
                                                 </div>
                                                 <div>
@@ -598,6 +619,7 @@
                                     :options="$assessmentTypes"
                                     placeholder="Select assessments..."
                                     multiselect
+                                    wire:key="learning-matrix-assessments-{{ $index }}"
                                     class="text-sm" />
                             </div>
                         </div>
@@ -791,6 +813,7 @@
                                             :options="$facultyOptions"
                                             placeholder="Select a faculty member..."
                                             searchable
+                                            wire:key="preparer-user-{{ $index }}"
                                         />
                                         @error('prepared_by.'.$index.'.user_id') 
                                             <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
@@ -800,7 +823,7 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Role/Position</label>
                                         <input type="text"
-                                               wire:model="prepared_by.{{ $index }}.role"
+                                               wire:model.live.debounce.1000ms="prepared_by.{{ $index }}.role"
                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                                                placeholder="e.g., Faculty, Distinguished Faculty, Library Officer">
                                         @error('prepared_by.'.$index.'.role') 
