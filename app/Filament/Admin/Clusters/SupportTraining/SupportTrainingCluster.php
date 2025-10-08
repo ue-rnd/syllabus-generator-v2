@@ -19,8 +19,8 @@ class SupportTrainingCluster extends Cluster
 
     protected static ?string $slug = 'support-training';
 
-    // public static function canAccess(): bool
-    // {
-    //     return auth()->user()->can('access admin panel');
-    // }
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('access admin panel');
+    }
 }

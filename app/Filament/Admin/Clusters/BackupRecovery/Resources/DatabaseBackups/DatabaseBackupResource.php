@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Clusters\BackupRecovery\Resources\DatabaseBackups;
 
-use App\Filament\Admin\Clusters\BackupRecovery\BackupRecovery;
+use App\Filament\Admin\Clusters\BackupRecovery\BackupRecoveryCluster;
 use App\Filament\Admin\Clusters\BackupRecovery\Resources\DatabaseBackups\Pages\CreateDatabaseBackup;
 use App\Filament\Admin\Clusters\BackupRecovery\Resources\DatabaseBackups\Pages\ListDatabaseBackups;
 use App\Filament\Admin\Clusters\BackupRecovery\Resources\DatabaseBackups\Pages\ViewDatabaseBackup;
@@ -20,7 +20,7 @@ class DatabaseBackupResource extends Resource
 {
     protected static ?string $model = DatabaseBackup::class;
 
-    protected static ?string $cluster = BackupRecovery::class;
+    protected static ?string $cluster = BackupRecoveryCluster::class;
 
     protected static ?int $navigationSort = 10;
 

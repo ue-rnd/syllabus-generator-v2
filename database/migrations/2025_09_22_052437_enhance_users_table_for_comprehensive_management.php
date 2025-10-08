@@ -17,12 +17,10 @@ return new class extends Migration
             $table->text('bio')->nullable()->after('title');
             $table->string('avatar')->nullable()->after('bio');
 
-            // Organizational Relationships
-            $table->foreignId('college_id')->nullable()->constrained()->onDelete('set null')->after('avatar');
-            $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null')->after('college_id');
+            // Organizational Relationships (college_id and department_id already exist in previous migrations)
 
             // Dates
-            $table->date('hire_date')->nullable()->after('department_id');
+            $table->date('hire_date')->nullable()->after('avatar');
             $table->date('birth_date')->nullable()->after('hire_date');
 
             // Contact Information
@@ -58,9 +56,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['college_id']);
-            $table->dropForeign(['department_id']);
-
+            // Note: college_id and department_id are handled by separate migrations
+            
             $table->dropIndex(['is_active', 'position']);
             $table->dropIndex(['college_id', 'is_active']);
             $table->dropIndex(['department_id', 'is_active']);
@@ -74,8 +71,6 @@ return new class extends Migration
                 'title',
                 'bio',
                 'avatar',
-                'college_id',
-                'department_id',
                 'hire_date',
                 'birth_date',
                 'address',

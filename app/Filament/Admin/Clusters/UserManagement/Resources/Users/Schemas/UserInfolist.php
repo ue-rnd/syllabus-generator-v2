@@ -4,15 +4,12 @@ namespace App\Filament\Admin\Clusters\UserManagement\Resources\Users\Schemas;
 
 use App\Constants\UserConstants;
 use App\Models\User;
-use Filament\Infolists\Components\Actions;
-use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Group;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Split;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
@@ -22,8 +19,7 @@ class UserInfolist
     {
         return $schema
             ->schema([
-                Split::make([
-                    Grid::make(2)
+                Grid::make(2)
                         ->schema([
                             Group::make([
                                 Section::make('Personal Information')
@@ -36,7 +32,7 @@ class UserInfolist
 
                                         TextEntry::make('name')
                                             ->label('Full Name')
-                                            ->size(TextEntry\TextEntrySize::Large)
+
                                             ->weight('bold'),
 
                                         TextEntry::make('email')
@@ -62,7 +58,6 @@ class UserInfolist
                                         TextEntry::make('bio')
                                             ->label('Biography')
                                             ->placeholder('No biography provided')
-                                            ->markdown()
                                             ->limit(200),
                                     ])
                                     ->columns(1),
@@ -113,7 +108,6 @@ class UserInfolist
                                     ->columns(1),
                             ]),
                         ]),
-                ]),
 
                 Section::make('Emergency Contacts')
                     ->schema([
@@ -177,8 +171,7 @@ class UserInfolist
                             ->schema([
                                 TextEntry::make('roles')
                                     ->label('System Roles')
-                                    ->listWithLineBreaks()
-                                    ->formatStateUsing(fn ($state) => $state->pluck('name')->map(fn ($role) => ucwords(str_replace('_', ' ', $role)))->join(', '))
+                                    ->formatStateUsing(fn ($state) => $state ? $state->pluck('name')->map(fn ($role) => ucwords(str_replace('_', ' ', $role)))->join(', ') : 'No roles assigned')
                                     ->placeholder('No roles assigned'),
 
                                 TextEntry::make('primary_role')
@@ -273,66 +266,7 @@ class UserInfolist
                     ->collapsible()
                     ->collapsed(),
 
-                Actions::make([
-                    Action::make('resetPassword')
-                        ->label('Reset Password')
-                        ->icon('heroicon-o-key')
-                        ->color('warning')
-                        ->requiresConfirmation()
-                        ->modalHeading('Reset User Password')
-                        ->modalDescription('This will force the user to change their password on next login.')
-                        ->action(function ($record) {
-                            $record->update([
-                                'must_change_password' => true,
-                                'password_changed_at' => now(),
-                            ]);
 
-                            \Filament\Notifications\Notification::make()
-                                ->title('Password Reset')
-                                ->body('User will be required to change password on next login.')
-                                ->success()
-                                ->send();
-                        })
-                        ->visible(fn () => auth()->user()->can('reset user passwords')),
-
-                    Action::make('toggleLock')
-                        ->label(fn ($record) => $record->isLocked() ? 'Unlock Account' : 'Lock Account')
-                        ->icon('heroicon-o-lock-closed')
-                        ->color(fn ($record) => $record->isLocked() ? 'success' : 'danger')
-                        ->requiresConfirmation()
-                        ->action(function ($record) {
-                            if ($record->isLocked()) {
-                                $record->unlockAccount();
-                                $message = 'Account unlocked successfully.';
-                            } else {
-                                $record->lockAccount(now()->addHours(24));
-                                $message = 'Account locked for 24 hours.';
-                            }
-
-                            \Filament\Notifications\Notification::make()
-                                ->title('Account Status Changed')
-                                ->body($message)
-                                ->success()
-                                ->send();
-                        })
-                        ->visible(fn () => auth()->user()->can('lock unlock accounts')),
-
-                    Action::make('toggleActive')
-                        ->label(fn ($record) => $record->is_active ? 'Deactivate' : 'Activate')
-                        ->icon('heroicon-o-user')
-                        ->color(fn ($record) => $record->is_active ? 'danger' : 'success')
-                        ->requiresConfirmation()
-                        ->action(function ($record) {
-                            $record->update(['is_active' => !$record->is_active]);
-
-                            \Filament\Notifications\Notification::make()
-                                ->title('Account Status Updated')
-                                ->body($record->is_active ? 'Account activated.' : 'Account deactivated.')
-                                ->success()
-                                ->send();
-                        })
-                        ->visible(fn () => auth()->user()->can('edit users')),
-                ]),
             ]);
     }
 }

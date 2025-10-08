@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Pages;
 
+use App\Models\User;
 use App\Services\AuthSecurityService;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -14,17 +15,14 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Support\Exceptions\Halt;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
-class ProfileManagement extends Page implements HasForms
+class ProfileManagement extends Page
 {
     use InteractsWithForms;
 
@@ -44,18 +42,20 @@ class ProfileManagement extends Page implements HasForms
     {
         $user = Auth::user();
         $this->data = [
-            'firstname' => $user->firstname,
-            'middlename' => $user->middlename,
-            'lastname' => $user->lastname,
-            'email' => $user->email,
-            'phone' => $user->phone,
+            'firstname' => $user->firstname ?? '',
+            'middlename' => $user->middlename ?? '',
+            'lastname' => $user->lastname ?? '',
+            'email' => $user->email ?? '',
+            'phone' => $user->phone ?? '',
+            'title' => $user->title ?? '',
             'birth_date' => $user->birth_date,
-            'address' => $user->address,
-            'bio' => $user->bio,
+            'address' => $user->address ?? '',
+            'bio' => $user->bio ?? '',
             'avatar' => $user->avatar,
             'emergency_contact' => $user->emergency_contact ?? [],
-            'timezone' => $user->timezone,
-            'locale' => $user->locale,
+            'emergency_phone' => $user->emergency_phone ?? '',
+            'timezone' => $user->timezone ?? 'UTC',
+            'locale' => $user->locale ?? 'en',
             'preferences' => $user->preferences ?? [],
         ];
     }
@@ -83,7 +83,7 @@ class ProfileManagement extends Page implements HasForms
                                     ->maxLength(255),
                             ]),
 
-                        Grid::make(2)
+                        Grid::make(3)
                             ->schema([
                                 TextInput::make('email')
                                     ->label('Email Address')
@@ -96,6 +96,10 @@ class ProfileManagement extends Page implements HasForms
                                     ->label('Phone Number')
                                     ->tel()
                                     ->maxLength(20),
+
+                                TextInput::make('title')
+                                    ->label('Job Title')
+                                    ->maxLength(255),
                             ]),
 
                         DatePicker::make('birth_date')
@@ -123,36 +127,52 @@ class ProfileManagement extends Page implements HasForms
                 Section::make('Emergency Contact Information')
                     ->description('Add emergency contacts for safety purposes')
                     ->schema([
+                        TextInput::make('emergency_phone')
+                            ->label('Primary Emergency Phone')
+                            ->tel()
+                            ->maxLength(20)
+                            ->helperText('A quick contact number for emergencies'),
+
                         Repeater::make('emergency_contact')
-                            ->label('Emergency Contacts')
+                            ->label('Detailed Emergency Contacts')
                             ->schema([
                                 Grid::make(3)
                                     ->schema([
                                         TextInput::make('name')
+                                            ->label('Full Name')
                                             ->required()
                                             ->maxLength(255),
 
                                         TextInput::make('relationship')
+                                            ->label('Relationship')
                                             ->required()
-                                            ->maxLength(100),
+                                            ->maxLength(100)
+                                            ->placeholder('e.g., Spouse, Parent, Sibling'),
 
                                         TextInput::make('phone')
+                                            ->label('Phone Number')
                                             ->tel()
                                             ->required()
                                             ->maxLength(20),
                                     ]),
 
-                                TextInput::make('email')
-                                    ->email()
-                                    ->maxLength(255),
+                                Grid::make(2)
+                                    ->schema([
+                                        TextInput::make('email')
+                                            ->label('Email Address')
+                                            ->email()
+                                            ->maxLength(255),
 
-                                Textarea::make('address')
-                                    ->rows(2),
+                                        Textarea::make('address')
+                                            ->label('Address')
+                                            ->rows(2),
+                                    ]),
                             ])
                             ->addActionLabel('Add Emergency Contact')
                             ->reorderableWithButtons()
                             ->collapsible()
-                            ->maxItems(3),
+                            ->maxItems(5)
+                            ->defaultItems(0),
                     ]),
 
                 Section::make('User Preferences')
@@ -240,11 +260,13 @@ class ProfileManagement extends Page implements HasForms
                 'lastname' => $data['lastname'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
+                'title' => $data['title'],
                 'birth_date' => $data['birth_date'],
                 'address' => $data['address'],
                 'bio' => $data['bio'],
                 'avatar' => $data['avatar'],
                 'emergency_contact' => $data['emergency_contact'],
+                'emergency_phone' => $data['emergency_phone'],
                 'timezone' => $data['timezone'],
                 'locale' => $data['locale'],
                 'preferences' => $data['preferences'],
@@ -265,6 +287,12 @@ class ProfileManagement extends Page implements HasForms
                 ->body($exception->getMessage())
                 ->danger()
                 ->send();
+        } catch (\Exception $exception) {
+            Notification::make()
+                ->title('Update Failed')
+                ->body('An unexpected error occurred while updating your profile.')
+                ->danger()
+                ->send();
         }
     }
 
@@ -282,9 +310,11 @@ class ProfileManagement extends Page implements HasForms
                 ->url('/admin/change-password'),
 
             Action::make('resetToDefaults')
-                ->label('Reset to Defaults')
+                ->label('Reset Preferences')
                 ->color('gray')
                 ->requiresConfirmation()
+                ->modalHeading('Reset User Preferences')
+                ->modalDescription('This will reset your timezone, language, and custom preferences to default values. Your personal information will not be affected.')
                 ->action(function () {
                     $this->data['timezone'] = 'UTC';
                     $this->data['locale'] = 'en';

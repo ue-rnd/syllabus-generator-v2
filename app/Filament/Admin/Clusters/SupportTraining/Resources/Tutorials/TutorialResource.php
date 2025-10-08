@@ -9,7 +9,7 @@ use App\Filament\Admin\Clusters\SupportTraining\Resources\Tutorials\Pages\ViewTu
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Tutorials\Schemas\TutorialForm;
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Tutorials\Schemas\TutorialInfolist;
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Tutorials\Tables\TutorialsTable;
-use App\Filament\Admin\Clusters\SupportTraining\SupportTraining;
+use App\Filament\Admin\Clusters\SupportTraining\SupportTrainingCluster;
 use App\Models\Tutorial;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -23,7 +23,7 @@ class TutorialResource extends Resource
 {
     protected static ?string $model = Tutorial::class;
 
-    protected static ?string $cluster = SupportTraining::class;
+    protected static ?string $cluster = SupportTrainingCluster::class;
 
     protected static ?int $navigationSort = 10;
 

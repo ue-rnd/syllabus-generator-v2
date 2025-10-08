@@ -9,7 +9,7 @@ use App\Filament\Admin\Clusters\SupportTraining\Resources\Faqs\Pages\ViewFaq;
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Faqs\Schemas\FaqForm;
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Faqs\Schemas\FaqInfolist;
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Faqs\Tables\FaqsTable;
-use App\Filament\Admin\Clusters\SupportTraining\SupportTraining;
+use App\Filament\Admin\Clusters\SupportTraining\SupportTrainingCluster;
 use App\Models\Faq;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -23,7 +23,7 @@ class FaqResource extends Resource
 {
     protected static ?string $model = Faq::class;
 
-    protected static ?string $cluster = SupportTraining::class;
+    protected static ?string $cluster = SupportTrainingCluster::class;
 
     protected static ?int $navigationSort = 20;
 
