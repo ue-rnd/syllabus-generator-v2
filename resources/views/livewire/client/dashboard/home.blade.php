@@ -210,15 +210,15 @@
                 <div class="col-span-full">
                     <div class="text-center">
                         <div class="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6">
-                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            <svg class="w-12 h-12 text-accent-desc" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">No syllabi found</h3>
-                        <p class="text-gray-500 mb-8 max-w-md mx-auto leading-relaxed">
+                        <h3 class="text-xl font-semibold text-accent-text mb-3">No syllabi found</h3>
+                        <p class="text-accent-desc mb-8 max-w-md mx-auto leading-relaxed">
                             @if($search || $statusFilter)
                                 No syllabi match your current filters. Try adjusting your search criteria or clear the filters
                                 to see all syllabi.
@@ -229,7 +229,7 @@
                         </p>
                         @if(!$search && !$statusFilter)
                             <a href="{{ route('syllabus') }}" wire:navigate
-                                class="inline-flex items-center gap-2 bg-red-700 text-white px-6 py-3 rounded-xl hover:bg-red-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-sm hover:shadow-md">
+                                class="inline-flex items-center gap-2 bg-accent-main text-white px-6 py-3 rounded-xl hover:bg-accent-hover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 shadow-sm hover:shadow-md">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -238,7 +238,7 @@
                             </a>
                         @else
                             <button wire:click="clearFilters"
-                                class="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                class="inline-flex items-center gap-2 bg-accent-ghost text-accent-desc px-6 py-3 rounded-xl hover:bg-accent-ghost-dark transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ghost-accent-dark focus:ring-offset-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
