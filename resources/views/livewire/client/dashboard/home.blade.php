@@ -22,20 +22,31 @@
                 </a>
             </div>
             <div class="border bg-white rounded-xl shadow-sm">
-                <div class="border-b p-3 text-sm font-medium text-gray-700 flex space-x-2 items-center">
-                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bell" class="size-4"
-                        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path fill="currentColor"
-                            d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z">
-                        </path>
-                    </svg>
-                    <h4>Notifications</h4>
+                <div class="border-b p-3 text-sm font-medium text-gray-700 flex space-x-2">
+                    <div class="flex space-x-2 items-center">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bell" class="size-4"
+                            role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor"
+                                d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z">
+                            </path>
+                        </svg>
+                        <h4>Notifications</h4>
+                    </div>
+                    <a class="text-gray-400 flex items-center" href="{{route('notifications')}}">
+                        See all
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                            class="size-4 text-gray-400">
+                            <path fill-rule="evenodd"
+                                d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-4">
+        <div class="max-w-7xl mx-auto mt-4 pt-3">
             <div class="flex items-center justify-between mb-4">
-                <h4 class="text-xl">My Syllabi</h4>
+                <h4 class="text-xl font-bold">My Syllabi</h4>
                 <nav class="flex items-center text-sm text-gray-600" aria-label="Breadcrumb">
                     <a href="{{ route('home') }}" wire:navigate class="flex items-center hover:text-gray-800">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -45,9 +56,13 @@
                         </svg>
                         Home
                     </a>
-                    <svg class="w-4 h-4 mx-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M9.75 4.5l6.75 7.5-6.75 7.5" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                        class="size-4 text-gray-500">
+                        <path fill-rule="evenodd"
+                            d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z"
+                            clip-rule="evenodd" />
                     </svg>
+
                     <span class="text-gray-800">Syllabi</span>
                 </nav>
             </div>
@@ -100,11 +115,11 @@
                                     <span class="text-sm font-medium text-gray-600">Syllabus #{{ $syllabus->id }}</span>
                                 </div>
                                 <span class="px-2 py-1 text-xs rounded-full {{ 
-                                                                                                $syllabus->status === 'approved' ? 'bg-green-100 text-green-800' :
+                                                                                                                        $syllabus->status === 'approved' ? 'bg-green-100 text-green-800' :
                 ($syllabus->status === 'under_review' ? 'bg-yellow-100 text-yellow-800' :
                     ($syllabus->status === 'rejected' ? 'bg-red-100 text-red-800' :
                         'bg-gray-100 text-gray-800')) 
-                                                                                            }}">
+                                                                                                                    }}">
                                     {{ ucfirst(str_replace('_', ' ', $syllabus->status)) }}
                                 </span>
                             </div>

@@ -10,7 +10,7 @@
         @endif
         <h4 class="text-red-700 font-semibold text-lg">{{ $college->name ?? 'Your College' }}</h4>
     </div>
-    <div class="flex items-center space-x-4">
+    <a class="flex items-center space-x-4" href="{{ route("profile")}}">
         @php($user = auth()->user())
         @if(method_exists($user, 'initials'))
             <div class="size-10 rounded-full bg-red-600 text-white flex items-center justify-center font-semibold">
@@ -20,5 +20,5 @@
             <div class="size-10 rounded-full bg-gray-200"></div>
         @endif
         <span class="text-gray-600">Hello, <span class="font-medium">{{ $user?->name }}</span></span>
-    </div>
+    </a>
 </div>
