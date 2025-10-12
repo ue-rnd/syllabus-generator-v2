@@ -3,10 +3,10 @@
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLogs\Tables;
 
 use App\Models\SecurityAuditLog;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Support\Enums\FontWeight;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;

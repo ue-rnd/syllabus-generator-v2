@@ -11,16 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tutorial_views', function (Blueprint $table) {
+        Schema::create('faq_feedbacks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tutorial_id')->constrained('tutorials')->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('faq_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->boolean('is_helpful')->nullable();
+            $table->text('comment')->nullable();
             $table->string('ip_address')->nullable();
-            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
-            $table->index(['tutorial_id']);
+            
+            // Indexes
+            $table->index(['faq_id']);
             $table->index(['user_id']);
-            $table->index(['created_at']);
+            $table->index(['is_helpful']);
         });
     }
 
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tutorial_views');
+        Schema::dropIfExists('faq_feedbacks');
     }
 };

@@ -7,10 +7,11 @@ use App\Models\College;
 use App\Models\Department;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\KeyValue;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\JsonEditor;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -224,7 +225,7 @@ class UserForm
                                     ->default('en'),
                             ]),
 
-                        JsonEditor::make('preferences')
+                        KeyValue::make('preferences')
                             ->label('Additional Preferences')
                             ->helperText('JSON format for storing user-specific settings')
                             ->columnSpanFull(),

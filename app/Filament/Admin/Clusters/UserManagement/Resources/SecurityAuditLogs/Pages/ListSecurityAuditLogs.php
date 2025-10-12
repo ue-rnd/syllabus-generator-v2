@@ -6,7 +6,7 @@ use App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLogs\Secur
 use App\Models\SecurityAuditLog;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Resources\Components\Tab;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListSecurityAuditLogs extends ListRecords

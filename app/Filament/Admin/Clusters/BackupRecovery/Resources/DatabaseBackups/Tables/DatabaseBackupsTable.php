@@ -4,12 +4,12 @@ namespace App\Filament\Admin\Clusters\BackupRecovery\Resources\DatabaseBackups\T
 
 use App\Models\DatabaseBackup;
 use App\Services\DatabaseBackupService;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -67,7 +67,7 @@ class DatabaseBackupsTable
                 TextColumn::make('error_message')
                     ->label('Error')
                     ->limit(30)
-                    ->visible(fn ($record) => $record->status === 'failed')
+                    ->visible(fn ($record) => $record?->status === 'failed')
                     ->color('danger'),
             ])
             ->filters([
@@ -84,7 +84,7 @@ class DatabaseBackupsTable
                     ->searchable()
                     ->preload(),
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
 
                 Action::make('download')

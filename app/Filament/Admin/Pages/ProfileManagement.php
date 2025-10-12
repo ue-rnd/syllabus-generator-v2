@@ -28,7 +28,7 @@ class ProfileManagement extends Page
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::UserCircle;
 
-    protected string $view = 'filament.admin.pages.profile-management';
+    protected static ?string $view = 'filament.admin.pages.profile-management';
 
     protected static ?string $navigationLabel = 'My Profile';
 
@@ -37,26 +37,28 @@ class ProfileManagement extends Page
     protected static ?int $navigationSort = 100;
 
     public ?array $data = [];
+    
+    public User $user;
 
     public function mount(): void
     {
-        $user = Auth::user();
+        $this->user = Auth::user();
         $this->data = [
-            'firstname' => $user->firstname ?? '',
-            'middlename' => $user->middlename ?? '',
-            'lastname' => $user->lastname ?? '',
-            'email' => $user->email ?? '',
-            'phone' => $user->phone ?? '',
-            'title' => $user->title ?? '',
-            'birth_date' => $user->birth_date,
-            'address' => $user->address ?? '',
-            'bio' => $user->bio ?? '',
-            'avatar' => $user->avatar,
-            'emergency_contact' => $user->emergency_contact ?? [],
-            'emergency_phone' => $user->emergency_phone ?? '',
-            'timezone' => $user->timezone ?? 'UTC',
-            'locale' => $user->locale ?? 'en',
-            'preferences' => $user->preferences ?? [],
+            'firstname' => $this->user->firstname ?? '',
+            'middlename' => $this->user->middlename ?? '',
+            'lastname' => $this->user->lastname ?? '',
+            'email' => $this->user->email ?? '',
+            'phone' => $this->user->phone ?? '',
+            'title' => $this->user->title ?? '',
+            'birth_date' => $this->user->birth_date,
+            'address' => $this->user->address ?? '',
+            'bio' => $this->user->bio ?? '',
+            'avatar' => $this->user->avatar,
+            'emergency_contact' => $this->user->emergency_contact ?? [],
+            'emergency_phone' => $this->user->emergency_phone ?? '',
+            'timezone' => $this->user->timezone ?? 'UTC',
+            'locale' => $this->user->locale ?? 'en',
+            'preferences' => $this->user->preferences ?? [],
         ];
     }
 
@@ -64,186 +66,186 @@ class ProfileManagement extends Page
     {
         return [
             Section::make('Personal Information')
-                    ->description('Update your basic profile information')
-                    ->schema([
-                        Grid::make(3)
-                            ->schema([
-                                TextInput::make('firstname')
-                                    ->label('First Name')
-                                    ->required()
-                                    ->maxLength(255),
+                ->description('Update your basic profile information')
+                ->schema([
+                    Grid::make(3)
+                        ->schema([
+                            TextInput::make('firstname')
+                                ->label('First Name')
+                                ->required()
+                                ->maxLength(255),
 
-                                TextInput::make('middlename')
-                                    ->label('Middle Name')
-                                    ->maxLength(255),
+                            TextInput::make('middlename')
+                                ->label('Middle Name')
+                                ->maxLength(255),
 
-                                TextInput::make('lastname')
-                                    ->label('Last Name')
-                                    ->required()
-                                    ->maxLength(255),
-                            ]),
+                            TextInput::make('lastname')
+                                ->label('Last Name')
+                                ->required()
+                                ->maxLength(255),
+                        ]),
 
-                        Grid::make(3)
-                            ->schema([
-                                TextInput::make('email')
-                                    ->label('Email Address')
-                                    ->email()
-                                    ->required()
-                                    ->unique('users', 'email', fn () => Auth::user())
-                                    ->maxLength(255),
+                    Grid::make(3)
+                        ->schema([
+                            TextInput::make('email')
+                                ->label('Email Address')
+                                ->email()
+                                ->required()
+                                ->unique('users', 'email', fn () => Auth::user())
+                                ->maxLength(255),
 
-                                TextInput::make('phone')
-                                    ->label('Phone Number')
-                                    ->tel()
-                                    ->maxLength(20),
+                            TextInput::make('phone')
+                                ->label('Phone Number')
+                                ->tel()
+                                ->maxLength(20),
 
-                                TextInput::make('title')
-                                    ->label('Job Title')
-                                    ->maxLength(255),
-                            ]),
+                            TextInput::make('title')
+                                ->label('Job Title')
+                                ->maxLength(255),
+                        ]),
 
-                        DatePicker::make('birth_date')
-                            ->label('Date of Birth')
-                            ->native(false),
+                    DatePicker::make('birth_date')
+                        ->label('Date of Birth')
+                        ->native(false),
 
-                        Textarea::make('address')
-                            ->label('Address')
-                            ->rows(3),
+                    Textarea::make('address')
+                        ->label('Address')
+                        ->rows(3),
 
-                        Textarea::make('bio')
-                            ->label('Biography')
-                            ->rows(4)
-                            ->maxLength(1000),
+                    Textarea::make('bio')
+                        ->label('Biography')
+                        ->rows(4)
+                        ->maxLength(1000),
 
-                        FileUpload::make('avatar')
-                            ->label('Profile Picture')
-                            ->image()
-                            ->avatar()
-                            ->imageEditor()
-                            ->circleCropper()
-                            ->directory('user-avatars'),
-                    ]),
+                    FileUpload::make('avatar')
+                        ->label('Profile Picture')
+                        ->image()
+                        ->avatar()
+                        ->imageEditor()
+                        ->circleCropper()
+                        ->directory('user-avatars'),
+                ]),
 
-                Section::make('Emergency Contact Information')
-                    ->description('Add emergency contacts for safety purposes')
-                    ->schema([
-                        TextInput::make('emergency_phone')
-                            ->label('Primary Emergency Phone')
-                            ->tel()
-                            ->maxLength(20)
-                            ->helperText('A quick contact number for emergencies'),
+            Section::make('Emergency Contact Information')
+                ->description('Add emergency contacts for safety purposes')
+                ->schema([
+                    TextInput::make('emergency_phone')
+                        ->label('Primary Emergency Phone')
+                        ->tel()
+                        ->maxLength(20)
+                        ->helperText('A quick contact number for emergencies'),
 
-                        Repeater::make('emergency_contact')
-                            ->label('Detailed Emergency Contacts')
-                            ->schema([
-                                Grid::make(3)
-                                    ->schema([
-                                        TextInput::make('name')
-                                            ->label('Full Name')
-                                            ->required()
-                                            ->maxLength(255),
+                    Repeater::make('emergency_contact')
+                        ->label('Detailed Emergency Contacts')
+                        ->schema([
+                            Grid::make(3)
+                                ->schema([
+                                    TextInput::make('name')
+                                        ->label('Full Name')
+                                        ->required()
+                                        ->maxLength(255),
 
-                                        TextInput::make('relationship')
-                                            ->label('Relationship')
-                                            ->required()
-                                            ->maxLength(100)
-                                            ->placeholder('e.g., Spouse, Parent, Sibling'),
+                                    TextInput::make('relationship')
+                                        ->label('Relationship')
+                                        ->required()
+                                        ->maxLength(100)
+                                        ->placeholder('e.g., Spouse, Parent, Sibling'),
 
-                                        TextInput::make('phone')
-                                            ->label('Phone Number')
-                                            ->tel()
-                                            ->required()
-                                            ->maxLength(20),
-                                    ]),
+                                    TextInput::make('phone')
+                                        ->label('Phone Number')
+                                        ->tel()
+                                        ->required()
+                                        ->maxLength(20),
+                                ]),
 
-                                Grid::make(2)
-                                    ->schema([
-                                        TextInput::make('email')
-                                            ->label('Email Address')
-                                            ->email()
-                                            ->maxLength(255),
+                            Grid::make(2)
+                                ->schema([
+                                    TextInput::make('email')
+                                        ->label('Email Address')
+                                        ->email()
+                                        ->maxLength(255),
 
-                                        Textarea::make('address')
-                                            ->label('Address')
-                                            ->rows(2),
-                                    ]),
-                            ])
-                            ->addActionLabel('Add Emergency Contact')
-                            ->reorderableWithButtons()
-                            ->collapsible()
-                            ->maxItems(5)
-                            ->defaultItems(0),
-                    ]),
+                                    Textarea::make('address')
+                                        ->label('Address')
+                                        ->rows(2),
+                                ]),
+                        ])
+                        ->addActionLabel('Add Emergency Contact')
+                        ->reorderableWithButtons()
+                        ->collapsible()
+                        ->maxItems(5)
+                        ->defaultItems(0),
+                ]),
 
-                Section::make('User Preferences')
-                    ->description('Customize your account settings and preferences')
-                    ->schema([
-                        Grid::make(2)
-                            ->schema([
-                                Select::make('timezone')
-                                    ->label('Timezone')
-                                    ->options(collect(timezone_identifiers_list())->mapWithKeys(fn ($tz) => [$tz => $tz]))
-                                    ->default('UTC')
-                                    ->searchable(),
+            Section::make('User Preferences')
+                ->description('Customize your account settings and preferences')
+                ->schema([
+                    Grid::make(2)
+                        ->schema([
+                            Select::make('timezone')
+                                ->label('Timezone')
+                                ->options(collect(timezone_identifiers_list())->mapWithKeys(fn ($tz) => [$tz => $tz]))
+                                ->default('UTC')
+                                ->searchable(),
 
-                                Select::make('locale')
-                                    ->label('Language')
-                                    ->options([
-                                        'en' => 'English',
-                                        'es' => 'Spanish',
-                                        'fr' => 'French',
-                                    ])
-                                    ->default('en'),
-                            ]),
+                            Select::make('locale')
+                                ->label('Language')
+                                ->options([
+                                    'en' => 'English',
+                                    'es' => 'Spanish',
+                                    'fr' => 'French',
+                                ])
+                                ->default('en'),
+                        ]),
 
-                        KeyValue::make('preferences')
-                            ->label('Additional Preferences')
-                            ->helperText('Key-value pairs for storing user-specific settings')
-                            ->columnSpanFull(),
-                    ]),
+                    KeyValue::make('preferences')
+                        ->label('Additional Preferences')
+                        ->helperText('Key-value pairs for storing user-specific settings')
+                        ->columnSpanFull(),
+                ]),
 
-                Section::make('Professional Information')
-                    ->description('This information is managed by administrators and cannot be edited.')
-                    ->schema([
-                        Grid::make(2)
-                            ->schema([
-                                TextInput::make('position_display')
-                                    ->label('Academic Position')
-                                    ->default(fn () => Auth::user()->getPositionTitleAttribute())
-                                    ->disabled(),
+            Section::make('Professional Information')
+                ->description('This information is managed by administrators and cannot be edited.')
+                ->schema([
+                    Grid::make(2)
+                        ->schema([
+                            TextInput::make('position_display')
+                                ->label('Academic Position')
+                                ->default(fn () => Auth::user()->getPositionTitleAttribute())
+                                ->disabled(),
 
-                                TextInput::make('employment_type_display')
-                                    ->label('Employment Type')
-                                    ->default(fn () => Auth::user()->employment_type ? ucwords(str_replace('_', ' ', Auth::user()->employment_type)) : 'Not Set')
-                                    ->disabled(),
-                            ]),
+                            TextInput::make('employment_type_display')
+                                ->label('Employment Type')
+                                ->default(fn () => Auth::user()->employment_type ? ucwords(str_replace('_', ' ', Auth::user()->employment_type)) : 'Not Set')
+                                ->disabled(),
+                        ]),
 
-                        Grid::make(2)
-                            ->schema([
-                                TextInput::make('college_display')
-                                    ->label('College')
-                                    ->default(fn () => Auth::user()->college?->name ?? 'Not Assigned')
-                                    ->disabled(),
+                    Grid::make(2)
+                        ->schema([
+                            TextInput::make('college_display')
+                                ->label('College')
+                                ->default(fn () => Auth::user()->college?->name ?? 'Not Assigned')
+                                ->disabled(),
 
-                                TextInput::make('department_display')
-                                    ->label('Department')
-                                    ->default(fn () => Auth::user()->department?->name ?? 'Not Assigned')
-                                    ->disabled(),
-                            ]),
+                            TextInput::make('department_display')
+                                ->label('Department')
+                                ->default(fn () => Auth::user()->department?->name ?? 'Not Assigned')
+                                ->disabled(),
+                        ]),
 
-                        Grid::make(2)
-                            ->schema([
-                                TextInput::make('hire_date_display')
-                                    ->label('Hire Date')
-                                    ->default(fn () => Auth::user()->hire_date ? \Carbon\Carbon::parse(Auth::user()->hire_date)->format('M j, Y') : 'Not Set')
-                                    ->disabled(),
+                    Grid::make(2)
+                        ->schema([
+                            TextInput::make('hire_date_display')
+                                ->label('Hire Date')
+                                ->default(fn () => Auth::user()->hire_date ? \Carbon\Carbon::parse(Auth::user()->hire_date)->format('M j, Y') : 'Not Set')
+                                ->disabled(),
 
-                                TextInput::make('employee_id_display')
-                                    ->label('Employee ID')
-                                    ->default(fn () => Auth::user()->employee_id ?? 'Not Set')
-                                    ->disabled(),
-                            ]),
-                    ]),
+                            TextInput::make('employee_id_display')
+                                ->label('Employee ID')
+                                ->default(fn () => Auth::user()->employee_id ?? 'Not Set')
+                                ->disabled(),
+                        ]),
+                ]),
         ];
     }
 
@@ -253,7 +255,7 @@ class ProfileManagement extends Page
             $data = $this->data;
             $user = Auth::user();
 
-            // Update user data
+            // Update user data (only editable fields)
             $user->update([
                 'firstname' => $data['firstname'],
                 'middlename' => $data['middlename'],

@@ -5,7 +5,7 @@ namespace App\Filament\Admin\Clusters\SupportTraining\Resources\Faqs\Pages;
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Faqs\FaqResource;
 use App\Models\Faq;
 use Filament\Actions;
-use Filament\Resources\Components\Tab;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 

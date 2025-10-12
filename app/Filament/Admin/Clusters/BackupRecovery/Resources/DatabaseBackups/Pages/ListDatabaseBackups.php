@@ -8,8 +8,8 @@ use App\Services\DatabaseBackupService;
 use Filament\Actions;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
-use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListDatabaseBackups extends ListRecords
@@ -89,10 +89,20 @@ class ListDatabaseBackups extends ListRecords
                 ->color('gray')
                 ->modalHeading('Backup Statistics')
                 ->modalContent(function () {
-                    $service = app(DatabaseBackupService::class);
-                    $stats = $service->getBackupStatistics();
-
-                    return view('filament.admin.backup-statistics', compact('stats'));
+                    try {
+                        $service = app(DatabaseBackupService::class);
+                        $stats = $service->getBackupStatistics();
+                        
+                        $content = '<div class="space-y-4">';
+                        foreach ($stats as $key => $value) {
+                            $content .= '<div class="flex justify-between"><span class="font-medium">' . ucfirst(str_replace('_', ' ', $key)) . ':</span><span>' . $value . '</span></div>';
+                        }
+                        $content .= '</div>';
+                        
+                        return new \Illuminate\Support\HtmlString($content);
+                    } catch (\Exception $e) {
+                        return new \Illuminate\Support\HtmlString('<div class="text-red-600">Unable to load statistics: ' . $e->getMessage() . '</div>');
+                    }
                 }),
         ];
     }
