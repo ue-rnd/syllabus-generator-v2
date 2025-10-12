@@ -28,7 +28,7 @@ class ProfileManagement extends Page
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::UserCircle;
 
-    protected static ?string $view = 'filament.admin.pages.profile-management';
+    protected string $view = 'filament.admin.pages.profile-management';
 
     protected static ?string $navigationLabel = 'My Profile';
 
@@ -43,7 +43,8 @@ class ProfileManagement extends Page
     public function mount(): void
     {
         $this->user = Auth::user();
-        $this->data = [
+        
+        $this->form->fill([
             'firstname' => $this->user->firstname ?? '',
             'middlename' => $this->user->middlename ?? '',
             'lastname' => $this->user->lastname ?? '',
@@ -59,7 +60,12 @@ class ProfileManagement extends Page
             'timezone' => $this->user->timezone ?? 'UTC',
             'locale' => $this->user->locale ?? 'en',
             'preferences' => $this->user->preferences ?? [],
-        ];
+        ]);
+    }
+
+    protected function getFormStatePath(): string
+    {
+        return 'data';
     }
 
     protected function getFormSchema(): array
@@ -252,7 +258,8 @@ class ProfileManagement extends Page
     public function save(): void
     {
         try {
-            $data = $this->data;
+            // Use the form state to ensure file uploads and other components are properly dehydrated
+            $data = $this->form->getState();
             $user = Auth::user();
 
             // Update user data (only editable fields)
@@ -266,13 +273,16 @@ class ProfileManagement extends Page
                 'birth_date' => $data['birth_date'],
                 'address' => $data['address'],
                 'bio' => $data['bio'],
-                'avatar' => $data['avatar'],
-                'emergency_contact' => $data['emergency_contact'],
+                'avatar' => $data['avatar'] ?? null,
+                'emergency_contact' => $data['emergency_contact'] ?? [],
                 'emergency_phone' => $data['emergency_phone'],
                 'timezone' => $data['timezone'],
                 'locale' => $data['locale'],
-                'preferences' => $data['preferences'],
+                'preferences' => $data['preferences'] ?? [],
             ]);
+
+            // Refresh the user instance
+            $this->user = $user->fresh();
 
             // Log security event
             app(AuthSecurityService::class)->logSecurityEvent('Profile updated', $user);

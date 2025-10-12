@@ -4,19 +4,22 @@ namespace App\Filament\Admin\Pages;
 
 use App\Services\AuthSecurityService;
 use BackedEnum;
-use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 use Filament\Support\Exceptions\Halt;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
-class ChangePassword extends Page
+class ChangePassword extends Page implements HasForms
 {
+    use InteractsWithForms;
+    
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Key;
 
     protected string $view = 'filament.admin.pages.change-password';
@@ -32,10 +35,10 @@ class ChangePassword extends Page
         $this->form->fill();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('current_password')
                     ->label('Current Password')
                     ->password()
@@ -117,16 +120,6 @@ class ChangePassword extends Page
                 ->danger()
                 ->send();
         }
-    }
-
-    protected function getFormActions(): array
-    {
-        return [
-            Action::make('changePassword')
-                ->label('Change Password')
-                ->submit('changePassword')
-                ->color('primary'),
-        ];
     }
 
     public function getTitle(): string

@@ -22,7 +22,7 @@ class DatabaseBackupService
     /**
      * Create a full database backup
      */
-    public function createFullBackup(string $name = null, string $description = null): DatabaseBackup
+    public function createFullBackup(?string $name = null, ?string $description = null): DatabaseBackup
     {
         $tables = array_keys(DatabaseBackup::getMainTables());
 
@@ -37,7 +37,7 @@ class DatabaseBackupService
     /**
      * Create a selective backup of specific tables
      */
-    public function createSelectiveBackup(array $tables, string $name = null, string $description = null): DatabaseBackup
+    public function createSelectiveBackup(array $tables, ?string $name = null, ?string $description = null): DatabaseBackup
     {
         return $this->createBackup(
             tables: $tables,
@@ -105,10 +105,17 @@ class DatabaseBackupService
      */
     protected function generateSqlDump(array $tables): string
     {
+        $driver = DB::connection()->getDriverName();
+        
         $sql = "-- Database Backup Generated: " . now() . "\n";
+        $sql .= "-- Database Driver: {$driver}\n";
         $sql .= "-- Tables: " . implode(', ', $tables) . "\n\n";
 
-        $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n\n";
+        if ($driver === 'mysql') {
+            $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n\n";
+        } elseif ($driver === 'sqlite') {
+            $sql .= "PRAGMA foreign_keys = OFF;\n\n";
+        }
 
         foreach ($tables as $table) {
             if (!$this->tableExists($table)) {
@@ -119,7 +126,11 @@ class DatabaseBackupService
             $sql .= "\n\n";
         }
 
-        $sql .= "SET FOREIGN_KEY_CHECKS = 1;\n";
+        if ($driver === 'mysql') {
+            $sql .= "SET FOREIGN_KEY_CHECKS = 1;\n";
+        } elseif ($driver === 'sqlite') {
+            $sql .= "PRAGMA foreign_keys = ON;\n";
+        }
 
         return $sql;
     }
@@ -129,12 +140,23 @@ class DatabaseBackupService
      */
     protected function getTableDump(string $table): string
     {
+        $driver = DB::connection()->getDriverName();
         $sql = "-- Table: {$table}\n";
 
-        // Get table structure
-        $createTable = DB::select("SHOW CREATE TABLE `{$table}`")[0];
-        $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
-        $sql .= $createTable->{"Create Table"} . ";\n\n";
+        if ($driver === 'sqlite') {
+            // SQLite: Get schema from sqlite_master
+            $schema = DB::select("SELECT sql FROM sqlite_master WHERE type='table' AND name=?", [$table]);
+            
+            if (!empty($schema)) {
+                $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
+                $sql .= $schema[0]->sql . ";\n\n";
+            }
+        } else {
+            // MySQL: Use SHOW CREATE TABLE
+            $createTable = DB::select("SHOW CREATE TABLE `{$table}`")[0];
+            $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
+            $sql .= $createTable->{"Create Table"} . ";\n\n";
+        }
 
         // Get table data
         $records = DB::table($table)->get();
@@ -222,6 +244,7 @@ class DatabaseBackupService
             DatabaseBackup::create([
                 'name' => "Imported: {$originalName}",
                 'description' => "Data restored from imported file: {$originalName}",
+                'file_path' => null, // Imported files are not stored
                 'backup_type' => 'manual',
                 'status' => 'completed',
                 'created_by' => auth()->id(),

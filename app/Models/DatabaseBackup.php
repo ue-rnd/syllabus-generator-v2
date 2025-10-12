@@ -94,6 +94,10 @@ class DatabaseBackup extends Model
 
     public function getFileExists(): bool
     {
+        if (!$this->file_path) {
+            return false;
+        }
+        
         return Storage::disk('backups')->exists($this->file_path);
     }
 
@@ -103,11 +107,16 @@ class DatabaseBackup extends Model
             return null;
         }
 
-        return Storage::disk('backups')->url($this->file_path);
+        // Backups use private disk, so download through controller route
+        return route('admin.backups.download', $this);
     }
 
     public function deleteFile(): bool
     {
+        if (!$this->file_path) {
+            return true;
+        }
+        
         if ($this->getFileExists()) {
             return Storage::disk('backups')->delete($this->file_path);
         }

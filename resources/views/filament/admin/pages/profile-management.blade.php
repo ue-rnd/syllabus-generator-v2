@@ -79,22 +79,5 @@
                 </div>
             </div>
         </x-filament::section>
-
-        <x-filament::section class="mt-6">
-            <x-slot name="heading">
-                Privacy & Security Tips
-            </x-slot>
-
-            <div class="prose dark:prose-invert max-w-none">
-                <ul class="text-sm space-y-2">
-                    <li>Keep your profile information up to date for better communication.</li>
-                    <li>Use a strong password and change it regularly.</li>
-                    <li>Enable two-factor authentication for additional security.</li>
-                    <li>Review your emergency contacts periodically to ensure they are current.</li>
-                    <li>Be cautious about what personal information you include in your biography.</li>
-                    <li>Contact an administrator if you notice any suspicious account activity.</li>
-                </ul>
-            </div>
-        </x-filament::section>
     </div>
 </x-filament-panels::page>

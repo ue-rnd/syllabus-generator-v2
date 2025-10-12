@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('file_path');
+            $table->string('file_path')->nullable();
             $table->bigInteger('file_size')->nullable();
             $table->json('tables_included')->nullable();
             $table->string('backup_type'); // full, selective, manual, automated

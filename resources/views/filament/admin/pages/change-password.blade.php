@@ -11,15 +11,15 @@
                 </x-slot>
             @endif
 
-            <x-filament-panels::form wire:submit="changePassword">
+            <form wire:submit="changePassword">
                 {{ $this->form }}
 
-                <x-slot name="footer">
-                    <div class="flex justify-end">
-                        {{ $this->getFormActions() }}
-                    </div>
-                </x-slot>
-            </x-filament-panels::form>
+                <div class="flex justify-end mt-6">
+                    <x-filament::button type="submit" color="primary">
+                        Change Password
+                    </x-filament::button>
+                </div>
+            </form>
         </x-filament::section>
 
         <x-filament::section class="mt-6">

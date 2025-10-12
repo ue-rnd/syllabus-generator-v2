@@ -12,6 +12,13 @@ class ViewDatabaseBackup extends ViewRecord
 {
     protected static string $resource = DatabaseBackupResource::class;
 
+    // Eager load relationships to prevent N+1 queries
+    protected function resolveRecord(int | string $key): \Illuminate\Database\Eloquent\Model
+    {
+        return static::getResource()::resolveRecordRouteBinding($key)
+            ->load('creator');
+    }
+
     protected function getHeaderActions(): array
     {
         return [

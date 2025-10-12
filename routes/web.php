@@ -36,6 +36,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('syllabus/{syllabus}/pdf/download', [\App\Http\Controllers\SyllabusPdfController::class, 'download'])
         ->middleware('auth')
         ->name('syllabus.pdf.download');
+    
+    // Database Backup Download Route
+    Route::get('admin/backups/{backup}/download', [\App\Http\Controllers\DatabaseBackupController::class, 'download'])
+        ->middleware(['auth', 'can:manage backups'])
+        ->name('admin.backups.download');
 });
 
 Route::middleware('auth')->group(function () {

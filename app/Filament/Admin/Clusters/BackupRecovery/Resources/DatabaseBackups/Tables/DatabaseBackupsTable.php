@@ -143,6 +143,6 @@ class DatabaseBackupsTable
             ])
             ->defaultSort('created_at', 'desc')
             ->poll('30s') // Refresh every 30 seconds to show status updates
-            ->recordUrl(fn ($record) => route('filament.admin.resources.database-backups.view', $record));
+            ->recordUrl(fn ($record) => route('filament.admin.backup-recovery.resources.database-backups.view', $record));
     }
 }
