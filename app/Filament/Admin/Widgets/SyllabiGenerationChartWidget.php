@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 class SyllabiGenerationChartWidget extends ChartWidget
 {
     protected static ?int $sort = 3;
+    
+    protected int|string|array $columnSpan = ['sm' => 'full', 'lg' => 5];
 
     protected function getData(): array
     {

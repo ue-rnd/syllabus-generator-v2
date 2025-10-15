@@ -13,6 +13,11 @@ class ComplianceOverviewWidget extends ChartWidget
 
     protected static bool $isLazy = true;
 
+    /**
+     * Align with other charts to occupy half the dashboard on large screens.
+     */
+    protected int|string|array $columnSpan = ['sm' => 'full', 'lg' => 5];
+
     public function getHeading(): string
     {
         return 'Standards Compliance Overview';

@@ -24,10 +24,6 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
-    --color-accent-foreground: var(--color-white);
-
     /* WireUI Color Palette - Red Theme */
     --color-primary-50: #fef2f2;
     --color-primary-100: #fee2e2;
@@ -100,13 +96,52 @@
     --color-info-800: #1e40af;
     --color-info-900: #1e3a8a;
     --color-info-950: #172554;
+
+    /* Main Colors */
+    --color-accent-text: var(--color-black);
+    --color-accent-desc: var(--color-neutral-500);
+    --color-accent-main: var(--color-red-600);
+    --color-accent-hover: var(--color-red-700);
+    --color-accent-error: var(--color-accent-main);
+    --color-accent-button: var(--color-red-600);
+    --color-accent-ghost: var(--color-white);
+    --color-accent-ghost-dark: var(--color-neutral-200);
+    --color-accent-foreground: var(--color-white);
+    --color-accent-background: var(--color-neutral-50);
+    
+    /* Status / intent colors (used for status pills) */
+    --color-accent-positive: var(--color-positive-100);
+    --color-accent-positive-foreground: var(--color-positive-800);
+
+    --color-accent-negative: var(--color-negative-100);
+    --color-accent-negative-foreground: var(--color-negative-800);
+
+    --color-accent-warning: var(--color-warning-100);
+    --color-accent-warning-foreground: var(--color-warning-800);
 }
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
+        /* Main Colors Dark */
+        --color-accent-text: var(--color-white);
+        --color-accent-desc: var(--color-neutral-300);
+        --color-accent-main: var(--color-red-600);
+        --color-accent-hover: var(--color-red-700);
+        --color-accent-button: var(--color-red-600);
+        --color-accent-error: var(--color-red-400);
+        --color-accent-ghost: var(--color-neutral-800);
+        --color-accent-ghost-dark: var(--color-neutral-600);
         --color-accent-foreground: var(--color-neutral-800);
+        --color-accent-background: var(--color-neutral-900);
+        /* Status / intent colors (dark variants) */
+        --color-accent-positive: var(--color-positive-800);
+        --color-accent-positive-foreground: var(--color-positive-50);
+
+        --color-accent-negative: var(--color-negative-800);
+        --color-accent-negative-foreground: var(--color-negative-50);
+
+        --color-accent-warning: var(--color-warning-800);
+        --color-accent-warning-foreground: var(--color-warning-50);
     }
 }
 
@@ -132,7 +167,7 @@
 input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
-    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+    @apply outline-hidden ring-2 ring-red-600 ring-offset-2 ring-offset-accent-foreground;
 }
 
 /* \[:where(&)\]:size-4 {

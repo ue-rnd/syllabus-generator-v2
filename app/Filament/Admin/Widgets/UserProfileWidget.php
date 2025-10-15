@@ -8,7 +8,11 @@ class UserProfileWidget extends Widget
 {
     protected string $view = 'filament.admin.widgets.user-profile-widget';
 
-    protected int|string|array $columnSpan = 'full';
+    /**
+     * Make the profile area occupy most of the row on large screens,
+     * and full width on small screens.
+     */
+    protected int|string|array $columnSpan = ['sm' => 'full', 'lg' => 6];
 
     protected static ?int $sort = 1;
 

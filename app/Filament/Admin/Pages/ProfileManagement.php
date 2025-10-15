@@ -351,8 +351,9 @@ class ProfileManagement extends Page
         return 'Profile Management';
     }
 
-    public function getSubheading(): ?string
-    {
-        return 'Manage your personal information and preferences.';
-    }
+    // duplicate?
+    // public function getSubheading(): ?string
+    // {
+    //     return 'Manage your personal information and preferences.';
+    // }
 }

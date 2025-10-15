@@ -1,6 +1,36 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+{{-- darkmode --}}
+<script>
+	(function() {
+		try {
+			var stored = localStorage.getItem('darkMode');
+			var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+			var dark = (stored === 'true') || (stored === null && prefersDark);
+			if (dark) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+		} catch (e) {
+			// ignore (add error)
+		}
+	})();
+
+	// Re-apply theme after Livewire updates or SPA-like navigation so the .dark class persists
+	(function() {
+		function applyTheme() {
+			try {
+				var stored = localStorage.getItem('darkMode');
+				var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+				var dark = (stored === 'true') || (stored === null && prefersDark);
+				if (dark) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+			} catch (e) { /* ignore */ }
+		}
+		document.addEventListener('DOMContentLoaded', applyTheme);
+		document.addEventListener('livewire:load', applyTheme);
+		document.addEventListener('livewire:message.processed', applyTheme);
+		document.addEventListener('livewire:navigated', applyTheme);
+	})();
+</script>
+
 <title>{{ $title ?? config('app.name') }}</title>
 
 <link rel="icon" href="/images/logo_ue.png" sizes="any">

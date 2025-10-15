@@ -2,7 +2,7 @@
     <div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
             <div class="space-y-6">
-                <div class="flex items-center space-x-5">
+                <div class="flex items-center space-x-5 text-accent-text">
                     <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book" class="size-16"
                         role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path fill="currentColor"
@@ -12,7 +12,7 @@
                     <h4 class="text-4xl font-bold">Syllabus Generator</h4>
                 </div>
                 <a href="{{ route('syllabus') }}" wire:navigate aria-label="Create Syllabus"
-                    class="inline-flex items-center bg-red-700 text-white px-4 py-2 space-x-2 rounded-xl hover:bg-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 w-auto max-w-fit">
+                    class="inline-flex items-center bg-accent-button text-white px-4 py-2 space-x-2 rounded-xl hover:bg-accent-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent-main w-auto max-w-fit">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
                         <path fill-rule="evenodd"
                             d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v2.5h-2.5a.75.75 0 0 0 0 1.5h2.5v2.5a.75.75 0 0 0 1.5 0v-2.5h2.5a.75.75 0 0 0 0-1.5h-2.5v-2.5Z"
@@ -21,8 +21,8 @@
                     <span>Create Syllabus</span>
                 </a>
             </div>
-            <div class="border bg-white rounded-xl shadow-sm">
-                <div class="border-b p-3 text-sm font-medium text-gray-700 flex space-x-2">
+            <div class="border border-accent-ghost-dark bg-accent-foreground rounded-xl shadow-sm">
+                <div class="border-b border-accent-ghost-dark p-3 text-sm font-medium text-accent-desc flex space-x-2">
                     <div class="flex space-x-2 items-center">
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bell" class="size-4"
                             role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -32,10 +32,10 @@
                         </svg>
                         <h4>Notifications</h4>
                     </div>
-                    <a class="text-gray-400 flex items-center" href="{{route('notifications')}}">
+                    <a class="text-accent-desc flex items-center" href="{{route('notifications')}}">
                         See all
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                            class="size-4 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                            class="size-4 fill-current">
                             <path fill-rule="evenodd"
                                 d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z"
                                 clip-rule="evenodd" />
@@ -46,9 +46,9 @@
         </div>
         <div class="max-w-7xl mx-auto mt-4 pt-3">
             <div class="flex items-center justify-between mb-4">
-                <h4 class="text-xl font-bold">My Syllabi</h4>
-                <nav class="flex items-center text-sm text-gray-600" aria-label="Breadcrumb">
-                    <a href="{{ route('home') }}" wire:navigate class="flex items-center hover:text-gray-800">
+                <h4 class="text-xl font-bold text-accent-text">My Syllabi</h4>
+                <nav class="flex items-center text-sm text-accent-desc" aria-label="Breadcrumb">
+                    <a href="{{ route('home') }}" wire:navigate class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                             class="w-4 h-4 mr-1.5">
                             <path d="M2.25 12l8.955-8.955a1.125 1.125 0 011.59 0L21.75 12" />
@@ -57,16 +57,16 @@
                         Home
                     </a>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                        class="size-4 text-gray-500">
+                        class="size-4">
                         <path fill-rule="evenodd"
                             d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z"
                             clip-rule="evenodd" />
                     </svg>
 
-                    <span class="text-gray-800">Syllabi</span>
+                    <span class="font-bold">Syllabi</span>
                 </nav>
             </div>
-            <div class="border-b-2 border-gray-200"></div>
+            <div class="border-b-2 border-accent-ghost-dark"></div>
         </div>
 
         {{-- Search and Filter Controls --}}
@@ -75,7 +75,7 @@
                 <div class="flex flex-col sm:flex-row gap-6 flex-1">
                     <div class="relative">
                         <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search syllabi..."
-                            class="w-full sm:w-72 pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-700 placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all duration-200 shadow-sm hover:border-gray-300">
+                            class="w-full sm:w-72 pl-10 pr-4 py-3 bg-accent-foreground border-2 border-accent-ghost-dark focus:ring-2 rounded-xl text-accent-text placeholder-accent-des focus:ring-accent-main focus:border-accent-main focus:bg-accent-foreground hover:border-accent-main transition-all duration-200 shadow-sm">
                         <svg class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -83,18 +83,19 @@
                         </svg>
                     </div>
                     <select wire:model.live="statusFilter"
-                        class="px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-700 focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:bg-white transition-all duration-200 shadow-sm hover:border-gray-300 min-w-[140px]">
-                        <option value="">All Status</option>
-                        <option value="draft">Draft</option>
-                        <option value="submitted">Submitted</option>
-                        <option value="under_review">Under Review</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
+                        class="px-4 py-3 bg-accent-foreground border-2 border-accent-ghost-dark rounded-xl text-accent-text focus:ring-2 focus:ring-accent-main focus:border-accent-main focus:bg-accent-foreground transition-all duration-200 shadow-sm hover:border-accent-main min-w-[140px]">
+                        <option value="" class="">All Status</option>
+                        <option value="draft" class="">Draft</option>
+                        <option value="submitted" class="">Submitted</option>
+                        <option value="under_review" class="">Under Review</option>
+                        <option value="approved" class="">Approved</option>
+                        <option value="rejected" class="">Rejected</option>
                     </select>
                 </div>
+
                 @if($search || $statusFilter)
                     <button wire:click="clearFilters"
-                        class="px-4 py-3 text-sm font-medium text-gray-600 hover:text-gray-800 bg-white border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm">
+                        class="px-4 py-3 text-sm font-medium text-accent-text bg-accent-main border-2 hover:border-accent-hover border-accent-main rounded-xl hover:bg-accent-hover transition-all duration-200 shadow-sm">
                         Clear Filters
                     </button>
                 @endif
@@ -103,51 +104,54 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
             @forelse($syllabi as $syllabus)
-                    <div class="border bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <div class="border border-accent-ghost-dark bg-accent-foreground p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
                         <div class="space-y-5">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-3">
-                                    <svg class="w-8 h-8 text-red-700" viewBox="0 0 24 24" fill="currentColor"
+                                    <svg class="w-8 h-8 text-accent-main" viewBox="0 0 24 24" fill="currentColor"
                                         aria-hidden="true">
                                         <path d="M6 4a2 2 0 00-2 2v12a2 2 0 002 2h11a1 1 0 000-2H6V6h9a1 1 0 100-2H6z" />
                                         <path d="M9 8h11a1 1 0 011 1v9a2 2 0 01-2 2H10a1 1 0 01-1-1V8z" />
                                     </svg>
-                                    <span class="text-sm font-medium text-gray-600">Syllabus #{{ $syllabus->id }}</span>
+                                    <span class="text-sm font-medium text-accent-desc">Syllabus #{{ $syllabus->id }}</span>
                                 </div>
-                                <span class="px-2 py-1 text-xs rounded-full {{ 
-                                                                                                                        $syllabus->status === 'approved' ? 'bg-green-100 text-green-800' :
-                ($syllabus->status === 'under_review' ? 'bg-yellow-100 text-yellow-800' :
-                    ($syllabus->status === 'rejected' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800')) 
+                                <span class="px-2 py-1 text-xs rounded-full font-bold {{ 
+                                                                                                                        $syllabus->status === 'approved' ? 'bg-accent-positive text-accent-positive-foreground' :
+                ($syllabus->status === 'under_review' ? 'bg-accent-warning text-accent-warning-foreground' :
+                    ($syllabus->status === 'rejected' ? 'bg-accent-negative text-accent-negative-foreground' :
+                        'bg-accent-ghost-dark text-accent-desc')) 
                                                                                                                     }}">
                                     {{ ucfirst(str_replace('_', ' ', $syllabus->status)) }}
                                 </span>
                             </div>
 
-                            <div class="space-y-3">
-                                <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">
+                            <div class="space-y-3 text-accent-desc">
+                                <h3 class="text-lg font-semibold text-accent-text line-clamp-2">
                                     <a href="{{ route('syllabus.view', $syllabus) }}" wire:navigate
-                                        class="hover:underline underline underline-offset-2 decoration-gray-300">
+                                        class="hover:underline underline underline-offset-2 decoration-current">
                                         {{ $syllabus->name }}
                                     </a>
                                 </h3>
-                                <p class="text-sm text-gray-600">Course: {{ $syllabus->course->name ?? 'N/A' }}</p>
-                                <p class="text-sm text-gray-600">Code: {{ $syllabus->course->code ?? 'N/A' }}</p>
-                                <p class="text-sm text-gray-600">College: {{ $syllabus->course->college->name ?? 'N/A' }}</p>
+                                <p class="text-sm">Course: {{ $syllabus->course->name ?? 'N/A' }}</p>
+                                <p class="text-sm">Code: {{ $syllabus->course->code ?? 'N/A' }}</p>
+                                <p class="text-sm">College: {{ $syllabus->course->college->name ?? 'N/A' }}</p>
                             </div>
 
-                            <div class="flex items-center justify-between pt-3 border-t">
-                                <div class="flex items-center space-x-2">
+                            <div class="flex items-center justify-between pt-3 border-t border-accent-ghost-dark">
+                                
+                                {{-- Updated --}}
+                                <div class="flex items-center space-x-2 text-accent-desc">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                        class="size-5 text-gray-400">
+                                        class="size-5">
                                         <path fill-rule="evenodd"
                                             d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z"
                                             clip-rule="evenodd" />
                                     </svg>
-
-                                    <span class="text-xs text-gray-500">{{ $syllabus->updated_at->diffForHumans() }}</span>
+                                    <span class="text-xs">{{ $syllabus->updated_at->diffForHumans() }}</span>
                                 </div>
-                                <div class="flex items-center gap-4">
+
+                                {{-- Syllabus buttons --}}
+                                <div class="flex items-center gap-1">
                                     @php
                                         $canEdit = in_array($syllabus->status, ['draft', 'for_revisions'])
                                             && (
@@ -158,7 +162,7 @@
 
                                     @if($canEdit)
                                         <a href="{{ route('syllabus.edit', $syllabus) }}" wire:navigate
-                                            class="text-gray-700 hover:text-gray-900 group relative" aria-label="Edit">
+                                            class="text-accent-desc hover:text-accent-desc group relative p-2 rounded-xl hover:bg-accent-ghost-dark" aria-label="Edit">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -173,7 +177,7 @@
                                     @endif
 
                                     <a href="{{ route('syllabus.pdf.view', $syllabus) }}" target="_blank" rel="noopener"
-                                        class="text-red-700 hover:text-red-800 group relative" aria-label="Open PDF">
+                                        class="text-accent-main hover:text-accent-hover group relative p-2 rounded-xl hover:bg-accent-ghost-dark" aria-label="Open PDF">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -186,7 +190,7 @@
                                         </span>
                                     </a>
                                     <a href="{{ route('syllabus.pdf.download', $syllabus) }}"
-                                        class="text-gray-700 hover:text-gray-900 group relative" aria-label="Download PDF">
+                                        class="text-accent-desc hover:text-accent-desc group relative p-2 rounded-xl hover:bg-accent-ghost-dark" aria-label="Download PDF">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -206,15 +210,15 @@
                 <div class="col-span-full">
                     <div class="text-center">
                         <div class="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6">
-                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            <svg class="w-12 h-12 text-accent-desc" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">No syllabi found</h3>
-                        <p class="text-gray-500 mb-8 max-w-md mx-auto leading-relaxed">
+                        <h3 class="text-xl font-semibold text-accent-text mb-3">No syllabi found</h3>
+                        <p class="text-accent-desc mb-8 max-w-md mx-auto leading-relaxed">
                             @if($search || $statusFilter)
                                 No syllabi match your current filters. Try adjusting your search criteria or clear the filters
                                 to see all syllabi.
@@ -225,7 +229,7 @@
                         </p>
                         @if(!$search && !$statusFilter)
                             <a href="{{ route('syllabus') }}" wire:navigate
-                                class="inline-flex items-center gap-2 bg-red-700 text-white px-6 py-3 rounded-xl hover:bg-red-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-sm hover:shadow-md">
+                                class="inline-flex items-center gap-2 bg-accent-main text-white px-6 py-3 rounded-xl hover:bg-accent-hover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-main focus:ring-offset-2 shadow-sm hover:shadow-md">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -234,7 +238,7 @@
                             </a>
                         @else
                             <button wire:click="clearFilters"
-                                class="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                class="inline-flex items-center gap-2 bg-accent-ghost text-accent-desc px-6 py-3 rounded-xl hover:bg-accent-ghost-dark transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ghost-accent-dark focus:ring-offset-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">

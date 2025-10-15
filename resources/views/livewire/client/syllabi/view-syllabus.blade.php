@@ -3,7 +3,7 @@
     <div class="mb-6 flex items-center justify-between">
         <a href="{{ route('home') }}" 
            wire:navigate 
-           class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200">
+           class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-accent-desc bg-accent-foreground border border-accent-ghost-dark rounded-xl hover:bg-accent-ghost-dark hover:border-accent-ghost-dark focus:outline-none focus:ring-2 focus:ring-accent-main focus:border-transparent transition-colors duration-200">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -15,7 +15,7 @@
                 <a href="{{ route('syllabus.edit', $syllabus) }}" wire:navigate class="px-3 py-1.5 text-sm font-medium bg-gray-800 text-white rounded hover:bg-gray-900">Edit</a>
             @endif
 
-            <button type="button" wire:click="duplicateSyllabus" class="px-3 py-1.5 text-sm font-medium bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer transition-colors duration-200">Duplicate</button>
+            <button type="button" wire:click="duplicateSyllabus" class="px-3 py-1.5 text-sm font-medium bg-blue-500 text-white rounded-xl hover:bg-blue-600 cursor-pointer transition-colors duration-200">Duplicate</button>
             @if(!empty($canSubmit) && $canSubmit)
                 <button type="button" wire:click="confirmSubmitForApproval" class="px-3 py-1.5 text-sm font-medium bg-amber-500 text-white rounded hover:bg-amber-600 cursor-pointer transition-colors duration-200">Submit for Approval</button>
             @endif
@@ -23,34 +23,33 @@
     </div>
 
     <!-- Main Content -->
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="bg-accent-foreground rounded-xl shadow p-6 text-accent-text border border-accent-ghost-dark">
         <div class="flex items-center justify-between mb-4">
-            <h1 class="text-2xl font-bold text-gray-900">{{ $syllabus->name }}</h1>
+            <h1 class="text-2xl font-bold text-accent-text">{{ $syllabus->name }}</h1>
             <span class="px-2 py-1 text-xs rounded-full {{ 
-            $syllabus->status === 'approved' ? 'bg-green-100 text-green-800' : 
-            ($syllabus->status === 'under_review' ? 'bg-yellow-100 text-yellow-800' : 
-            ($syllabus->status === 'rejected' ? 'bg-red-100 text-red-800' : 
-            'bg-gray-100 text-gray-800')) 
+            $syllabus->status === 'approved' ? 'bg-accent-positive text-accent-positive-foreground' : 
+            ($syllabus->status === 'under_review' ? 'bg-accent-warning text-accent-warning-foreground' : 
+            ($syllabus->status === 'rejected' ? 'bg-accent-negative text-accent-negative-foreground' : 
+            'bg-accent-desc text-accent-desc-foreground')) 
         }}">{{ ucfirst(str_replace('_', ' ', $syllabus->status)) }}</span>
         </div>
 
-    <div class="text-sm text-gray-600 mb-6">
+    <div class="text-sm text-accent-desc mb-6">
         <div>Course: {{ $syllabus->course->name ?? 'N/A' }} ({{ $syllabus->course->code ?? 'N/A' }})</div>
         <div>College: {{ $syllabus->course->college->name ?? 'N/A' }}</div>
         <div>Academic Year: {{ $syllabus->ay_start }} - {{ $syllabus->ay_end }}</div>
         <div>Last updated: {{ $syllabus->updated_at->diffForHumans() }}</div>
     </div>
-
     <div class="prose max-w-none">
         <h2>Description</h2>
-        <div class="prose max-w-none p-4 border rounded bg-gray-50">
-            {!! $syllabus->description ?? ($syllabus->course->description ?? '<span class="text-gray-500">No description provided.</span>') !!}
+        <div class="prose max-w-none p-4 border rounded bg-accent-ghost text-accent-desc border-accent-ghost-dark">
+            {!! $syllabus->description ?? ($syllabus->course->description ?? '<span class="text-accent-desc">No description provided.</span>') !!}
         </div>
 
         <h2>Course Learning Outcomes</h2>
-        <div class="p-4 border rounded">
+        <div class="p-4 border rounded bg-accent-foreground border-accent-ghost-dark text-accent-text">
             @if(!empty($syllabus->course_outcomes))
-                <p class="text-sm text-gray-700 mb-2"><strong>Upon completion of the course, the learner will be able to:</strong></p>
+                <p class="text-sm text-accent-desc mb-2"><strong>Upon completion of the course, the learner will be able to:</strong></p>
                 <ol class="list-decimal list-inside space-y-1">
                     @foreach($syllabus->course_outcomes as $outcome)
                         <li>
@@ -60,30 +59,30 @@
                     @endforeach
                 </ol>
             @else
-                <div class="text-sm text-gray-500 italic">No course outcomes defined.</div>
+                <div class="text-sm text-accent-desc italic">No course outcomes defined.</div>
             @endif
         </div>
 
         <h2 class="mt-8">Pre-requisites</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full text-left text-sm border rounded">
-                <thead class="bg-gray-100">
+                <thead class="bg-accent-ghost-dark">
                     <tr>
-                        <th class="px-3 py-2">Course Code</th>
-                        <th class="px-3 py-2">Course Title</th>
+                        <th class="px-3 py-2 text-accent-desc">Course Code</th>
+                        <th class="px-3 py-2 text-accent-desc">Course Title</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if(!empty($prerequisites))
                         @foreach($prerequisites as $p)
                             <tr class="border-t">
-                                <td class="px-3 py-2">{{ $p['code'] }}</td>
-                                <td class="px-3 py-2">{{ $p['name'] }}</td>
+                                <td class="px-3 py-2 text-accent-text">{{ $p['code'] }}</td>
+                                <td class="px-3 py-2 text-accent-text">{{ $p['name'] }}</td>
                             </tr>
                         @endforeach
                     @else
                         <tr class="border-t">
-                            <td class="px-3 py-2 text-gray-500 italic" colspan="2">No prerequisites</td>
+                            <td class="px-3 py-2 text-accent-desc italic" colspan="2">No prerequisites</td>
                         </tr>
                     @endif
                 </tbody>
@@ -93,8 +92,8 @@
         <h2>Learning Matrix</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full text-left text-sm border rounded">
-                <thead class="bg-gray-100">
-                    <tr>
+                <thead class="bg-accent-ghost-dark">
+                    <tr class="text-accent-desc">
                         <th class="px-3 py-2">Week</th>
                         <th class="px-3 py-2">Lec Hrs</th>
                         <th class="px-3 py-2">Lab Hrs</th>
@@ -155,15 +154,15 @@
                                                 <span class="text-gray-500 italic">No outcomes</span>
                                             @endif
                                         </td>
-                                        <td class="px-3 py-2" rowspan="{{ $rows }}">{!! $item['content'] ?? '<span class=\"text-gray-500 italic\">No content</span>' !!}</td>
+                                        <td class="px-3 py-2" rowspan="{{ $rows }}">{!! $item['content'] ?? '<span class=\"text-accent-desc italic\">No content</span>' !!}</td>
                                     @endif
-                                    <td class="px-3 py-2">{!! $activity['description'] ?? '<span class=\"text-gray-500 italic\">—</span>' !!}</td>
+                                    <td class="px-3 py-2">{!! $activity['description'] ?? '<span class=\"text-accent-desc italic\">—</span>' !!}</td>
                                     <td class="px-3 py-2">{!! !empty($hasOnsite) ? '&#10003;' : '' !!}</td>
                                     <td class="px-3 py-2">{!! !empty($hasAsync) ? '&#10003;' : '' !!}</td>
                                     <td class="px-3 py-2">{!! !empty($hasSync) ? '&#10003;' : '' !!}</td>
                                     <td class="px-3 py-2">{!! $activity['reference'] ?? '' !!}</td>
                                     @if($r===0)
-                                        <td class="px-3 py-2" rowspan="{{ $rows }}">
+                                        <td class="px-3 py-2 text-accent-text" rowspan="{{ $rows }}">
                                             @if(!empty($assessments))
                                                 @if(is_array($assessments))
                                                     <ul class="list-disc list-inside space-y-1">
@@ -172,19 +171,19 @@
                                                         @endforeach
                                                     </ul>
                                                 @else
-                                                    <div class="prose prose-sm max-w-none">{!! $assessments !!}</div>
+                                                    <div class="prose prose-sm max-w-none text-accent-text">{!! $assessments !!}</div>
                                                 @endif
                                             @else
-                                                <span class="text-gray-500 italic">No assessment</span>
+                                                <span class="text-accent-desc italic">No assessment</span>
                                             @endif
                                         </td>
                                     @endif
                                 </tr>
                             @endfor
                         @endforeach
-                    @else
+                        @else
                         <tr class="border-t">
-                            <td class="px-3 py-4 text-gray-500 italic" colspan="11">No data available</td>
+                            <td class="px-3 py-4 text-accent-desc italic" colspan="11">No data available</td>
                         </tr>
                     @endif
                 </tbody>
@@ -196,20 +195,20 @@
             <table class="min-w-full text-left text-sm border rounded">
                 <tbody>
                     <tr class="border-t">
-                        <th class="px-3 py-2 w-56 bg-gray-50">Adaptive Digital Solutions</th>
-                        <td class="px-3 py-2">{!! $syllabus->adaptive_digital_solutions ?? '<span class="text-gray-500">Not specified</span>' !!}</td>
+                        <th class="px-3 py-2 w-56 bg-accent-ghost">Adaptive Digital Solutions</th>
+                        <td class="px-3 py-2">{!! $syllabus->adaptive_digital_solutions ?? '<span class="text-accent-desc">Not specified</span>' !!}</td>
                     </tr>
                     <tr class="border-t">
-                        <th class="px-3 py-2 w-56 bg-gray-50">Textbook</th>
-                        <td class="px-3 py-2">{!! $syllabus->textbook_references ?? '<span class="text-gray-500">Not specified</span>' !!}</td>
+                        <th class="px-3 py-2 w-56 bg-accent-ghost">Textbook</th>
+                        <td class="px-3 py-2">{!! $syllabus->textbook_references ?? '<span class="text-accent-desc">Not specified</span>' !!}</td>
                     </tr>
                     <tr class="border-t">
-                        <th class="px-3 py-2 w-56 bg-gray-50">Online References</th>
-                        <td class="px-3 py-2">{!! $syllabus->online_references ?? '<span class="text-gray-500">Not specified</span>' !!}</td>
+                        <th class="px-3 py-2 w-56 bg-accent-ghost">Online References</th>
+                        <td class="px-3 py-2">{!! $syllabus->online_references ?? '<span class="text-accent-desc">Not specified</span>' !!}</td>
                     </tr>
                     <tr class="border-t">
-                        <th class="px-3 py-2 w-56 bg-gray-50">Others</th>
-                        <td class="px-3 py-2">{!! $syllabus->other_references ?? '<span class="text-gray-500">Not specified</span>' !!}</td>
+                        <th class="px-3 py-2 w-56 bg-accent-ghost">Others</th>
+                        <td class="px-3 py-2">{!! $syllabus->other_references ?? '<span class="text-accent-desc">Not specified</span>' !!}</td>
                     </tr>
                 </tbody>
             </table>
@@ -220,16 +219,16 @@
             <table class="min-w-full text-left text-sm border rounded">
                 <tbody>
                     <tr class="border-t">
-                        <th class="px-3 py-2 w-56 bg-gray-50">Grading System</th>
-                        <td class="px-3 py-2">{!! $syllabus->grading_system ?? '<span class="text-gray-500">Standard University grading system applies.</span>' !!}</td>
+                        <th class="px-3 py-2 w-56 bg-accent-ghost">Grading System</th>
+                        <td class="px-3 py-2">{!! $syllabus->grading_system ?? '<span class="text-accent-desc">Standard University grading system applies.</span>' !!}</td>
                     </tr>
                     <tr class="border-t">
-                        <th class="px-3 py-2 w-56 bg-gray-50">Classroom Policies</th>
-                        <td class="px-3 py-2">{!! $syllabus->classroom_policies ?? '<span class="text-gray-500">Standard classroom policies apply.</span>' !!}</td>
+                        <th class="px-3 py-2 w-56 bg-accent-ghost">Classroom Policies</th>
+                        <td class="px-3 py-2">{!! $syllabus->classroom_policies ?? '<span class="text-accent-desc">Standard classroom policies apply.</span>' !!}</td>
                     </tr>
                     <tr class="border-t">
-                        <th class="px-3 py-2 w-56 bg-gray-50">Consultation Hours</th>
-                        <td class="px-3 py-2">{!! $syllabus->consultation_hours ?? '<span class="text-gray-500">By appointment.</span>' !!}</td>
+                        <th class="px-3 py-2 w-56 bg-accent-ghost">Consultation Hours</th>
+                        <td class="px-3 py-2">{!! $syllabus->consultation_hours ?? '<span class="text-accent-desc">By appointment.</span>' !!}</td>
                     </tr>
                 </tbody>
             </table>
@@ -237,25 +236,25 @@
 
         <h2 class="mt-8">Signatories</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="p-4 border rounded">
-                <div class="text-xs text-gray-500 mb-2 font-medium">PREPARED BY</div>
+            <div class="p-4 border rounded bg-accent-foreground text-accent-text border-accent-ghost-dark">
+                <div class="text-xs text-accent-desc mb-2 font-medium">PREPARED BY</div>
                 <div class="font-semibold">{{ $syllabus->principalPreparer->full_name ?? $syllabus->principalPreparer->name ?? '[Principal Preparer]' }}</div>
-                <div class="text-sm text-gray-600">Principal Preparer</div>
+                <div class="text-sm text-accent-desc">Principal Preparer</div>
             </div>
-            <div class="p-4 border rounded">
-                <div class="text-xs text-gray-500 mb-2 font-medium">VERIFIED BY</div>
+            <div class="p-4 border rounded bg-accent-foreground text-accent-text border-accent-ghost-dark">
+                <div class="text-xs text-accent-desc mb-2 font-medium">VERIFIED BY</div>
                 <div class="font-semibold">{{ $syllabus->reviewer->full_name ?? $syllabus->reviewer->name ?? '[Department Chair]' }}</div>
-                <div class="text-sm text-gray-600">Department Chair</div>
+                <div class="text-sm text-accent-desc">Department Chair</div>
             </div>
-            <div class="p-4 border rounded">
-                <div class="text-xs text-gray-500 mb-2 font-medium">RECOMMENDING APPROVAL</div>
+            <div class="p-4 border rounded bg-accent-foreground text-accent-text border-accent-ghost-dark">
+                <div class="text-xs text-accent-desc mb-2 font-medium">RECOMMENDING APPROVAL</div>
                 <div class="font-semibold">{{ $syllabus->recommendingApprover->full_name ?? $syllabus->recommendingApprover->name ?? '[Associate Dean]' }}</div>
-                <div class="text-sm text-gray-600">Associate Dean</div>
+                <div class="text-sm text-accent-desc">Associate Dean</div>
             </div>
-            <div class="p-4 border rounded md:col-span-1">
-                <div class="text-xs text-gray-500 mb-2 font-medium">APPROVED BY</div>
+            <div class="p-4 border rounded bg-accent-foreground text-accent-text md:col-span-1 border-accent-ghost-dark">
+                <div class="text-xs text-accent-desc mb-2 font-medium">APPROVED BY</div>
                 <div class="font-semibold">{{ $syllabus->approver->full_name ?? $syllabus->approver->name ?? '[Dean]' }}</div>
-                <div class="text-sm text-gray-600">Dean</div>
+                <div class="text-sm text-accent-desc">Dean</div>
             </div>
         </div>
     </div>

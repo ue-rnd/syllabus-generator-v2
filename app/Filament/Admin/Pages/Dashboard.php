@@ -55,14 +55,14 @@ class Dashboard extends BaseDashboard
 
     public function getColumns(): int|array
     {
-        return 2;
+        return 10;
     }
 
     public function getWidgets(): array
     {
         return [
-            \App\Filament\Admin\Widgets\NotificationsWidget::class,
             \App\Filament\Admin\Widgets\UserProfileWidget::class,
+            \App\Filament\Admin\Widgets\NotificationsWidget::class,
             \App\Filament\Admin\Widgets\PendingSuggestionsWidget::class,
             \App\Filament\Admin\Widgets\PendingSyllabiWidget::class,
             \App\Filament\Admin\Widgets\StatsOverviewWidget::class,

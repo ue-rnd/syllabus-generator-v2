@@ -2,14 +2,12 @@
     <div class="max-w-4xl mx-auto">
         <x-filament::section>
             <x-slot name="heading">
-                {{ $this->getHeading() }}
+                Profile Management
             </x-slot>
 
-            @if($this->getSubheading())
-                <x-slot name="description">
-                    {{ $this->getSubheading() }}
-                </x-slot>
-            @endif
+            <x-slot name="description">
+                Manage your personal information and preferences.
+            </x-slot>
 
             <form wire:submit="save">
                 {{ $this->form }}

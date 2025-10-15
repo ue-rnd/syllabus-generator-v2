@@ -1,5 +1,5 @@
 <x-filament-widgets::widget>
-    <x-filament::section>
+    <x-filament::section class="h-full">
         <x-slot name="heading">
             <div class="flex items-center gap-2">
                 <x-heroicon-o-bell class="h-5 w-5" />
@@ -8,8 +8,10 @@
         </x-slot>
 
         @if($hasNotifications)
-            <div class="space-y-3">
-                @foreach($notifications as $notification)
+            {{-- Container fills available height and allows the list to scroll --}}
+            <div class="flex flex-col h-[300px]"> {{-- match height visually to user profile widget --}}
+                <div class="overflow-y-auto space-y-3 px-0">
+                    @foreach($notifications as $notification)
                     <div class="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
                         <div class="flex-shrink-0">
                             @switch($notification->type)
@@ -50,22 +52,35 @@
                             </div>
                         @endif
                     </div>
-                @endforeach
+                    @endforeach
+                </div>
+                {{-- footer --}}
+                @if($notifications->count() >= 10)
+                    <div class="mt-5 text-center">
+                        @if(\Illuminate\Support\Facades\Route::has('filament.admin.pages.notifications'))
+                            <x-filament::button
+                                outlined
+                                size="sm"
+                                href="{{ route('filament.admin.pages.notifications') }}"
+                            >
+                                View All Notifications
+                            </x-filament::button>
+                        @else
+                            <x-filament::button
+                                outlined
+                                size="sm"
+                                disabled
+                            >
+                                View All Notifications
+                            </x-filament::button>
+                        @endif
+                    </div>
+                @endif
             </div>
 
-            @if($notifications->count() >= 10)
-                <div class="mt-4 text-center">
-                    <x-filament::button
-                        outlined
-                        size="sm"
-                        href="{{ route('filament.admin.pages.notifications') }}"
-                    >
-                        View All Notifications
-                    </x-filament::button>
-                </div>
-            @endif
+            {{-- duplicate footer removed --}}
         @else
-            <div class="text-center py-6">
+            <div class="text-center py-6 h-[300px] flex flex-col items-center justify-center"> {{-- keep empty state same height --}}
                 <x-heroicon-o-bell-slash class="mx-auto h-12 w-12 text-gray-400" />
                 <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No notifications</h3>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">You're all caught up!</p>

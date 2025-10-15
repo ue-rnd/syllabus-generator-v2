@@ -9,7 +9,11 @@ class NotificationsWidget extends Widget
 {
     protected string $view = 'filament.admin.widgets.notifications-widget';
 
-    protected int|string|array $columnSpan = 'full';
+    /**
+     * Make the widget full width on small screens and span 4 columns on large screens
+     * so it pairs with the profile widget (6 + 4 = 10 columns on large screens).
+     */
+    protected int|string|array $columnSpan = ['sm' => 'full', 'lg' => 4];
 
     protected static ?int $sort = 1;
 
