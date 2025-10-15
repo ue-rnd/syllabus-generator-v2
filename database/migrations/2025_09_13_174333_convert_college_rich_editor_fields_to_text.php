@@ -24,7 +24,7 @@ return new class extends Migration
                 if (is_array($objectives)) {
                     $html = '<ul>';
                     foreach ($objectives as $objective) {
-                        $html .= '<li>'.htmlspecialchars($objective).'</li>';
+                        $html .= '<li>' . htmlspecialchars($objective) . '</li>';
                     }
                     $html .= '</ul>';
                     $updates['objectives'] = $html;

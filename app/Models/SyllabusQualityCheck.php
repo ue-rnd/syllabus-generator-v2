@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property-read \App\Models\Syllabus $syllabus
+ * @property-read \App\Models\QualityChecklist $qualityChecklist
+ */
 class SyllabusQualityCheck extends Model
 {
     use HasFactory;
@@ -28,12 +32,12 @@ class SyllabusQualityCheck extends Model
         'auto_generated' => 'boolean',
     ];
 
-    public function syllabus()
+    public function syllabus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Syllabus::class);
     }
 
-    public function qualityChecklist()
+    public function qualityChecklist(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(QualityChecklist::class);
     }
@@ -63,7 +67,7 @@ class SyllabusQualityCheck extends Model
         $checklist = $this->qualityChecklist;
         $syllabus = $this->syllabus;
 
-        if (!$checklist || !$syllabus) {
+        if (! $checklist || ! $syllabus) {
             return;
         }
 
@@ -160,6 +164,7 @@ class SyllabusQualityCheck extends Model
     public function getCompletionRateAttribute(): float
     {
         $total = $this->total_items_count;
+
         return $total > 0 ? round(($this->passed_items_count / $total) * 100, 1) : 0;
     }
 
@@ -174,7 +179,7 @@ class SyllabusQualityCheck extends Model
         ];
     }
 
-    public static function createForSyllabus(Syllabus $syllabus, QualityChecklist $checklist, User $checker = null): self
+    public static function createForSyllabus(Syllabus $syllabus, QualityChecklist $checklist, ?User $checker = null): self
     {
         return self::create([
             'syllabus_id' => $syllabus->id,

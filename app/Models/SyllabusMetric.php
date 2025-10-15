@@ -22,7 +22,7 @@ class SyllabusMetric extends Model
     ];
 
     protected $casts = [
-        'metric_value' => 'decimal:2',
+        'metric_value' => 'float',
         'period_start' => 'date',
         'period_end' => 'date',
         'metadata' => 'array',
@@ -45,6 +45,7 @@ class SyllabusMetric extends Model
         if ($scopeId) {
             $query->where('scope_id', $scopeId);
         }
+
         return $query;
     }
 
@@ -151,9 +152,12 @@ class SyllabusMetric extends Model
     private static function calculateComplianceRate(array $parameters): float
     {
         $total = StandardsCompliance::count();
-        if ($total === 0) return 0;
+        if ($total === 0) {
+            return 0;
+        }
 
         $compliant = StandardsCompliance::where('compliance_status', 'compliant')->count();
+
         return round(($compliant / $total) * 100, 2);
     }
 
@@ -163,7 +167,9 @@ class SyllabusMetric extends Model
             ->whereNotNull('dean_approved_at')
             ->get();
 
-        if ($approvedSyllabi->isEmpty()) return 0;
+        if ($approvedSyllabi->isEmpty()) {
+            return 0;
+        }
 
         $totalDays = 0;
         foreach ($approvedSyllabi as $syllabus) {
@@ -177,7 +183,9 @@ class SyllabusMetric extends Model
     {
         $qualityChecks = SyllabusQualityCheck::whereNotNull('overall_score')->get();
 
-        if ($qualityChecks->isEmpty()) return 0;
+        if ($qualityChecks->isEmpty()) {
+            return 0;
+        }
 
         return round($qualityChecks->avg('overall_score'), 2);
     }

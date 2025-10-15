@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QualityChecklistItem> $activeItems
+ */
 class QualityChecklist extends Model
 {
     use HasFactory, SoftDeletes;
@@ -100,7 +103,7 @@ class QualityChecklist extends Model
             ->where('syllabus_id', $syllabus->id)
             ->first();
 
-        if (!$syllabusCheck) {
+        if (! $syllabusCheck) {
             return ['rate' => 0, 'completed' => 0, 'total' => $totalItems];
         }
 
@@ -113,7 +116,7 @@ class QualityChecklist extends Model
         return [
             'rate' => $rate,
             'completed' => $completedItems,
-            'total' => $totalItems
+            'total' => $totalItems,
         ];
     }
 

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class DatabaseBackupController extends Controller
 {
     /**
-     * Download a database backup file
+     * Download a database backup file.
      */
     public function download(DatabaseBackup $backup): StreamedResponse
     {
@@ -29,7 +29,7 @@ class DatabaseBackupController extends Controller
 
         // Get the file from storage
         $disk = Storage::disk('backups');
-        
+
         // Generate download filename
         $downloadName = sprintf(
             '%s_%s.sql',

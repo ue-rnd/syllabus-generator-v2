@@ -27,25 +27,25 @@ class QualityStandardsTable
                 TextColumn::make('type')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'institutional' => Color::Blue,
-                        'accreditation' => Color::Green,
-                        'departmental' => Color::Yellow,
-                        'program' => Color::Purple,
-                        'course' => Color::Orange,
-                        default => Color::Gray,
+                        'institutional' => 'blue',
+                        'accreditation' => 'green',
+                        'departmental' => 'yellow',
+                        'program' => 'purple',
+                        'course' => 'orange',
+                        default => 'gray',
                     })
                     ->sortable(),
 
                 TextColumn::make('category')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'content' => Color::Blue,
-                        'structure' => Color::Green,
-                        'assessment' => Color::Orange,
-                        'learning_outcomes' => Color::Purple,
-                        'resources' => Color::Pink,
-                        'policies' => Color::Indigo,
-                        default => Color::Gray,
+                        'content' => 'blue',
+                        'structure' => 'green',
+                        'assessment' => 'orange',
+                        'learning_outcomes' => 'purple',
+                        'resources' => 'pink',
+                        'policies' => 'indigo',
+                        default => 'gray',
                     })
                     ->sortable(),
 
@@ -115,11 +115,11 @@ class QualityStandardsTable
                     ->trueLabel('Active only')
                     ->falseLabel('Inactive only'),
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

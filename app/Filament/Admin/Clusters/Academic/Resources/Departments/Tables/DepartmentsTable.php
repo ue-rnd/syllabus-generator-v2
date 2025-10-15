@@ -67,7 +67,7 @@ class DepartmentsTable
                 ReplicateAction::make('duplicate')
                     ->label('Duplicate')
                     ->beforeReplicaSaved(function (array $data): array {
-                        $data['name'] = $data['name'].' (Copy)';
+                        $data['name'] = $data['name'] . ' (Copy)';
 
                         return $data;
                     }),

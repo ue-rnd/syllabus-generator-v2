@@ -1,0 +1,33 @@
+parameters:
+    level: 5
+    paths:
+        - app
+        - config
+        - database
+        - routes
+    
+    # Reduce strictness on PHPDoc types
+    treatPhpDocTypesAsCertain: false
+    
+    # Exclude paths
+    excludePaths:
+        - app/Providers/Filament/AdminPanelProvider.php
+        - bootstrap
+        - storage
+        - vendor
+    
+    # Ignore common Laravel/Filament errors
+    ignoreErrors:
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model#'
+        - '#Unsafe usage of new static#'
+        - '#Match arm comparison between .+ and .+ is always true#'
+    
+    # Performance
+    parallel:
+        jobSize: 20
+        maximumNumberOfProcesses: 4
+        minimumNumberOfJobsPerProcess: 2
+    
+    # Report settings
+    reportUnmatchedIgnoredErrors: false

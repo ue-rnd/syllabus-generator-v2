@@ -5,7 +5,7 @@ namespace App\Constants;
 class DepartmentConstants
 {
     /**
-     * Department status options
+     * Department status options.
      */
     public const STATUSES = [
         'active' => 'Active',
@@ -16,7 +16,7 @@ class DepartmentConstants
     ];
 
     /**
-     * Department types
+     * Department types.
      */
     public const TYPES = [
         'academic' => 'Academic Department',
@@ -32,7 +32,7 @@ class DepartmentConstants
     ];
 
     /**
-     * Get status color for badges
+     * Get status color for badges.
      */
     public static function getStatusColor(string $status): string
     {
@@ -47,7 +47,7 @@ class DepartmentConstants
     }
 
     /**
-     * Get type color for badges
+     * Get type color for badges.
      */
     public static function getTypeColor(string $type): string
     {
@@ -67,7 +67,7 @@ class DepartmentConstants
     }
 
     /**
-     * Get statuses as options for select fields
+     * Get statuses as options for select fields.
      */
     public static function getStatusOptions(): array
     {
@@ -75,7 +75,7 @@ class DepartmentConstants
     }
 
     /**
-     * Get types as options for select fields
+     * Get types as options for select fields.
      */
     public static function getTypeOptions(): array
     {

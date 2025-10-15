@@ -5,14 +5,14 @@ namespace App\Filament\Admin\Clusters\QualityAssurance\Resources\QualityStandard
 use App\Models\College;
 use App\Models\Department;
 use App\Models\QualityStandard;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\JsonEditor;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class QualityStandardForm
@@ -63,7 +63,7 @@ class QualityStandardForm
                                     ->options(fn (callable $get) => Department::where('college_id', $get('college_id'))->pluck('name', 'id'))
                                     ->searchable()
                                     ->preload()
-                                    ->disabled(fn (callable $get) => !$get('college_id')),
+                                    ->disabled(fn (callable $get) => ! $get('college_id')),
 
                                 TextInput::make('sort_order')
                                     ->numeric()
@@ -118,8 +118,8 @@ class QualityStandardForm
                                 Textarea::make('description')
                                     ->rows(2),
 
-                                JsonEditor::make('validation_rules')
-                                    ->label('Validation Rules (JSON)')
+                                KeyValue::make('validation_rules')
+                                    ->label('Validation Rules')
                                     ->columnSpanFull(),
                             ])
                             ->columnSpanFull()

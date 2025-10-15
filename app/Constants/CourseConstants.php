@@ -5,7 +5,7 @@ namespace App\Constants;
 class CourseConstants
 {
     /**
-     * Course types
+     * Course types.
      */
     public const TYPES = [
         'pure_onsite' => 'Pure Onsite',
@@ -15,7 +15,7 @@ class CourseConstants
     ];
 
     /**
-     * Course delivery modes
+     * Course delivery modes.
      */
     public const DELIVERY_MODES = [
         'face_to_face' => 'Face-to-Face',
@@ -30,7 +30,7 @@ class CourseConstants
     ];
 
     /**
-     * Course status options
+     * Course status options.
      */
     public const STATUSES = [
         'active' => 'Active',
@@ -41,7 +41,7 @@ class CourseConstants
     ];
 
     /**
-     * Grade levels/years
+     * Grade levels/years.
      */
     public const GRADE_LEVELS = [
         'freshman' => 'Freshman (1st Year)',
@@ -53,7 +53,7 @@ class CourseConstants
     ];
 
     /**
-     * Get course type color for badges
+     * Get course type color for badges.
      */
     public static function getTypeColor(string $type): string
     {
@@ -67,7 +67,7 @@ class CourseConstants
     }
 
     /**
-     * Get delivery mode color for badges
+     * Get delivery mode color for badges.
      */
     public static function getDeliveryModeColor(string $mode): string
     {
@@ -83,7 +83,7 @@ class CourseConstants
     }
 
     /**
-     * Get status color for badges
+     * Get status color for badges.
      */
     public static function getStatusColor(string $status): string
     {
@@ -98,7 +98,7 @@ class CourseConstants
     }
 
     /**
-     * Get grade level color for badges
+     * Get grade level color for badges.
      */
     public static function getGradeLevelColor(string $level): string
     {
@@ -114,7 +114,7 @@ class CourseConstants
     }
 
     /**
-     * Get course types as options for select fields
+     * Get course types as options for select fields.
      */
     public static function getTypeOptions(): array
     {
@@ -122,7 +122,7 @@ class CourseConstants
     }
 
     /**
-     * Get delivery modes as options for select fields
+     * Get delivery modes as options for select fields.
      */
     public static function getDeliveryModeOptions(): array
     {
@@ -130,7 +130,7 @@ class CourseConstants
     }
 
     /**
-     * Get statuses as options for select fields
+     * Get statuses as options for select fields.
      */
     public static function getStatusOptions(): array
     {
@@ -138,7 +138,7 @@ class CourseConstants
     }
 
     /**
-     * Get grade levels as options for select fields
+     * Get grade levels as options for select fields.
      */
     public static function getGradeLevelOptions(): array
     {

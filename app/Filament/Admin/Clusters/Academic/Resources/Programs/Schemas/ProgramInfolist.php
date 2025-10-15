@@ -28,6 +28,7 @@ class ProgramInfolist
                             ->label('Department'),
                         TextEntry::make('description')
                             ->placeholder('-')
+                            ->html()
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),

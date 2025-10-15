@@ -12,7 +12,7 @@ use Spatie\TemporaryDirectory\TemporaryDirectory;
 class SyllabusPdfService
 {
     /**
-     * Generate PDF for a syllabus using Spatie Browsershot
+     * Generate PDF for a syllabus using Spatie Browsershot.
      */
     public function generatePdf(Syllabus $syllabus, bool $useNewTemplate = true): string
     {
@@ -56,7 +56,7 @@ class SyllabusPdfService
             return $pdfPath;
         } catch (\Exception $e) {
             // Log the error for debugging
-            Log::error('PDF Generation Error: '.$e->getMessage(), [
+            Log::error('PDF Generation Error: ' . $e->getMessage(), [
                 'syllabus_id' => $syllabus->id,
                 'course_id' => $syllabus->course_id,
                 'trace' => $e->getTraceAsString(),
@@ -68,7 +68,7 @@ class SyllabusPdfService
     }
 
     /**
-     * Prepare data for PDF generation
+     * Prepare data for PDF generation.
      */
     private function preparePdfData(Syllabus $syllabus): array
     {
@@ -113,7 +113,7 @@ class SyllabusPdfService
                             })->toArray();
                     }
                 } catch (\Exception $e) {
-                    $errors[] = 'Error loading prerequisites: '.$e->getMessage();
+                    $errors[] = 'Error loading prerequisites: ' . $e->getMessage();
                 }
             }
 
@@ -178,7 +178,7 @@ class SyllabusPdfService
                 'errors' => $errors,
             ];
         } catch (\Exception $e) {
-            $errors[] = 'Data preparation error: '.$e->getMessage();
+            $errors[] = 'Data preparation error: ' . $e->getMessage();
 
             // Return minimal data structure to prevent template errors
             return [
@@ -201,7 +201,7 @@ class SyllabusPdfService
                 'course_outcomes' => [],
                 'total_hours' => ['lecture' => 0, 'laboratory' => 0, 'total' => 0, 'weeks' => 0],
                 'approval_details' => ['status' => 'error'],
-                'academicYear' => date('Y').'-'.(date('Y') + 1),
+                'academicYear' => date('Y') . '-' . (date('Y') + 1),
                 'generated_at' => now(),
                 'generated_by' => Auth::user(),
                 'logo_path' => public_path('images/logo_ue.png'),
@@ -213,7 +213,7 @@ class SyllabusPdfService
     }
 
     /**
-     * Get preparers data with user information
+     * Get preparers data with user information.
      */
     private function getPreparersData(Syllabus $syllabus): array
     {
@@ -252,13 +252,16 @@ class SyllabusPdfService
     }
 
     /**
-     * Process learning matrix for PDF display
+     * Process learning matrix for PDF display.
      */
     private function processingLearningMatrix(Syllabus $syllabus, array $learningMatrix): array
     {
         return collect($learningMatrix)->map(function ($item) use ($syllabus) {
             // Process week range
             $weekDisplay = 'N/A';
+            $start = null;
+            $end = null;
+            
             if (isset($item['week_range'])) {
                 $weekRange = $item['week_range'];
                 $start = $weekRange['start'] ?? null;
@@ -279,7 +282,7 @@ class SyllabusPdfService
                 return [
                     'verb' => ucfirst($outcome['verb'] ?? ''),
                     'content' => $outcome['content'] ?? '',
-                    'full_text' => ucfirst($outcome['verb'] ?? '').' '.($outcome['content'] ?? ''),
+                    'full_text' => ucfirst($outcome['verb'] ?? '') . ' ' . ($outcome['content'] ?? ''),
                 ];
             })->toArray();
 
@@ -316,7 +319,7 @@ class SyllabusPdfService
     }
 
     /**
-     * Download PDF with proper filename
+     * Download PDF with proper filename.
      */
     public function downloadPdf(Syllabus $syllabus, ?string $filename = null): \Symfony\Component\HttpFoundation\Response
     {
@@ -333,7 +336,7 @@ class SyllabusPdfService
     }
 
     /**
-     * Stream PDF for inline viewing
+     * Stream PDF for inline viewing.
      */
     public function streamPdf(Syllabus $syllabus): \Symfony\Component\HttpFoundation\Response
     {
@@ -344,12 +347,12 @@ class SyllabusPdfService
 
         return response()->file($pdfPath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$filename.'"',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
         ]);
     }
 
     /**
-     * Generate error PDF when main generation fails
+     * Generate error PDF when main generation fails.
      */
     private function generateErrorPdf(Syllabus $syllabus, string $errorMessage): string
     {
@@ -371,7 +374,6 @@ class SyllabusPdfService
 
         Browsershot::html($html)
             ->format($config['pdf']['format'])
-            ->portrait()
             ->margins(
                 $config['pdf']['margins']['top'],
                 $config['pdf']['margins']['right'],
@@ -388,7 +390,7 @@ class SyllabusPdfService
     }
 
     /**
-     * Get current academic year
+     * Get current academic year.
      */
     private function getCurrentAcademicYear(): string
     {
@@ -397,14 +399,14 @@ class SyllabusPdfService
 
         // Academic year typically starts in August/September
         if ($currentMonth >= 8) {
-            return $currentYear.'-'.($currentYear + 1);
+            return $currentYear . '-' . ($currentYear + 1);
         } else {
-            return ($currentYear - 1).'-'.$currentYear;
+            return ($currentYear - 1) . '-' . $currentYear;
         }
     }
 
     /**
-     * Get base64 encoded logo for PDF embedding
+     * Get base64 encoded logo for PDF embedding.
      */
     private function getLogoBase64(): ?string
     {
@@ -413,7 +415,7 @@ class SyllabusPdfService
         if (file_exists($logoPath)) {
             $imageData = base64_encode(file_get_contents($logoPath));
 
-            return 'data:image/png;base64,'.$imageData;
+            return 'data:image/png;base64,' . $imageData;
         }
 
         return null;

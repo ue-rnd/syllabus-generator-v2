@@ -19,7 +19,7 @@ class ProgramFactory extends Factory
         $levels = ['associate', 'bachelor', 'masteral', 'doctoral'];
 
         return [
-            'name' => $this->faker->unique()->words(3, true).' Program',
+            'name' => $this->faker->unique()->words(3, true) . ' Program',
             'level' => $this->faker->randomElement($levels),
             'code' => $this->faker->unique()->lexify('????'),
             'description' => $this->faker->paragraphs(2, true),

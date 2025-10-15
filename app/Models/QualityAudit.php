@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QualityAuditFinding> $findings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Syllabus> $syllabi
+ */
 class QualityAudit extends Model
 {
     use HasFactory, SoftDeletes;
@@ -51,7 +55,7 @@ class QualityAudit extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function findings()
+    public function findings(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(QualityAuditFinding::class);
     }
@@ -61,7 +65,7 @@ class QualityAudit extends Model
         return $this->hasMany(QualityAuditAction::class);
     }
 
-    public function syllabi()
+    public function syllabi(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Syllabus::class, 'quality_audit_syllabi')
             ->withPivot(['audit_score', 'compliance_status', 'notes'])
@@ -167,6 +171,7 @@ class QualityAudit extends Model
         }
 
         $totalScore = $auditedSyllabi->sum('pivot.audit_score');
+
         return round($totalScore / $auditedSyllabi->count(), 2);
     }
 
@@ -179,6 +184,7 @@ class QualityAudit extends Model
         }
 
         $compliantCount = $auditedSyllabi->where('pivot.compliance_status', 'compliant')->count();
+
         return round(($compliantCount / $auditedSyllabi->count()) * 100, 1);
     }
 

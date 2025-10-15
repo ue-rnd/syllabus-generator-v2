@@ -78,7 +78,7 @@ class DatabaseBackup extends Model
 
     public function getFormattedFileSizeAttribute(): string
     {
-        if (!$this->file_size) {
+        if (! $this->file_size) {
             return 'Unknown';
         }
 
@@ -94,16 +94,16 @@ class DatabaseBackup extends Model
 
     public function getFileExists(): bool
     {
-        if (!$this->file_path) {
+        if (! $this->file_path) {
             return false;
         }
-        
+
         return Storage::disk('backups')->exists($this->file_path);
     }
 
     public function getDownloadUrl(): ?string
     {
-        if (!$this->getFileExists()) {
+        if (! $this->getFileExists()) {
             return null;
         }
 
@@ -113,10 +113,10 @@ class DatabaseBackup extends Model
 
     public function deleteFile(): bool
     {
-        if (!$this->file_path) {
+        if (! $this->file_path) {
             return true;
         }
-        
+
         if ($this->getFileExists()) {
             return Storage::disk('backups')->delete($this->file_path);
         }

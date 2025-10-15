@@ -72,7 +72,7 @@ class CollegesChartWidget extends ChartWidget
                     'ticks' => [
                         'stepSize' => 1,
                         'maxTicksLimit' => 6,
-                    ]
+                    ],
                 ],
             ],
         ];

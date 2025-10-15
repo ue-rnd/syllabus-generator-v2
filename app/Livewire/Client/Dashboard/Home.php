@@ -58,10 +58,10 @@ class Home extends Component
         // Apply search filter
         if ($this->search) {
             $syllabiQuery->where(function ($query) {
-                $query->where('name', 'like', '%'.$this->search.'%')
+                $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhereHas('course', function ($q) {
-                        $q->where('name', 'like', '%'.$this->search.'%')
-                            ->orWhere('code', 'like', '%'.$this->search.'%');
+                        $q->where('name', 'like', '%' . $this->search . '%')
+                            ->orWhere('code', 'like', '%' . $this->search . '%');
                     });
             });
         }

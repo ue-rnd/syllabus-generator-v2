@@ -148,7 +148,7 @@ class Tutorial extends Model
                 ->whereDate('created_at', today())
                 ->exists();
 
-            if (!$existingView) {
+            if (! $existingView) {
                 $this->views()->create([
                     'user_id' => $user->id,
                     'ip_address' => request()->ip(),

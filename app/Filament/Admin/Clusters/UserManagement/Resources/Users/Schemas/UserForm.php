@@ -8,14 +8,13 @@ use App\Models\Department;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\KeyValue;
-use Filament\Schemas\Components\Grid;
-use Filament\Forms\Components\JsonEditor;
 use Filament\Forms\Components\Repeater;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Spatie\Permission\Models\Role;
 
@@ -132,7 +131,7 @@ class UserForm
                                     ->options(fn (callable $get) => Department::where('college_id', $get('college_id'))->pluck('name', 'id'))
                                     ->searchable()
                                     ->preload()
-                                    ->disabled(fn (callable $get) => !$get('college_id')),
+                                    ->disabled(fn (callable $get) => ! $get('college_id')),
                             ]),
                     ]),
 

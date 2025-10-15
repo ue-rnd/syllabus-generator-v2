@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property-read \App\Models\Syllabus $syllabus
+ * @property-read \App\Models\User $suggestedBy
+ */
 class SyllabusSuggestion extends Model
 {
     use HasFactory;
@@ -37,7 +41,7 @@ class SyllabusSuggestion extends Model
     /**
      * Get the syllabus that this suggestion belongs to.
      */
-    public function syllabus()
+    public function syllabus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Syllabus::class);
     }
@@ -45,7 +49,7 @@ class SyllabusSuggestion extends Model
     /**
      * Get the user who made this suggestion.
      */
-    public function suggestedBy()
+    public function suggestedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'suggested_by');
     }
@@ -226,8 +230,8 @@ class SyllabusSuggestion extends Model
         return [
             'field' => $this->field_name,
             'field_label' => $this->change_description,
-            'current' => $this->current_value ? substr(strip_tags($this->current_value), 0, 100).'...' : '(empty)',
-            'suggested' => substr(strip_tags($this->suggested_value), 0, 100).'...',
+            'current' => $this->current_value ? substr(strip_tags($this->current_value), 0, 100) . '...' : '(empty)',
+            'suggested' => substr(strip_tags($this->suggested_value), 0, 100) . '...',
         ];
     }
 }

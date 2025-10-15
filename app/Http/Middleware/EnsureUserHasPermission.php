@@ -14,18 +14,18 @@ class EnsureUserHasPermission
      */
     public function handle(Request $request, Closure $next, string $permission): Response
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect('/admin/login');
         }
 
         $user = Auth::user();
 
         // Check if user has the required permission
-        if (!$user->can($permission)) {
+        if (! $user->can($permission)) {
             // Return 403 for API requests, redirect for web requests
             if ($request->expectsJson()) {
                 return response()->json([
-                    'message' => 'You do not have permission to access this resource.'
+                    'message' => 'You do not have permission to access this resource.',
                 ], 403);
             }
 

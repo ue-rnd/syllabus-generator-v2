@@ -2,15 +2,14 @@
 
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\Users\Schemas;
 
-use App\Constants\UserConstants;
 use App\Models\User;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class UserInfolist
@@ -20,94 +19,94 @@ class UserInfolist
         return $schema
             ->schema([
                 Grid::make(2)
-                        ->schema([
-                            Group::make([
-                                Section::make('Personal Information')
-                                    ->schema([
-                                        ImageEntry::make('avatar')
-                                            ->label('Profile Picture')
-                                            ->circular()
-                                            ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&background=6366f1&color=fff')
-                                            ->size(100),
+                    ->schema([
+                        Group::make([
+                            Section::make('Personal Information')
+                                ->schema([
+                                    ImageEntry::make('avatar')
+                                        ->label('Profile Picture')
+                                        ->circular()
+                                        ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&background=6366f1&color=fff')
+                                        ->imageSize(100),
 
-                                        TextEntry::make('name')
-                                            ->label('Full Name')
+                                    TextEntry::make('name')
+                                        ->label('Full Name')
 
-                                            ->weight('bold'),
+                                        ->weight('bold'),
 
-                                        TextEntry::make('email')
-                                            ->label('Email Address')
-                                            ->icon('heroicon-o-envelope')
-                                            ->copyable(),
+                                    TextEntry::make('email')
+                                        ->label('Email Address')
+                                        ->icon('heroicon-o-envelope')
+                                        ->copyable(),
 
-                                        TextEntry::make('phone')
-                                            ->label('Phone Number')
-                                            ->icon('heroicon-o-phone')
-                                            ->placeholder('Not provided'),
+                                    TextEntry::make('phone')
+                                        ->label('Phone Number')
+                                        ->icon('heroicon-o-phone')
+                                        ->placeholder('Not provided'),
 
-                                        TextEntry::make('birth_date')
-                                            ->label('Date of Birth')
-                                            ->date()
-                                            ->placeholder('Not provided'),
+                                    TextEntry::make('birth_date')
+                                        ->label('Date of Birth')
+                                        ->date()
+                                        ->placeholder('Not provided'),
 
-                                        TextEntry::make('address')
-                                            ->label('Address')
-                                            ->placeholder('Not provided')
-                                            ->limit(100),
+                                    TextEntry::make('address')
+                                        ->label('Address')
+                                        ->placeholder('Not provided')
+                                        ->limit(100),
 
-                                        TextEntry::make('bio')
-                                            ->label('Biography')
-                                            ->placeholder('No biography provided')
-                                            ->limit(200),
-                                    ])
-                                    ->columns(1),
-                            ]),
-
-                            Group::make([
-                                Section::make('Professional Information')
-                                    ->schema([
-                                        TextEntry::make('employee_id')
-                                            ->label('Employee ID')
-                                            ->placeholder('Not assigned'),
-
-                                        TextEntry::make('position')
-                                            ->label('Academic Position')
-                                            ->formatStateUsing(fn ($state, $record) => $record->getPositionTitleAttribute())
-                                            ->badge()
-                                            ->color(fn ($state) => match ($state) {
-                                                'superadmin' => 'danger',
-                                                'dean', 'associate_dean' => 'warning',
-                                                'department_chair' => 'info',
-                                                'qa_representative' => 'success',
-                                                'faculty' => 'primary',
-                                                default => 'gray',
-                                            }),
-
-                                        TextEntry::make('employment_type')
-                                            ->label('Employment Type')
-                                            ->formatStateUsing(fn ($state) => $state ? ucwords(str_replace('_', ' ', $state)) : 'Not set')
-                                            ->badge(),
-
-                                        TextEntry::make('title')
-                                            ->label('Job Title')
-                                            ->placeholder('Uses academic position'),
-
-                                        TextEntry::make('college.name')
-                                            ->label('College')
-                                            ->placeholder('Not assigned'),
-
-                                        TextEntry::make('department.name')
-                                            ->label('Department')
-                                            ->placeholder('Not assigned'),
-
-                                        TextEntry::make('hire_date')
-                                            ->label('Hire Date')
-                                            ->date()
-                                            ->placeholder('Not set'),
-                                    ])
-                                    ->columns(1),
-                            ]),
+                                    TextEntry::make('bio')
+                                        ->label('Biography')
+                                        ->placeholder('No biography provided')
+                                        ->limit(200),
+                                ])
+                                ->columns(1),
                         ]),
+
+                        Group::make([
+                            Section::make('Professional Information')
+                                ->schema([
+                                    TextEntry::make('employee_id')
+                                        ->label('Employee ID')
+                                        ->placeholder('Not assigned'),
+
+                                    TextEntry::make('position')
+                                        ->label('Academic Position')
+                                        ->formatStateUsing(fn ($state, $record) => $record->getPositionTitleAttribute())
+                                        ->badge()
+                                        ->color(fn ($state) => match ($state) {
+                                            'superadmin' => 'danger',
+                                            'dean', 'associate_dean' => 'warning',
+                                            'department_chair' => 'info',
+                                            'qa_representative' => 'success',
+                                            'faculty' => 'primary',
+                                            default => 'gray',
+                                        }),
+
+                                    TextEntry::make('employment_type')
+                                        ->label('Employment Type')
+                                        ->formatStateUsing(fn ($state) => $state ? ucwords(str_replace('_', ' ', $state)) : 'Not set')
+                                        ->badge(),
+
+                                    TextEntry::make('title')
+                                        ->label('Job Title')
+                                        ->placeholder('Uses academic position'),
+
+                                    TextEntry::make('college.name')
+                                        ->label('College')
+                                        ->placeholder('Not assigned'),
+
+                                    TextEntry::make('department.name')
+                                        ->label('Department')
+                                        ->placeholder('Not assigned'),
+
+                                    TextEntry::make('hire_date')
+                                        ->label('Hire Date')
+                                        ->date()
+                                        ->placeholder('Not set'),
+                                ])
+                                ->columns(1),
+                        ]),
+                    ]),
 
                 Section::make('Emergency Contacts')
                     ->schema([
@@ -265,7 +264,6 @@ class UserInfolist
                     ])
                     ->collapsible()
                     ->collapsed(),
-
 
             ]);
     }

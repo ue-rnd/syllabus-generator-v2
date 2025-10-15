@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('syllabi', function (Blueprint $table) {
             $table->timestamp('qa_reviewed_at')->nullable()->after('dean_approved_at');
-            $table->foreignId('qa_reviewed_by')->nullable()->constrained('users')->onDelete('set null')->after('qa_reviewed_at');
+            $table->foreignId('qa_reviewed_by')->nullable()->after('qa_reviewed_at')->constrained('users')->onDelete('set null');
         });
     }
 

@@ -130,19 +130,18 @@ class SyllabusForm
                                         ->live()
                                         ->afterStateUpdated(function ($set, $get, $state) {
                                             if ($state) {
-                                                $course = Course::find($state);
+                                                $course = Course::with('college', 'programs.department')->find($state);
 
                                                 if ($course) {
-                                                    $set('name', $course->name.' Syllabus '.'('.(new \DateTime)->format('Y-m-d').')');
-                                                    $set('reviewed_by', $course->programs()->first()->department->department_chair_id);
-                                                    $set('recommending_approval', $course->college->associate_dean_id);
-                                                    $set('approved_by', $course->college->dean_id);
+                                                    $set('name', $course->name . ' Syllabus ' . '(' . (new \DateTime)->format('Y-m-d') . ')');
+                                                    $set('reviewed_by', $course->programs()->first()?->department?->department_chair_id);
+                                                    $set('recommending_approval', $course->college?->associate_dean_id);
+                                                    $set('approved_by', $course->college?->dean_id);
 
                                                     $program = $course->programs()->first();
                                                     $programOutcomes = $program->outcomes;
 
-                                                    function parseOutcome(string $outcomes)
-                                                    {
+                                                    $parseOutcome = function (string $outcomes) {
                                                         $outcome = [];
 
                                                         preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $outcomes, $matches);
@@ -155,9 +154,9 @@ class SyllabusForm
                                                         }
 
                                                         return $outcome;
-                                                    }
+                                                    };
 
-                                                    $programOutcomesFormatted = parseOutcome($programOutcomes);
+                                                    $programOutcomesFormatted = $parseOutcome($programOutcomes);
 
                                                     $set('program_outcomes', $programOutcomesFormatted);
                                                 }
@@ -425,7 +424,7 @@ class SyllabusForm
                                 ->columnSpanFull()
                                 ->addActionLabel('Add Item')
                                 ->collapsible()
-                                ->itemLabel(function (array $state): ?string {
+                                ->itemLabel(function (array $state): string {
                                     if (! isset($state['week_range'])) {
                                         return 'New Week';
                                     }
@@ -477,13 +476,13 @@ class SyllabusForm
                                                 $end = is_numeric($end) ? (int) $end : $start;
 
                                                 if (! $start) {
-                                                    $errors[] = 'Item '.($index + 1).': Week is required';
+                                                    $errors[] = 'Item ' . ($index + 1) . ': Week is required';
 
                                                     continue;
                                                 }
 
                                                 if ($isRange && $start > $end) {
-                                                    $errors[] = 'Item '.($index + 1).': Start week must be less than or equal to end week';
+                                                    $errors[] = 'Item ' . ($index + 1) . ': Start week must be less than or equal to end week';
 
                                                     continue;
                                                 }
@@ -491,7 +490,7 @@ class SyllabusForm
                                                 // Check for overlaps
                                                 for ($week = $start; $week <= $end; $week++) {
                                                     if (isset($occupiedWeeks[$week])) {
-                                                        $errors[] = "Week {$week} is used in multiple items (Item ".($index + 1).')';
+                                                        $errors[] = "Week {$week} is used in multiple items (Item " . ($index + 1) . ')';
                                                     } else {
                                                         $occupiedWeeks[$week] = true;
                                                     }
@@ -499,7 +498,7 @@ class SyllabusForm
                                             }
 
                                             if (! empty($errors)) {
-                                                $fail('Week validation errors: '.implode('; ', $errors));
+                                                $fail('Week validation errors: ' . implode('; ', $errors));
                                             }
                                         };
                                     },

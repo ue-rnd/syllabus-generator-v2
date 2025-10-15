@@ -5,7 +5,7 @@ namespace App\Constants;
 class SettingConstants
 {
     /**
-     * College status options
+     * College status options.
      */
     public const CATEGORIES = [
         'academic' => 'Academic',
@@ -13,7 +13,7 @@ class SettingConstants
     ];
 
     /**
-     * Get status color for badges
+     * Get status color for badges.
      */
     public static function getCategoryColor(string $category): string
     {
@@ -25,7 +25,7 @@ class SettingConstants
     }
 
     /**
-     * Get statuses as options for select fields
+     * Get statuses as options for select fields.
      */
     public static function getCategoryOptions(): array
     {

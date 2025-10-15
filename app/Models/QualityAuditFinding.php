@@ -131,11 +131,11 @@ class QualityAuditFinding extends Model
 
     public function getDaysUntilDueAttribute(): ?int
     {
-        if (!$this->due_date) {
+        if (! $this->due_date) {
             return null;
         }
 
-        return now()->diffInDays($this->due_date, false);
+        return (int) now()->diffInDays($this->due_date, false);
     }
 
     public static function getSeverityOptions(): array

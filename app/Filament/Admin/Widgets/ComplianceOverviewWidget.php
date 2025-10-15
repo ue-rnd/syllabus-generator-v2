@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Widgets;
 
 use App\Models\StandardsCompliance;
-use App\Models\Syllabus;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\ChartWidget;
 

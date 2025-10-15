@@ -326,7 +326,7 @@ class RolePermissionSeeder extends Seeder
             ];
 
             foreach ($newPermissions as $permission) {
-                if (!in_array($permission, $adminPermissions)) {
+                if (! in_array($permission, $adminPermissions)) {
                     $permissionModel = Permission::where('name', $permission)->first();
                     if ($permissionModel) {
                         $adminRole->givePermissionTo($permissionModel);

@@ -16,7 +16,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -98,7 +97,8 @@ class SyllabusSuggestionsResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                BadgeColumn::make('status')
+                TextColumn::make('status')
+                    ->badge()
                     ->colors([
                         'warning' => 'pending',
                         'success' => 'approved',
@@ -138,13 +138,13 @@ class SyllabusSuggestionsResource extends Resource
                     ->searchable()
                     ->preload(),
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
                 Action::make('approve')
                     ->label('Approve')
                     ->icon('heroicon-o-check')
                     ->color('success')
-                    ->form([
+                    ->schema([
                         Textarea::make('comments')
                             ->label('Comments (optional)')
                             ->placeholder('Add any comments about this approval...')
@@ -153,7 +153,8 @@ class SyllabusSuggestionsResource extends Resource
                     ->action(function (SyllabusSuggestion $record, array $data) {
                         $record->approve(auth()->user(), $data['comments'] ?? null);
                     })
-                    ->visible(fn (SyllabusSuggestion $record) => $record->isPending() && $record->canBeReviewedBy(auth()->user())
+                    ->visible(
+                        fn (SyllabusSuggestion $record) => $record->isPending() && $record->canBeReviewedBy(auth()->user())
                     )
                     ->requiresConfirmation()
                     ->modalHeading('Approve Suggestion')
@@ -163,7 +164,7 @@ class SyllabusSuggestionsResource extends Resource
                     ->label('Reject')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->form([
+                    ->schema([
                         Textarea::make('comments')
                             ->label('Reason for rejection')
                             ->placeholder('Please explain why this suggestion is being rejected...')
@@ -173,7 +174,8 @@ class SyllabusSuggestionsResource extends Resource
                     ->action(function (SyllabusSuggestion $record, array $data) {
                         $record->reject(auth()->user(), $data['comments']);
                     })
-                    ->visible(fn (SyllabusSuggestion $record) => $record->isPending() && $record->canBeReviewedBy(auth()->user())
+                    ->visible(
+                        fn (SyllabusSuggestion $record) => $record->isPending() && $record->canBeReviewedBy(auth()->user())
                     )
                     ->requiresConfirmation()
                     ->modalHeading('Reject Suggestion')
@@ -191,7 +193,7 @@ class SyllabusSuggestionsResource extends Resource
                     ->modalHeading('Proposed Changes')
                     ->slideOver(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

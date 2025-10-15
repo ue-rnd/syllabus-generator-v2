@@ -34,16 +34,16 @@ class Register extends Component
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'middlename' => ['nullable', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
         // Build full name from components
         $name = $validated['firstname'];
         if (! empty($validated['middlename'])) {
-            $name .= ' '.$validated['middlename'];
+            $name .= ' ' . $validated['middlename'];
         }
-        $name .= ' '.$validated['lastname'];
+        $name .= ' ' . $validated['lastname'];
 
         $validated['name'] = $name;
         $validated['password'] = Hash::make($validated['password']);

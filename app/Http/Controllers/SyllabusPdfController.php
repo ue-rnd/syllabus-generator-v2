@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SyllabusPdfController extends Controller
 {
     /**
-     * View PDF in browser
+     * View PDF in browser.
      */
     public function view(Syllabus $syllabus): Response
     {
@@ -18,12 +18,12 @@ class SyllabusPdfController extends Controller
 
             return $pdfService->streamPdf($syllabus);
         } catch (\Exception $e) {
-            abort(500, 'Error generating PDF: '.$e->getMessage());
+            abort(500, 'Error generating PDF: ' . $e->getMessage());
         }
     }
 
     /**
-     * Download PDF
+     * Download PDF.
      */
     public function download(Syllabus $syllabus): Response
     {
@@ -32,7 +32,7 @@ class SyllabusPdfController extends Controller
 
             return $pdfService->downloadPdf($syllabus);
         } catch (\Exception $e) {
-            abort(500, 'Error generating PDF: '.$e->getMessage());
+            abort(500, 'Error generating PDF: ' . $e->getMessage());
         }
     }
 }

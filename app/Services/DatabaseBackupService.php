@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\DatabaseBackup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class DatabaseBackupService
 {
@@ -14,13 +13,13 @@ class DatabaseBackupService
     public function __construct()
     {
         // Ensure backup disk exists
-        if (!Storage::disk($this->backupDisk)->exists('')) {
+        if (! Storage::disk($this->backupDisk)->exists('')) {
             Storage::disk($this->backupDisk)->makeDirectory('');
         }
     }
 
     /**
-     * Create a full database backup
+     * Create a full database backup.
      */
     public function createFullBackup(?string $name = null, ?string $description = null): DatabaseBackup
     {
@@ -35,7 +34,7 @@ class DatabaseBackupService
     }
 
     /**
-     * Create a selective backup of specific tables
+     * Create a selective backup of specific tables.
      */
     public function createSelectiveBackup(array $tables, ?string $name = null, ?string $description = null): DatabaseBackup
     {
@@ -48,7 +47,7 @@ class DatabaseBackupService
     }
 
     /**
-     * Create a backup of specified tables
+     * Create a backup of specified tables.
      */
     protected function createBackup(array $tables, string $name, string $description, string $type): DatabaseBackup
     {
@@ -101,15 +100,15 @@ class DatabaseBackupService
     }
 
     /**
-     * Generate SQL dump for specified tables
+     * Generate SQL dump for specified tables.
      */
     protected function generateSqlDump(array $tables): string
     {
         $driver = DB::connection()->getDriverName();
-        
-        $sql = "-- Database Backup Generated: " . now() . "\n";
+
+        $sql = '-- Database Backup Generated: ' . now() . "\n";
         $sql .= "-- Database Driver: {$driver}\n";
-        $sql .= "-- Tables: " . implode(', ', $tables) . "\n\n";
+        $sql .= '-- Tables: ' . implode(', ', $tables) . "\n\n";
 
         if ($driver === 'mysql') {
             $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n\n";
@@ -118,7 +117,7 @@ class DatabaseBackupService
         }
 
         foreach ($tables as $table) {
-            if (!$this->tableExists($table)) {
+            if (! $this->tableExists($table)) {
                 continue;
             }
 
@@ -136,7 +135,7 @@ class DatabaseBackupService
     }
 
     /**
-     * Get SQL dump for a specific table
+     * Get SQL dump for a specific table.
      */
     protected function getTableDump(string $table): string
     {
@@ -146,8 +145,8 @@ class DatabaseBackupService
         if ($driver === 'sqlite') {
             // SQLite: Get schema from sqlite_master
             $schema = DB::select("SELECT sql FROM sqlite_master WHERE type='table' AND name=?", [$table]);
-            
-            if (!empty($schema)) {
+
+            if (! empty($schema)) {
                 $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
                 $sql .= $schema[0]->sql . ";\n\n";
             }
@@ -155,7 +154,7 @@ class DatabaseBackupService
             // MySQL: Use SHOW CREATE TABLE
             $createTable = DB::select("SHOW CREATE TABLE `{$table}`")[0];
             $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
-            $sql .= $createTable->{"Create Table"} . ";\n\n";
+            $sql .= $createTable->{'Create Table'} . ";\n\n";
         }
 
         // Get table data
@@ -172,6 +171,7 @@ class DatabaseBackupService
                     if ($value === null) {
                         return 'NULL';
                     }
+
                     return "'" . addslashes((string) $value) . "'";
                 }, $recordArray);
 
@@ -185,11 +185,11 @@ class DatabaseBackupService
     }
 
     /**
-     * Restore database from backup file
+     * Restore database from backup file.
      */
     public function restoreFromBackup(DatabaseBackup $backup): bool
     {
-        if (!$backup->getFileExists()) {
+        if (! $backup->getFileExists()) {
             throw new \Exception('Backup file not found');
         }
 
@@ -202,7 +202,7 @@ class DatabaseBackupService
             DB::transaction(function () use ($statements) {
                 foreach ($statements as $statement) {
                     $statement = trim($statement);
-                    if (!empty($statement) && !str_starts_with($statement, '--')) {
+                    if (! empty($statement) && ! str_starts_with($statement, '--')) {
                         DB::unprepared($statement);
                     }
                 }
@@ -211,12 +211,12 @@ class DatabaseBackupService
             return true;
 
         } catch (\Exception $e) {
-            throw new \Exception("Failed to restore backup: " . $e->getMessage());
+            throw new \Exception('Failed to restore backup: ' . $e->getMessage());
         }
     }
 
     /**
-     * Import SQL file and create restore record
+     * Import SQL file and create restore record.
      */
     public function importSqlFile(string $filePath, string $originalName): bool
     {
@@ -224,7 +224,7 @@ class DatabaseBackupService
             $sqlContent = Storage::disk('temp')->get($filePath);
 
             // Validate SQL content
-            if (!$this->validateSqlContent($sqlContent)) {
+            if (! $this->validateSqlContent($sqlContent)) {
                 throw new \Exception('Invalid SQL file format');
             }
 
@@ -234,7 +234,7 @@ class DatabaseBackupService
             DB::transaction(function () use ($statements) {
                 foreach ($statements as $statement) {
                     $statement = trim($statement);
-                    if (!empty($statement) && !str_starts_with($statement, '--')) {
+                    if (! empty($statement) && ! str_starts_with($statement, '--')) {
                         DB::unprepared($statement);
                     }
                 }
@@ -257,12 +257,12 @@ class DatabaseBackupService
             return true;
 
         } catch (\Exception $e) {
-            throw new \Exception("Failed to import SQL file: " . $e->getMessage());
+            throw new \Exception('Failed to import SQL file: ' . $e->getMessage());
         }
     }
 
     /**
-     * Split SQL content into individual statements
+     * Split SQL content into individual statements.
      */
     protected function splitSqlStatements(string $sqlContent): array
     {
@@ -272,16 +272,16 @@ class DatabaseBackupService
 
         foreach ($lines as $line) {
             $line = trim($line);
-            if (!str_starts_with($line, '--') && !empty($line)) {
+            if (! str_starts_with($line, '--') && ! empty($line)) {
                 $sql .= $line . "\n";
             }
         }
 
-        return array_filter(explode(';', $sql), fn($statement) => !empty(trim($statement)));
+        return array_filter(explode(';', $sql), fn ($statement) => ! empty(trim($statement)));
     }
 
     /**
-     * Validate SQL content
+     * Validate SQL content.
      */
     protected function validateSqlContent(string $sqlContent): bool
     {
@@ -298,7 +298,7 @@ class DatabaseBackupService
     }
 
     /**
-     * Check if table exists
+     * Check if table exists.
      */
     protected function tableExists(string $table): bool
     {
@@ -306,7 +306,7 @@ class DatabaseBackupService
     }
 
     /**
-     * Get record counts for tables
+     * Get record counts for tables.
      */
     protected function getTableRecordCounts(array $tables): array
     {
@@ -322,7 +322,7 @@ class DatabaseBackupService
     }
 
     /**
-     * Clean up old backup files
+     * Clean up old backup files.
      */
     public function cleanupOldBackups(int $daysToKeep = 30): int
     {
@@ -342,7 +342,7 @@ class DatabaseBackupService
     }
 
     /**
-     * Get backup statistics
+     * Get backup statistics.
      */
     public function getBackupStatistics(): array
     {

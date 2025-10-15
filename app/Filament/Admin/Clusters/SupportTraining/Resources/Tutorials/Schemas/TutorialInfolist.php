@@ -81,7 +81,7 @@ class TutorialInfolist
                             ])
                             ->columns(2)
                             ->columnSpanFull()
-                            ->visible(fn ($record) => !empty($record->attachments)),
+                            ->visible(fn ($record) => ! empty($record->attachments)),
                         TextEntry::make('no_attachments')
                             ->label('Attachments')
                             ->default('No attachments')
@@ -103,8 +103,8 @@ class TutorialInfolist
                             ])
                             ->columns(4)
                             ->columnSpanFull()
-                            ->visible(fn ($record) => !empty($record->tags)),
-                        
+                            ->visible(fn ($record) => ! empty($record->tags)),
+
                         TextEntry::make('no_tags')
                             ->label('Tags')
                             ->default('No tags assigned')

@@ -12,7 +12,6 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
@@ -33,9 +32,10 @@ class SyllabiTable
                     ->searchable()
                     ->sortable(),
 
-                BadgeColumn::make('status')
+                TextColumn::make('status')
                     ->label('Status')
                     ->formatStateUsing(fn (string $state): string => SyllabusConstants::getStatusOptions()[$state])
+                    ->badge()
                     ->color(fn (string $state): string => SyllabusConstants::getStatusColor($state))
                     ->sortable(),
 
@@ -66,7 +66,7 @@ class SyllabiTable
                     ->searchable()
                     ->toggleable(),
 
-                BadgeColumn::make('suggestions_count')
+                TextColumn::make('suggestions_count')
                     ->label('Suggestions')
                     ->formatStateUsing(function ($record): string {
                         $count = $record->suggestions()->count();
@@ -74,6 +74,7 @@ class SyllabiTable
 
                         return $pending > 0 ? "{$pending} pending" : ($count > 0 ? "{$count} total" : '0');
                     })
+                    ->badge()
                     ->color(function ($record): string {
                         $pending = $record->pendingSuggestions()->count();
 
@@ -121,25 +122,28 @@ class SyllabiTable
                     ->label('Suggest Changes')
                     ->icon('heroicon-o-light-bulb')
                     ->color('info')
-                    ->url(fn ($record): string => route('filament.admin.academic.resources.syllabi.edit', $record).'?mode=suggest')
-                    ->visible(fn ($record): bool => $record->canSuggestChanges(auth()->user()) &&
+                    ->url(fn ($record): string => route('filament.admin.academic.resources.syllabi.edit', $record) . '?mode=suggest')
+                    ->visible(
+                        fn ($record): bool => $record->canSuggestChanges(auth()->user()) &&
                         ! $record->canBeDirectlyEditedBy(auth()->user())
                     ),
                 Action::make('view_suggestions')
                     ->label('View Suggestions')
                     ->icon('heroicon-o-document-text')
                     ->color('gray')
-                    ->url(fn ($record): string => route('filament.admin.academic.resources.syllabus-suggestions.index').'?tableFilters[syllabus][value]='.$record->id)
-                    ->visible(fn ($record): bool => $record->canViewSuggestions(auth()->user()) &&
+                    ->url(fn ($record): string => route('filament.admin.academic.resources.syllabus-suggestions.index') . '?tableFilters[syllabus][value]=' . $record->id)
+                    ->visible(
+                        fn ($record): bool => $record->canViewSuggestions(auth()->user()) &&
                         $record->suggestions()->count() > 0
                     )
-                    ->badge(fn ($record): ?string => $record->pendingSuggestions()->count() > 0 ?
+                    ->badge(
+                        fn ($record): ?string => $record->pendingSuggestions()->count() > 0 ?
                         (string) $record->pendingSuggestions()->count() : null
                     ),
                 ReplicateAction::make('duplicate')
                     ->label('Duplicate')
                     ->beforeReplicaSaved(function (array $data): array {
-                        $data['name'] = $data['name'].' (Copy)';
+                        $data['name'] = $data['name'] . ' (Copy)';
                         $data['status'] = 'draft';
                         $data['submitted_at'] = null;
                         $data['dept_chair_reviewed_at'] = null;

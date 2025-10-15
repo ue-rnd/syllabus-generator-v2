@@ -138,8 +138,9 @@ class CourseForm
                             ])
                             ->addActionLabel('Add Course Outcome')
                             ->collapsible()
-                            ->itemLabel(fn (array $state): ?string => isset($state['verb']) && isset($state['content'])
-                                    ? ucfirst($state['verb']).' '.\Str::limit(strip_tags(is_string($state['content']) ? $state['content'] : ''), 50)
+                            ->itemLabel(
+                                fn (array $state): string => isset($state['verb']) && isset($state['content'])
+                                    ? ucfirst($state['verb']) . ' ' . \Str::limit(strip_tags(is_string($state['content']) ? $state['content'] : ''), 50)
                                     : 'New Outcome'
                             )
                             ->columnSpanFull(),

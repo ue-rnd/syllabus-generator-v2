@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class AuthSecurityService
 {
     /**
-     * Handle successful login
+     * Handle successful login.
      */
     public function handleSuccessfulLogin(User $user, string $ip): void
     {
@@ -24,7 +24,7 @@ class AuthSecurityService
     }
 
     /**
-     * Handle failed login attempt
+     * Handle failed login attempt.
      */
     public function handleFailedLogin(string $email, string $ip): void
     {
@@ -50,7 +50,7 @@ class AuthSecurityService
     }
 
     /**
-     * Check if password meets security requirements
+     * Check if password meets security requirements.
      */
     public function validatePasswordStrength(string $password): array
     {
@@ -60,19 +60,19 @@ class AuthSecurityService
             $errors[] = 'Password must be at least 8 characters long.';
         }
 
-        if (!preg_match('/[A-Z]/', $password)) {
+        if (! preg_match('/[A-Z]/', $password)) {
             $errors[] = 'Password must contain at least one uppercase letter.';
         }
 
-        if (!preg_match('/[a-z]/', $password)) {
+        if (! preg_match('/[a-z]/', $password)) {
             $errors[] = 'Password must contain at least one lowercase letter.';
         }
 
-        if (!preg_match('/[0-9]/', $password)) {
+        if (! preg_match('/[0-9]/', $password)) {
             $errors[] = 'Password must contain at least one number.';
         }
 
-        if (!preg_match('/[^A-Za-z0-9]/', $password)) {
+        if (! preg_match('/[^A-Za-z0-9]/', $password)) {
             $errors[] = 'Password must contain at least one special character.';
         }
 
@@ -80,7 +80,7 @@ class AuthSecurityService
     }
 
     /**
-     * Check if password has been used recently
+     * Check if password has been used recently.
      */
     public function isPasswordRecentlyUsed(User $user, string $password): bool
     {
@@ -94,7 +94,7 @@ class AuthSecurityService
     }
 
     /**
-     * Force password change for user
+     * Force password change for user.
      */
     public function forcePasswordChange(User $user): void
     {
@@ -110,7 +110,7 @@ class AuthSecurityService
     }
 
     /**
-     * Lock user account
+     * Lock user account.
      */
     public function lockAccount(User $user, int $minutes = 30): void
     {
@@ -125,7 +125,7 @@ class AuthSecurityService
     }
 
     /**
-     * Unlock user account
+     * Unlock user account.
      */
     public function unlockAccount(User $user): void
     {
@@ -139,7 +139,7 @@ class AuthSecurityService
     }
 
     /**
-     * Generate secure random password
+     * Generate secure random password.
      */
     public function generateSecurePassword(int $length = 12): string
     {
@@ -167,7 +167,7 @@ class AuthSecurityService
     }
 
     /**
-     * Generate two-factor authentication secret
+     * Generate two-factor authentication secret.
      */
     public function generateTwoFactorSecret(): string
     {
@@ -175,7 +175,7 @@ class AuthSecurityService
     }
 
     /**
-     * Generate recovery codes for two-factor authentication
+     * Generate recovery codes for two-factor authentication.
      */
     public function generateRecoveryCodes(int $count = 8): array
     {
@@ -189,7 +189,7 @@ class AuthSecurityService
     }
 
     /**
-     * Log security event
+     * Log security event.
      */
     public function logSecurityEvent(string $event, User $user, array $context = []): void
     {
@@ -203,7 +203,7 @@ class AuthSecurityService
 }
 
 /**
- * Base32 encoding function (simple implementation)
+ * Base32 encoding function (simple implementation).
  */
 function base32_encode(string $data): string
 {

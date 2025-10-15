@@ -67,7 +67,7 @@ class PendingSyllabiWidget extends BaseWidget
                     ->options($this->getAvailableStatuses())
                     ->default($this->getDefaultStatusFilter()),
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-o-eye')
@@ -95,7 +95,7 @@ class PendingSyllabiWidget extends BaseWidget
 
                         return [];
                     })
-                    ->modalHeading(fn (Syllabus $record) => 'Approve Syllabus: '.$record->name)
+                    ->modalHeading(fn (Syllabus $record) => 'Approve Syllabus: ' . $record->name)
                     ->modalDescription('Please review and approve this syllabus.')
                     ->modalSubmitActionLabel('Approve')
                     ->action(function (Syllabus $record, array $data) use ($user) {
@@ -116,7 +116,7 @@ class PendingSyllabiWidget extends BaseWidget
                             ->rows(3)
                             ->placeholder('Please provide reasons for rejection...'),
                     ])
-                    ->modalHeading(fn (Syllabus $record) => 'Reject Syllabus: '.$record->name)
+                    ->modalHeading(fn (Syllabus $record) => 'Reject Syllabus: ' . $record->name)
                     ->modalDescription('Please provide clear reasons for rejecting this syllabus.')
                     ->modalSubmitActionLabel('Reject')
                     ->action(function (Syllabus $record, array $data) use ($user) {

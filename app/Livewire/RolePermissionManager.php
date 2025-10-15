@@ -59,19 +59,19 @@ class RolePermissionManager extends Component
     {
         $roles = Role::with('permissions')
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%'.$this->search.'%');
+                $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->paginate(10);
 
         $permissions = Permission::when($this->search, function ($query) {
-            $query->where('name', 'like', '%'.$this->search.'%');
+            $query->where('name', 'like', '%' . $this->search . '%');
         })
             ->paginate(10);
 
         $users = User::with('roles', 'permissions')
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%'.$this->search.'%')
-                    ->orWhere('email', 'like', '%'.$this->search.'%');
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
             })
             ->paginate(10);
 

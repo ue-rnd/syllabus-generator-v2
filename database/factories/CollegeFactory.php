@@ -17,7 +17,7 @@ class CollegeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->words(3, true).' College',
+            'name' => $this->faker->unique()->words(3, true) . ' College',
             'code' => $this->faker->unique()->lexify('???'),
             'description' => $this->faker->paragraphs(2, true),
             'mission' => $this->faker->paragraphs(3, true),

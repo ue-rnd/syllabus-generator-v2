@@ -72,7 +72,8 @@ class PendingSuggestionsWidget extends TableWidget
                 Action::make('view')
                     ->label('Review')
                     ->icon('heroicon-o-eye')
-                    ->url(fn (SyllabusSuggestion $record): string => route('filament.admin.academic.resources.syllabus-suggestions.view', $record)
+                    ->url(
+                        fn (SyllabusSuggestion $record): string => route('filament.admin.academic.resources.syllabus-suggestions.view', $record)
                     ),
             ])
             ->emptyStateHeading('No pending suggestions')

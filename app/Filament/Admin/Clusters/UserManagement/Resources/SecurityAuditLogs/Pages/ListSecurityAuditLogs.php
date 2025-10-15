@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLogs
 use App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLogs\SecurityAuditLogResource;
 use App\Models\SecurityAuditLog;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +23,10 @@ class ListSecurityAuditLogs extends ListRecords
                 ->color('gray')
                 ->action(function () {
                     // Export functionality would go here
-                    $this->notify('success', 'Export functionality to be implemented');
+                    Notification::make()
+                        ->success()
+                        ->title('Export functionality to be implemented')
+                        ->send();
                 })
                 ->visible(fn () => auth()->user()->can('export reports')),
 
@@ -35,7 +39,10 @@ class ListSecurityAuditLogs extends ListRecords
                 ->modalDescription('This will delete audit logs older than 90 days. This action cannot be undone.')
                 ->action(function () {
                     $deleted = SecurityAuditLog::where('created_at', '<', now()->subDays(90))->delete();
-                    $this->notify('success', "Deleted {$deleted} old audit logs");
+                    Notification::make()
+                        ->success()
+                        ->title("Deleted {$deleted} old audit logs")
+                        ->send();
                 })
                 ->visible(fn () => auth()->user()->can('manage system settings')),
         ];

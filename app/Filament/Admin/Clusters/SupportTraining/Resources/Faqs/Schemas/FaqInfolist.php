@@ -56,8 +56,8 @@ class FaqInfolist
                             ])
                             ->columns(4)
                             ->columnSpanFull()
-                            ->visible(fn ($record) => !empty($record->tags)),
-                        
+                            ->visible(fn ($record) => ! empty($record->tags)),
+
                         TextEntry::make('no_tags')
                             ->label('Tags')
                             ->default('No tags assigned')

@@ -30,9 +30,9 @@ class UserFactory extends Factory
         // Build full name
         $name = $firstname;
         if ($middlename) {
-            $name .= ' '.$middlename;
+            $name .= ' ' . $middlename;
         }
-        $name .= ' '.$lastname;
+        $name .= ' ' . $lastname;
 
         return [
             'name' => $name,

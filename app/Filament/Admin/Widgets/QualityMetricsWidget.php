@@ -43,19 +43,35 @@ class QualityMetricsWidget extends BaseWidget
 
     private function getPassRateColor(float $passRate): string
     {
-        if ($passRate >= 90) return Color::Emerald;
-        if ($passRate >= 75) return Color::Green;
-        if ($passRate >= 60) return Color::Yellow;
-        return Color::Red;
+        if ($passRate >= 90) {
+            return 'emerald';
+        }
+        if ($passRate >= 75) {
+            return 'green';
+        }
+        if ($passRate >= 60) {
+            return 'yellow';
+        }
+
+        return 'red';
     }
 
     private function getScoreColor(float $score): string
     {
-        if ($score >= 90) return Color::Emerald;
-        if ($score >= 80) return Color::Green;
-        if ($score >= 70) return Color::Yellow;
-        if ($score >= 60) return Color::Orange;
-        return Color::Red;
+        if ($score >= 90) {
+            return 'emerald';
+        }
+        if ($score >= 80) {
+            return 'green';
+        }
+        if ($score >= 70) {
+            return 'yellow';
+        }
+        if ($score >= 60) {
+            return 'orange';
+        }
+
+        return 'red';
     }
 
     private function getPassRateChart(): array

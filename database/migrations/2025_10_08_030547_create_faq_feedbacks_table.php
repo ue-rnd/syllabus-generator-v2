@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('comment')->nullable();
             $table->string('ip_address')->nullable();
             $table->timestamps();
-            
+
             // Indexes
             $table->index(['faq_id']);
             $table->index(['user_id']);

@@ -5,8 +5,8 @@ namespace App\Filament\Admin\Clusters\SupportTraining\Resources\Tutorials\Pages;
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Tutorials\TutorialResource;
 use App\Models\Tutorial;
 use Filament\Actions;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListTutorials extends ListRecords

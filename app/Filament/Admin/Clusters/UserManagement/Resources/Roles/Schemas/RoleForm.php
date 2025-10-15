@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Clusters\UserManagement\Resources\Roles\Schemas;
 
-use Filament\Forms\Components\MultiSelect;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -16,10 +16,10 @@ class RoleForm
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
-                MultiSelect::make('permissions')
+                Select::make('permissions')
                     ->relationship('permissions', 'name')
-                    ->preload()
                     ->multiple()
+                    ->preload()
                     ->searchable(),
             ]);
     }

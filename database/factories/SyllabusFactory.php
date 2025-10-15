@@ -15,7 +15,7 @@ class SyllabusFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\App\Models\Syllabus>
      */
     protected $model = Syllabus::class;
 
@@ -27,7 +27,7 @@ class SyllabusFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->sentence(3).' Syllabus',
+            'name' => $this->faker->sentence(3) . ' Syllabus',
             'description' => $this->faker->paragraph(2),
             'course_id' => Course::factory(),
             'default_lecture_hours' => $this->faker->randomFloat(1, 1, 4),
@@ -86,7 +86,7 @@ class SyllabusFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'course_id' => $course->id,
-            'name' => $course->name.' Syllabus',
+            'name' => $course->name . ' Syllabus',
         ]);
     }
 

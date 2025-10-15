@@ -39,7 +39,7 @@ class ViewSyllabus extends Component
         // Strict validation before allowing submission
         $errors = $this->validateForApproval();
         if (! empty($errors)) {
-            session()->flash('error', 'Please complete all required fields before submitting for approval. '.implode(' ', array_slice($errors, 0, 3)));
+            session()->flash('error', 'Please complete all required fields before submitting for approval. ' . implode(' ', array_slice($errors, 0, 3)));
 
             return null;
         }
@@ -96,7 +96,7 @@ class ViewSyllabus extends Component
             $newSyllabus = $this->syllabus->replicate();
 
             // Update the name to indicate it's a copy
-            $newSyllabus->name = $this->syllabus->name.' (Copy)';
+            $newSyllabus->name = $this->syllabus->name . ' (Copy)';
 
             // Reset status and approval fields for the duplicate
             $newSyllabus->status = 'draft';
@@ -130,7 +130,7 @@ class ViewSyllabus extends Component
             return $this->redirectRoute('syllabus.edit', $newSyllabus);
 
         } catch (\Exception $e) {
-            session()->flash('error', 'Failed to duplicate syllabus: '.$e->getMessage());
+            session()->flash('error', 'Failed to duplicate syllabus: ' . $e->getMessage());
 
             return;
         }
@@ -249,15 +249,15 @@ class ViewSyllabus extends Component
 
                 if ($start !== null) {
                     if ($start < 1 || $start > $weekFinal) {
-                        $errors[] = 'Learning matrix item '.($idx + 1).": Week start must be between 1 and {$weekFinal}.";
+                        $errors[] = 'Learning matrix item ' . ($idx + 1) . ": Week start must be between 1 and {$weekFinal}.";
                     }
                 }
                 if ($isRange) {
                     if ($end < $start) {
-                        $errors[] = 'Learning matrix item '.($idx + 1).': Week end must be greater than or equal to week start.';
+                        $errors[] = 'Learning matrix item ' . ($idx + 1) . ': Week end must be greater than or equal to week start.';
                     }
                     if ($end > $weekFinal) {
-                        $errors[] = 'Learning matrix item '.($idx + 1).": Week end must not exceed {$weekFinal}.";
+                        $errors[] = 'Learning matrix item ' . ($idx + 1) . ": Week end must not exceed {$weekFinal}.";
                     }
                 }
 
@@ -277,7 +277,7 @@ class ViewSyllabus extends Component
                 }
             }
             if (! empty($missing)) {
-                $errors[] = 'Learning matrix must cover all weeks from 1 to '.$weekFinal.'. Missing weeks: '.implode(', ', array_slice($missing, 0, 10)).(count($missing) > 10 ? '…' : '');
+                $errors[] = 'Learning matrix must cover all weeks from 1 to ' . $weekFinal . '. Missing weeks: ' . implode(', ', array_slice($missing, 0, 10)) . (count($missing) > 10 ? '…' : '');
             }
         }
 

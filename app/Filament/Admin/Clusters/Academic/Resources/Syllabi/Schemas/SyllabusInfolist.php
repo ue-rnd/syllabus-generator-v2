@@ -82,9 +82,9 @@ class SyllabusInfolist
                                         try {
                                             $user = User::find($state);
 
-                                            return $user?->full_name ?? $user?->name ?? 'Unknown User';
+                                            return $user->full_name ?? $user->name ?? 'Unknown User';
                                         } catch (\Exception $e) {
-                                            return 'User ID: '.$state;
+                                            return 'User ID: ' . $state;
                                         }
                                     }),
                                 TextEntry::make('user_role')
@@ -369,9 +369,9 @@ class SyllabusInfolist
                                         try {
                                             $user = User::find($state);
 
-                                            return $user?->full_name ?? $user?->name ?? 'Unknown User';
+                                            return $user->full_name ?? $user->name ?? 'Unknown User';
                                         } catch (\Exception $e) {
-                                            return 'User ID: '.$state;
+                                            return 'User ID: ' . $state;
                                         }
                                     }),
 

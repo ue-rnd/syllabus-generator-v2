@@ -12,6 +12,10 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property-read \App\Models\College|null $college
+ * @property-read \App\Models\Department|null $department
+ */
 class User extends Authenticatable
 {
     use HasFactory, HasRoles, Notifiable, SoftDeletes;
@@ -62,13 +66,13 @@ class User extends Authenticatable
     {
         static::creating(function ($user) {
             if ($user->firstname && $user->lastname) {
-                $user->name = trim($user->firstname.' '.$user->lastname);
+                $user->name = trim($user->firstname . ' ' . $user->lastname);
             }
         });
 
         static::updating(function ($user) {
             if ($user->firstname && $user->lastname) {
-                $user->name = trim($user->firstname.' '.$user->lastname);
+                $user->name = trim($user->firstname . ' ' . $user->lastname);
             }
         });
     }
@@ -110,12 +114,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's initials
+     * Get the user's initials.
      */
     public function initials(): string
     {
         if ($this->firstname && $this->lastname) {
-            return Str::substr($this->firstname, 0, 1).Str::substr($this->lastname, 0, 1);
+            return Str::substr($this->firstname, 0, 1) . Str::substr($this->lastname, 0, 1);
         }
 
         return Str::of($this->name)
@@ -126,13 +130,13 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's full name
+     * Get the user's full name.
      */
     public function getFullNameAttribute(): string
     {
         if ($this->firstname && $this->lastname) {
             $name = $this->firstname;
-            $name .= ' '.$this->lastname;
+            $name .= ' ' . $this->lastname;
 
             return $name;
         }
@@ -141,7 +145,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's name (computed attribute for Filament compatibility)
+     * Get the user's name (computed attribute for Filament compatibility).
      */
     public function getNameAttribute(): string
     {
@@ -154,19 +158,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's display name (first name + last name)
+     * Get the user's display name (first name + last name).
      */
     public function getDisplayNameAttribute(): string
     {
         if ($this->firstname && $this->lastname) {
-            return $this->firstname.' '.$this->lastname;
+            return $this->firstname . ' ' . $this->lastname;
         }
 
         return $this->name;
     }
 
     /**
-     * Check if user is active
+     * Check if user is active.
      */
     public function isActive(): bool
     {
@@ -174,7 +178,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a superadmin
+     * Check if user is a superadmin.
      */
     public function isSuperAdmin(): bool
     {
@@ -182,7 +186,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a dean
+     * Check if user is a dean.
      */
     public function isDean(): bool
     {
@@ -190,7 +194,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is an associate dean
+     * Check if user is an associate dean.
      */
     public function isAssociateDean(): bool
     {
@@ -198,7 +202,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a department chair
+     * Check if user is a department chair.
      */
     public function isDepartmentChair(): bool
     {
@@ -206,7 +210,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is faculty
+     * Check if user is faculty.
      */
     public function isFaculty(): bool
     {
@@ -214,7 +218,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is a QA Representative
+     * Check if the user is a QA Representative.
      */
     public function isQARepresentative(): bool
     {
@@ -222,7 +226,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get user's primary role name (using Spatie Permissions)
+     * Get user's primary role name (using Spatie Permissions).
      */
     public function getPrimaryRoleAttribute(): string
     {
@@ -237,7 +241,7 @@ class User extends Authenticatable
             'department_chair',
             'qa_representative',
             'faculty',
-            'staff'
+            'staff',
         ];
 
         foreach ($roleHierarchy as $role) {
@@ -250,7 +254,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get user's position title (different from role)
+     * Get user's position title (different from role).
      */
     public function getPositionTitleAttribute(): string
     {
@@ -258,7 +262,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Update last login information
+     * Update last login information.
      */
     public function updateLastLogin(?string $ip = null): void
     {
@@ -270,7 +274,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Increment login attempts
+     * Increment login attempts.
      */
     public function incrementLoginAttempts(): void
     {
@@ -282,7 +286,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Lock user account until specified time
+     * Lock user account until specified time.
      */
     public function lockAccount(\DateTime $until): void
     {
@@ -293,7 +297,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Unlock user account
+     * Unlock user account.
      */
     public function unlockAccount(): void
     {
@@ -305,24 +309,47 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if account is locked
+     * Check if account is locked.
      */
     public function isLocked(): bool
     {
-        return $this->locked_until && $this->locked_until->isFuture();
+        $lockedUntil = $this->locked_until;
+        
+        if (! $lockedUntil) {
+            return false;
+        }
+        
+        if (is_string($lockedUntil)) {
+            $lockedUntil = \Carbon\Carbon::parse($lockedUntil);
+        }
+        
+        return $lockedUntil->isFuture();
     }
 
     /**
-     * Check if password must be changed
+     * Check if password must be changed.
      */
     public function mustChangePassword(): bool
     {
-        return $this->must_change_password ||
-               ($this->password_changed_at && $this->password_changed_at->diffInDays(now()) > 90);
+        if ($this->must_change_password) {
+            return true;
+        }
+        
+        $passwordChangedAt = $this->password_changed_at;
+        
+        if (! $passwordChangedAt) {
+            return false;
+        }
+        
+        if (is_string($passwordChangedAt)) {
+            $passwordChangedAt = \Carbon\Carbon::parse($passwordChangedAt);
+        }
+        
+        return $passwordChangedAt->diffInDays(now()) > 90;
     }
 
     /**
-     * Enable two-factor authentication
+     * Enable two-factor authentication.
      */
     public function enableTwoFactor(string $secret, array $recoveryCodes): void
     {
@@ -334,7 +361,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Disable two-factor authentication
+     * Disable two-factor authentication.
      */
     public function disableTwoFactor(): void
     {
@@ -346,7 +373,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get decrypted two-factor secret
+     * Get decrypted two-factor secret.
      */
     public function getTwoFactorSecret(): ?string
     {
@@ -354,7 +381,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get decrypted recovery codes
+     * Get decrypted recovery codes.
      */
     public function getTwoFactorRecoveryCodes(): array
     {
@@ -362,7 +389,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Use a recovery code
+     * Use a recovery code.
      */
     public function useRecoveryCode(string $code): bool
     {
@@ -371,8 +398,9 @@ class User extends Authenticatable
         if (($key = array_search($code, $codes)) !== false) {
             unset($codes[$key]);
             $this->update([
-                'two_factor_recovery_codes' => encrypt(array_values($codes))
+                'two_factor_recovery_codes' => encrypt(array_values($codes)),
             ]);
+
             return true;
         }
 
@@ -380,7 +408,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Scope a query to search users by name (first, last, middle, or full name)
+     * Scope a query to search users by name (first, last, middle, or full name).
      */
     public function scopeSearchByName($query, $search)
     {
@@ -396,7 +424,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Scope a query to only include active users
+     * Scope a query to only include active users.
      */
     public function scopeActive($query)
     {
@@ -404,7 +432,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the college that the user belongs to
+     * Get the college that the user belongs to.
      */
     public function college()
     {
@@ -412,7 +440,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the college that the user belongs to
+     * Get the college that the user belongs to.
      */
     public function department()
     {
@@ -420,7 +448,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a dean of a specific college
+     * Check if user is a dean of a specific college.
      */
     public function isDeanOf(College $college): bool
     {
@@ -428,7 +456,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is an associate dean of a specific college
+     * Check if user is an associate dean of a specific college.
      */
     public function isAssociateDeanOf(College $college): bool
     {
@@ -436,7 +464,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a department chair of a specific department
+     * Check if user is a department chair of a specific department.
      */
     public function isDepartmentChairOf(Department $department): bool
     {
@@ -444,7 +472,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all colleges this user has administrative access to
+     * Get all colleges this user has administrative access to.
      */
     public function getAccessibleColleges()
     {
@@ -467,7 +495,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all departments this user has administrative access to
+     * Get all departments this user has administrative access to.
      */
     public function getAccessibleDepartments()
     {
@@ -489,7 +517,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all programs this user has administrative access to
+     * Get all programs this user has administrative access to.
      */
     public function getAccessiblePrograms()
     {
@@ -503,7 +531,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all courses this user has administrative access to
+     * Get all courses this user has administrative access to.
      */
     public function getAccessibleCourses()
     {
@@ -517,7 +545,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all syllabi this user has access to
+     * Get all syllabi this user has access to.
      */
     public function getAccessibleSyllabi()
     {

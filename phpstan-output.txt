@@ -1,0 +1,1276 @@
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/QualityAssurance/Resources/QualityStandar  
+         ds/QualityStandardResource.php                                         
+ ------ ----------------------------------------------------------------------- 
+  :43    Call to static method configure() on an unknown class                  
+         App\Filament\Admin\Clusters\QualityAssurance\Resources\QualityStandar  
+         ds\Schemas\QualityStandardInfolist.                                    
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/QualityAssurance/Resources/QualityStandar  
+         ds/Schemas/QualityStandardForm.php                                     
+ ------ ----------------------------------------------------------------------- 
+  :24    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Section.                                     
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :26    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Grid.                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :49    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Section.                                     
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :51    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Grid.                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :73    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Grid.                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :88    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Grid.                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :100   Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Section.                                     
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :104   Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Grid.                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :121   Call to static method make() on an unknown class                       
+         Filament\Forms\Components\JsonEditor.                                  
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/SupportTraining/Resources/Faqs/Pages/View  
+         Faq.php                                                                
+ ------ ----------------------------------------------------------------------- 
+  :25    Cannot call method incrementViews() on                                 
+         Illuminate\Database\Eloquent\Model|int|string.                         
+         🪪  method.nonObject                                                   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/SupportTraining/Resources/Faqs/Schemas/Fa  
+         qForm.php                                                              
+ ------ ----------------------------------------------------------------------- 
+  :23    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Section.                                     
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :52    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Grid.                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :71    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Section.                                     
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :73    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Grid.                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :86    Call to static method make() on an unknown class                       
+         Filament\Forms\Components\Grid.                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/SupportTraining/Resources/Faqs/Tables/Faq  
+         sTable.php                                                             
+ ------ ----------------------------------------------------------------------- 
+  :21    Call to deprecated method actions() of class Filament\Tables\Table:    
+         Use `recordActions()` instead.                                         
+         🪪  method.deprecated                                                  
+  :21    Call to deprecated method bulkActions() of class                       
+         Filament\Tables\Table:                                                 
+         Use `toolbarActions()` instead.                                        
+         🪪  method.deprecated                                                  
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/SupportTraining/Resources/Tutorials/Pages  
+         /ViewTutorial.php                                                      
+ ------ ----------------------------------------------------------------------- 
+  :25    Cannot call method incrementViews() on                                 
+         Illuminate\Database\Eloquent\Model|int|string.                         
+         🪪  method.nonObject                                                   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/SupportTraining/Resources/Tutorials/Table  
+         s/TutorialsTable.php                                                   
+ ------ ----------------------------------------------------------------------- 
+  :22    Call to deprecated method actions() of class Filament\Tables\Table:    
+         Use `recordActions()` instead.                                         
+         🪪  method.deprecated                                                  
+  :22    Call to deprecated method bulkActions() of class                       
+         Filament\Tables\Table:                                                 
+         Use `toolbarActions()` instead.                                        
+         🪪  method.deprecated                                                  
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/UserManagement/Resources/SecurityAuditLog  
+         s/Pages/ListSecurityAuditLogs.php                                      
+ ------ ----------------------------------------------------------------------- 
+  :25    Call to an undefined method                                            
+         App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLog  
+         s\Pages\ListSecurityAuditLogs::notify().                               
+         🪪  method.notFound                                                    
+  :38    Call to an undefined method                                            
+         App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLog  
+         s\Pages\ListSecurityAuditLogs::notify().                               
+         🪪  method.notFound                                                    
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/UserManagement/Resources/SecurityAuditLog  
+         s/Pages/ViewSecurityAuditLog.php                                       
+ ------ ----------------------------------------------------------------------- 
+  :21    Cannot access property $status on                                      
+         Illuminate\Database\Eloquent\Model|int|string.                         
+         🪪  property.nonObject                                                 
+  :24    Call to an undefined method                                            
+         App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLog  
+         s\Pages\ViewSecurityAuditLog::notify().                                
+         🪪  method.notFound                                                    
+  :32    Cannot access property $status on                                      
+         Illuminate\Database\Eloquent\Model|int|string.                         
+         🪪  property.nonObject                                                 
+  :35    Call to an undefined method                                            
+         App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLog  
+         s\Pages\ViewSecurityAuditLog::notify().                                
+         🪪  method.notFound                                                    
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/UserManagement/Resources/SecurityAuditLog  
+         s/SecurityAuditLogResource.php                                         
+ ------ ----------------------------------------------------------------------- 
+  :81    Call to an undefined static method                                     
+         Illuminate\Database\Eloquent\Model::bySeverity().                      
+         🪪  staticMethod.notFound                                              
+  :82    Call to an undefined static method                                     
+         Illuminate\Database\Eloquent\Model::bySeverity().                      
+         🪪  staticMethod.notFound                                              
+  :88    Call to an undefined static method                                     
+         Illuminate\Database\Eloquent\Model::bySeverity().                      
+         🪪  staticMethod.notFound                                              
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Clusters/UserManagement/Resources/SecurityAuditLog  
+         s/Tables/SecurityAuditLogsTable.php                                    
+ ------ ----------------------------------------------------------------------- 
+  :19    Call to deprecated method actions() of class Filament\Tables\Table:    
+         Use `recordActions()` instead.                                         
+         🪪  method.deprecated                                                  
+  :19    Call to deprecated method bulkActions() of class                       
+         Filament\Tables\Table:                                                 
+         Use `toolbarActions()` instead.                                        
+         🪪  method.deprecated                                                  
+  :97    Call to deprecated method form() of class                              
+         Filament\Tables\Filters\BaseFilter:                                    
+         Use `schema()` instead.                                                
+         🪪  method.deprecated                                                  
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Pages/ChangePassword.php                            
+ ------ ----------------------------------------------------------------------- 
+  :35    Access to an undefined property                                        
+         App\Filament\Admin\Pages\ChangePassword::$form.                        
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :77    Access to an undefined property                                        
+         App\Filament\Admin\Pages\ChangePassword::$form.                        
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :149   Cannot call method diffInDays() on string.                             
+         🪪  method.nonObject                                                   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Pages/ProfileManagement.php                         
+ ------ ----------------------------------------------------------------------- 
+  :47    Access to an undefined property                                        
+         App\Filament\Admin\Pages\ProfileManagement::$form.                     
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :233   Using nullsafe property access "?->name" on left side of ?? is         
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :238   Using nullsafe property access "?->name" on left side of ?? is         
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :262   Access to an undefined property                                        
+         App\Filament\Admin\Pages\ProfileManagement::$form.                     
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ------------------------------------------------------------- 
+  Line   app/Filament/Admin/Widgets/ActiveCoursesWidget.php           
+ ------ ------------------------------------------------------------- 
+  :21    Relation 'college' is not found in App\Models\Course model.  
+         🪪  larastan.relationExistence                               
+ ------ ------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Widgets/CollegesChartWidget.php                     
+ ------ ----------------------------------------------------------------------- 
+  :26    Access to an undefined property                                        
+         App\Models\College::$departments_count.                                
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :27    Access to an undefined property App\Models\College::$programs_count.   
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :28    Access to an undefined property App\Models\College::$courses_count.    
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Widgets/LatestSyllabiWidget.php                   
+ ------ --------------------------------------------------------------------- 
+  :19    Call to deprecated method actions() of class Filament\Tables\Table:  
+         Use `recordActions()` instead.                                       
+         🪪  method.deprecated                                                
+  :21    Relation 'course' is not found in App\Models\Syllabus model.         
+         🪪  larastan.relationExistence                                       
+ ------ --------------------------------------------------------------------- 
+
+ ------ ---------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Widgets/PendingSuggestionsWidget.php               
+ ------ ---------------------------------------------------------------------- 
+  :23    Relation 'suggestedBy' is not found in App\Models\SyllabusSuggestion  
+         model.                                                                
+         🪪  larastan.relationExistence                                        
+  :23    Relation 'syllabus' is not found in App\Models\SyllabusSuggestion     
+         model.                                                                
+         🪪  larastan.relationExistence                                        
+  :23    Relation 'syllabus' is not found in App\Models\SyllabusSuggestion     
+         model.                                                                
+         🪪  larastan.relationExistence                                        
+  :67    Call to static method make() on deprecated class                      
+         Filament\Tables\Columns\BadgeColumn:                                  
+         Use `TextColumn` with the `badge()` method instead.                   
+         🪪  staticMethod.deprecatedClass                                      
+ ------ ---------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Widgets/PendingSyllabiWidget.php                  
+ ------ --------------------------------------------------------------------- 
+  :26    Call to deprecated method actions() of class Filament\Tables\Table:  
+         Use `recordActions()` instead.                                       
+         🪪  method.deprecated                                                
+  :27    Call to deprecated method getTableQuery() of class                   
+         App\Filament\Admin\Widgets\PendingSyllabiWidget:                     
+         Override the `table()` method to configure the table.                
+         🪪  method.deprecated                                                
+  :43    Call to static method make() on deprecated class                     
+         Filament\Tables\Columns\BadgeColumn:                                 
+         Use `TextColumn` with the `badge()` method instead.                  
+         🪪  staticMethod.deprecatedClass                                     
+  :77    Call to deprecated method form() of class Filament\Actions\Action:   
+         Use `schema() instead.                                               
+         🪪  method.deprecated                                                
+  :107   Call to deprecated method form() of class Filament\Actions\Action:   
+         Use `schema() instead.                                               
+         🪪  method.deprecated                                                
+  :138   Relation 'course' is not found in App\Models\Syllabus model.         
+         🪪  larastan.relationExistence                                       
+  :138   Relation 'principalPreparer' is not found in App\Models\Syllabus     
+         model.                                                               
+         🪪  larastan.relationExistence                                       
+  :154   Relation 'course' is not found in App\Models\Syllabus model.         
+         🪪  larastan.relationExistence                                       
+  :160   Relation 'course' is not found in App\Models\Syllabus model.         
+         🪪  larastan.relationExistence                                       
+  :166   Relation 'course' is not found in App\Models\Syllabus model.         
+         🪪  larastan.relationExistence                                       
+ ------ --------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Widgets/QualityMetricsWidget.php                  
+ ------ --------------------------------------------------------------------- 
+  :47    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getPassRateColor()  
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+  :50    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getPassRateColor()  
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+  :53    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getPassRateColor()  
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+  :56    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getPassRateColor()  
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+  :62    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getScoreColor()     
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+  :65    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getScoreColor()     
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+  :68    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getScoreColor()     
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+  :71    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getScoreColor()     
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+  :74    Method                                                               
+         App\Filament\Admin\Widgets\QualityMetricsWidget::getScoreColor()     
+         should return string but returns array<int, string>.                 
+         🪪  return.type                                                      
+ ------ --------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Filament/Admin/Widgets/UserProfileWidget.php                       
+ ------ ----------------------------------------------------------------------- 
+  :21    Access to an undefined property App\Models\User::$college.             
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :22    Access to an undefined property App\Models\User::$department.          
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ -------------------------------------------- 
+  Line   app/Http/Middleware/CheckAccountStatus.php  
+ ------ -------------------------------------------- 
+  :34    Cannot call method format() on string.      
+         🪪  method.nonObject                        
+ ------ -------------------------------------------- 
+
+ ------ -------------------------------------------------------------- 
+  Line   app/Livewire/Client/Dashboard/Home.php                        
+ ------ -------------------------------------------------------------- 
+  :52    Relation 'course' is not found in App\Models\Syllabus model.  
+         🪪  larastan.relationExistence                                
+  :61    Relation 'course' is not found in App\Models\Syllabus model.  
+         🪪  larastan.relationExistence                                
+ ------ -------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Livewire/Client/Syllabi/CreateSyllabus.php                         
+ ------ ----------------------------------------------------------------------- 
+  :97    Using nullsafe property access "?->value" on left side of ?? is        
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :98    Using nullsafe property access "?->value" on left side of ?? is        
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :99    Using nullsafe property access "?->value" on left side of ?? is        
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :100   Using nullsafe property access "?->value" on left side of ?? is        
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :101   Using nullsafe property access "?->value" on left side of ?? is        
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :139   Relation 'programs' is not found in App\Models\Course model.           
+         🪪  larastan.relationExistence                                         
+  :163   Access to an undefined property                                        
+         App\Models\Course|Illuminate\Database\Eloquent\Collection<int, App\Mo  
+         dels\Course>::$college.                                                
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :165   Using nullsafe property access "?->department_chair_id" on left side   
+         of ?? is unnecessary. Use -> instead.                                  
+         🪪  nullsafe.neverNull                                                 
+  :166   Using nullsafe property access "?->associate_dean_id" on left side of  
+         ?? is unnecessary. Use -> instead.                                     
+         🪪  nullsafe.neverNull                                                 
+  :167   Using nullsafe property access "?->dean_id" on left side of ?? is      
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :558   Relation 'college' is not found in App\Models\Course model.            
+         🪪  larastan.relationExistence                                         
+  :558   Relation 'programs' is not found in App\Models\Course model.           
+         🪪  larastan.relationExistence                                         
+  :571   Using nullsafe property access "?->full_name" on left side of ?? is    
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :571   Using nullsafe property access "?->name" on left side of ?? is         
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :572   Using nullsafe property access "?->full_name" on left side of ?? is    
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :572   Using nullsafe property access "?->name" on left side of ?? is         
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :573   Using nullsafe property access "?->full_name" on left side of ?? is    
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :573   Using nullsafe property access "?->name" on left side of ?? is         
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :574   Using nullsafe property access "?->full_name" on left side of ?? is    
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :574   Using nullsafe property access "?->name" on left side of ?? is         
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Livewire/Client/Syllabi/EditSyllabus.php                           
+ ------ ----------------------------------------------------------------------- 
+  :38    Access to an undefined property App\Models\Syllabus::$course.          
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Livewire/Client/Syllabi/ViewSyllabus.php                           
+ ------ ----------------------------------------------------------------------- 
+  :244   Offset 'learning_matrix' on array{ay_start: int, ay_end: int,          
+         week_prelim: int, week_midterm: int, week_final: int, course_id: int,  
+         name: string, description: string|null, ...} on left side of ??        
+         always exists and is not nullable.                                     
+         🪪  nullCoalesce.offset                                                
+  :304   Access to an undefined property App\Models\Syllabus::$course.          
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :317   Call to function is_array() with array will always evaluate to true.   
+         🪪  function.alreadyNarrowedType                                       
+         💡  Because the type is coming from a PHPDoc, you can turn off this    
+         check by setting treatPhpDocTypesAsCertain: false in your phpstan.neo  
+         n.                                                                     
+  :329   Using nullsafe property access "?->full_name" on left side of ?? is    
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :329   Using nullsafe property access "?->name" on left side of ?? is         
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ---------------------------------------------------------------------- 
+  Line   app/Livewire/RolePermissionManager.php                                
+ ------ ---------------------------------------------------------------------- 
+  :55    Call to method App\Livewire\RolePermissionManager::loadPermissions()  
+         on a separate line has no effect.                                     
+         🪪  method.resultUnused                                               
+ ------ ---------------------------------------------------------------------- 
+
+ ------ -------------------------------------------------------------------- 
+  Line   app/Models/BloomsTaxonomyVerb.php                                   
+ ------ -------------------------------------------------------------------- 
+  :78    Match arm comparison between 'Create' and 'Create' is always true.  
+         🪪  match.alwaysTrue                                                
+         💡  Remove remaining cases below this one and this error will       
+         disappear too.                                                      
+ ------ -------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/ComplianceReport.php                                        
+ ------ ----------------------------------------------------------------------- 
+  :97    Match arm comparison between 'custom' and 'custom' is always true.     
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :109   Match arm comparison between 'cancelled' and 'cancelled' is always     
+         true.                                                                  
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :121   Match arm comparison between 'course' and 'course' is always true.     
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :200   Relation 'course' is not found in App\Models\Syllabus model.           
+         🪪  larastan.relationExistence                                         
+  :202   Relation 'course' is not found in App\Models\Syllabus model.           
+         🪪  larastan.relationExistence                                         
+  :219   Relation 'standardsCompliances' is not found in App\Models\Syllabus    
+         model.                                                                 
+         🪪  larastan.relationExistence                                         
+  :247   Access to an undefined property                                        
+         App\Models\Syllabus::$standardsCompliances.                            
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :291   Using nullsafe property access "?->name" on left side of ?? is         
+         unnecessary. Use -> instead.                                           
+         🪪  nullsafe.neverNull                                                 
+  :313   Parameter #1 $key of method                                            
+         Illuminate\Support\Collection<(int|string),Illuminate\Support\Collect  
+         ion<int, mixed>>::get() expects int|string|null, true given.           
+         🪪  argument.type                                                      
+  :314   Parameter #1 $key of method                                            
+         Illuminate\Support\Collection<(int|string),Illuminate\Support\Collect  
+         ion<int, mixed>>::get() expects int|string|null, false given.          
+         🪪  argument.type                                                      
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/CustomReport.php                                            
+ ------ ----------------------------------------------------------------------- 
+  :100   Match arm comparison between 'cancelled' and 'cancelled' is always     
+         true.                                                                  
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :112   Match arm comparison between 'html' and 'html' is always true.         
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :124   Match arm comparison between 'course' and 'course' is always true.     
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :137   Parameter #1 $string of function strlen expects string, int<min, -1>|  
+         int<1, max> given.                                                     
+         🪪  argument.type                                                      
+  :139   Invalid array key type float.                                          
+         🪪  offsetAccess.invalidOffset                                         
+  :192   Call to function is_array() with array will always evaluate to true.   
+         🪪  function.alreadyNarrowedType                                       
+  :225   Relation 'standardsCompliances' is not found in App\Models\Syllabus    
+         model.                                                                 
+         🪪  larastan.relationExistence                                         
+  :237   Access to an undefined property                                        
+         App\Models\Syllabus::$standardsCompliances.                            
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :252   Relation 'syllabus' is not found in App\Models\SyllabusQualityCheck    
+         model.                                                                 
+         🪪  larastan.relationExistence                                         
+  :260   Access to an undefined property                                        
+         App\Models\SyllabusQualityCheck::$syllabus.                            
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :261   Access to an undefined property                                        
+         App\Models\SyllabusQualityCheck::$syllabus.                            
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :263   Access to an undefined property                                        
+         App\Models\SyllabusQualityCheck::$qualityChecklist.                    
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :264   Access to an undefined property                                        
+         App\Models\SyllabusQualityCheck::$qualityChecklist.                    
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :288   Using nullsafe method call on non-nullable type Carbon\Carbon. Use ->  
+         instead.                                                               
+         🪪  nullsafe.neverNull                                                 
+  :289   Using nullsafe method call on non-nullable type Carbon\Carbon. Use ->  
+         instead.                                                               
+         🪪  nullsafe.neverNull                                                 
+  :290   Using nullsafe method call on non-nullable type Carbon\Carbon. Use ->  
+         instead.                                                               
+         🪪  nullsafe.neverNull                                                 
+  :297   Relation 'findings' is not found in App\Models\QualityAudit model.     
+         🪪  larastan.relationExistence                                         
+  :309   Using nullsafe method call on non-nullable type Carbon\Carbon. Use ->  
+         instead.                                                               
+         🪪  nullsafe.neverNull                                                 
+  :312   Access to an undefined property App\Models\QualityAudit::$findings.    
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :321   Access to an undefined property App\Models\QualityAudit::$syllabi.     
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :334   Left side of && is always true.                                        
+         🪪  booleanAnd.leftAlwaysTrue                                          
+         💡  Because the type is coming from a PHPDoc, you can turn off this    
+         check by setting treatPhpDocTypesAsCertain: false in your phpstan.neo  
+         n.                                                                     
+  :422   Match arm comparison between 'html' and 'html' is always true.         
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :435   Match arm comparison between 'html' and 'html' is always true.         
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/QualityAudit.php                                            
+ ------ ----------------------------------------------------------------------- 
+  :97    Match arm comparison between 'cancelled' and 'cancelled' is always     
+         true.                                                                  
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :109   Match arm comparison between 'external' and 'external' is always       
+         true.                                                                  
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :121   Match arm comparison between 'course' and 'course' is always true.     
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :163   Access to an undefined property App\Models\QualityAudit::$syllabi.     
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :176   Access to an undefined property App\Models\QualityAudit::$syllabi.     
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/QualityAuditAction.php                                      
+ ------ ----------------------------------------------------------------------- 
+  :82    Match arm comparison between 'low' and 'low' is always true.           
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :94    Match arm comparison between 'on_hold' and 'on_hold' is always true.   
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :107   Match arm comparison between 'process_change' and 'process_change' is  
+         always true.                                                           
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :157   Method App\Models\QualityAuditAction::getDaysUntilDueAttribute()       
+         should return int|null but returns float.                              
+         🪪  return.type                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ---------------------------------------------------------------------- 
+  Line   app/Models/QualityAuditFinding.php                                    
+ ------ ---------------------------------------------------------------------- 
+  :82    Match arm comparison between 'info' and 'info' is always true.        
+         🪪  match.alwaysTrue                                                  
+         💡  Remove remaining cases below this one and this error will         
+         disappear too.                                                        
+  :93    Match arm comparison between 'closed' and 'closed' is always true.    
+         🪪  match.alwaysTrue                                                  
+         💡  Remove remaining cases below this one and this error will         
+         disappear too.                                                        
+  :106   Match arm comparison between 'process' and 'process' is always true.  
+         🪪  match.alwaysTrue                                                  
+         💡  Remove remaining cases below this one and this error will         
+         disappear too.                                                        
+  :138   Method App\Models\QualityAuditFinding::getDaysUntilDueAttribute()     
+         should return int|null but returns float.                             
+         🪪  return.type                                                       
+ ------ ---------------------------------------------------------------------- 
+
+ ------ -------------------------------------------------------------------- 
+  Line   app/Models/QualityChecklist.php                                     
+ ------ -------------------------------------------------------------------- 
+  :82    Match arm comparison between 'custom' and 'custom' is always true.  
+         🪪  match.alwaysTrue                                                
+         💡  Remove remaining cases below this one and this error will       
+         disappear too.                                                      
+ ------ -------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/QualityChecklistItem.php                                    
+ ------ ----------------------------------------------------------------------- 
+  :106   Match arm comparison between 'completeness' and 'completeness' is      
+         always true.                                                           
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :113   Strict comparison using !== between mixed and null will always         
+         evaluate to true.                                                      
+         🪪  notIdentical.alwaysTrue                                            
+         💡  Type 0|0.0|''|'0'|array{}|false|null has already been eliminated   
+         from mixed.                                                            
+  :302   Strict comparison using !== between mixed and null will always         
+         evaluate to true.                                                      
+         🪪  notIdentical.alwaysTrue                                            
+         💡  Type 0|0.0|''|'0'|array{}|false|null has already been eliminated   
+         from mixed.                                                            
+  :310   Strict comparison using !== between mixed and null will always         
+         evaluate to true.                                                      
+         🪪  notIdentical.alwaysTrue                                            
+         💡  Type 0|0.0|''|'0'|array<mixed, mixed>|false|null has already been   
+         eliminated from mixed.                                                 
+ ------ ----------------------------------------------------------------------- 
+
+ ------ -------------------------------------------------------------------- 
+  Line   app/Models/QualityStandard.php                                      
+ ------ -------------------------------------------------------------------- 
+  :80    Match arm comparison between 'course' and 'course' is always true.  
+         🪪  match.alwaysTrue                                                
+         💡  Remove remaining cases below this one and this error will       
+         disappear too.                                                      
+  :93    Match arm comparison between 'policies' and 'policies' is always    
+         true.                                                               
+         🪪  match.alwaysTrue                                                
+         💡  Remove remaining cases below this one and this error will       
+         disappear too.                                                      
+ ------ -------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/ReportSchedule.php                                          
+ ------ ----------------------------------------------------------------------- 
+  :75    Match arm comparison between 'custom' and 'custom' is always true.     
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :88    Match arm comparison between 'custom' and 'custom' is always true.     
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :117   Access to an undefined property                                        
+         App\Models\ReportSchedule::$reportTemplate.                            
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ -------------------------------------------------------------------- 
+  Line   app/Models/ReportTemplate.php                                       
+ ------ -------------------------------------------------------------------- 
+  :92    Match arm comparison between 'custom' and 'custom' is always true.  
+         🪪  match.alwaysTrue                                                
+         💡  Remove remaining cases below this one and this error will       
+         disappear too.                                                      
+  :104   Match arm comparison between 'html' and 'html' is always true.      
+         🪪  match.alwaysTrue                                                
+         💡  Remove remaining cases below this one and this error will       
+         disappear too.                                                      
+  :149   Match arm comparison between 'custom' and 'custom' is always true.  
+         🪪  match.alwaysTrue                                                
+         💡  Remove remaining cases below this one and this error will       
+         disappear too.                                                      
+ ------ -------------------------------------------------------------------- 
+
+ ------ ------------------------------------------------------------------ 
+  Line   app/Models/SecurityAuditLog.php                                   
+ ------ ------------------------------------------------------------------ 
+  :60    Match arm comparison between 'critical' and 'critical' is always  
+         true.                                                             
+         🪪  match.alwaysTrue                                              
+         💡  Remove remaining cases below this one and this error will     
+         disappear too.                                                    
+ ------ ------------------------------------------------------------------ 
+
+ ------ ------------------------------------------------------------------- 
+  Line   app/Models/StandardsCompliance.php                                 
+ ------ ------------------------------------------------------------------- 
+  :73    Match arm comparison between 'not_assessed' and 'not_assessed' is  
+         always true.                                                       
+         🪪  match.alwaysTrue                                               
+         💡  Remove remaining cases below this one and this error will      
+         disappear too.                                                     
+  :84    Match arm comparison between 'not_assessed' and 'not_assessed' is  
+         always true.                                                       
+         🪪  match.alwaysTrue                                               
+         💡  Remove remaining cases below this one and this error will      
+         disappear too.                                                     
+ ------ ------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/Syllabus.php                                                
+ ------ ----------------------------------------------------------------------- 
+  :313   Access to an undefined property                                        
+         App\Models\Syllabus::$principalPreparer.                               
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :329   Access to an undefined property App\Models\Syllabus::$reviewer.        
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :332   Access to an undefined property                                        
+         App\Models\Syllabus::$recommendingApprover.                            
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :335   Access to an undefined property App\Models\Syllabus::$approver.        
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ------------------------------------------------------------------- 
+  Line   app/Models/SyllabusMetric.php                                      
+ ------ ------------------------------------------------------------------- 
+  :70    Match arm comparison between 'rate' and 'rate' is always true.     
+         🪪  match.alwaysTrue                                               
+         💡  Remove remaining cases below this one and this error will      
+         disappear too.                                                     
+  :83    Match arm comparison between 'user' and 'user' is always true.     
+         🪪  match.alwaysTrue                                               
+         💡  Remove remaining cases below this one and this error will      
+         disappear too.                                                     
+  :91    Parameter #1 $num of function number_format expects float, string  
+         given.                                                             
+         🪪  argument.type                                                  
+  :92    Parameter #1 $num of function number_format expects float, string  
+         given.                                                             
+         🪪  argument.type                                                  
+  :93    Parameter #1 $num of function number_format expects float, string  
+         given.                                                             
+         🪪  argument.type                                                  
+  :94    Parameter #1 $days of method                                       
+         App\Models\SyllabusMetric::formatDuration() expects float, string  
+         given.                                                             
+         🪪  argument.type                                                  
+  :95    Match arm comparison between 'rate' and 'rate' is always true.     
+         🪪  match.alwaysTrue                                               
+         💡  Remove remaining cases below this one and this error will      
+         disappear too.                                                     
+  :95    Parameter #1 $num of function number_format expects float, string  
+         given.                                                             
+         🪪  argument.type                                                  
+ ------ ------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/SyllabusQualityCheck.php                                    
+ ------ ----------------------------------------------------------------------- 
+  :63    Access to an undefined property                                        
+         App\Models\SyllabusQualityCheck::$qualityChecklist.                    
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :64    Access to an undefined property                                        
+         App\Models\SyllabusQualityCheck::$syllabus.                            
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :98    Access to an undefined property                                        
+         App\Models\SyllabusQualityCheck::$qualityChecklist.                    
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :124   Match arm comparison between 'completed' and 'completed' is always     
+         true.                                                                  
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :136   Match arm comparison between 'completed' and 'completed' is always     
+         true.                                                                  
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Models/SyllabusSuggestion.php                                      
+ ------ ----------------------------------------------------------------------- 
+  :125   Match arm comparison between 'rejected' and 'rejected' is always       
+         true.                                                                  
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :138   Match arm comparison between 'rejected' and 'rejected' is always       
+         true.                                                                  
+         🪪  match.alwaysTrue                                                   
+         💡  Remove remaining cases below this one and this error will          
+         disappear too.                                                         
+  :153   Access to an undefined property                                        
+         App\Models\SyllabusSuggestion::$syllabus.                              
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :193   Access to an undefined property                                        
+         App\Models\SyllabusSuggestion::$syllabus.                              
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ -------------------------------------------- 
+  Line   app/Models/User.php                         
+ ------ -------------------------------------------- 
+  :312   Cannot call method isFuture() on string.    
+         🪪  method.nonObject                        
+  :321   Cannot call method diffInDays() on string.  
+         🪪  method.nonObject                        
+ ------ -------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Policies/CoursePolicy.php                                          
+ ------ ----------------------------------------------------------------------- 
+  :75    Access to an undefined property App\Models\Course::$college.           
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :76    Access to an undefined property App\Models\Course::$college.           
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :95    Access to an undefined property App\Models\Course::$college.           
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :96    Access to an undefined property App\Models\Course::$college.           
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Policies/DepartmentPolicy.php                                      
+ ------ ----------------------------------------------------------------------- 
+  :95    Access to an undefined property App\Models\Department::$college.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :96    Access to an undefined property App\Models\Department::$college.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :115   Access to an undefined property App\Models\Department::$college.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :116   Access to an undefined property App\Models\Department::$college.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Policies/ProgramPolicy.php                                         
+ ------ ----------------------------------------------------------------------- 
+  :82    Access to an undefined property App\Models\Program::$department.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :83    Access to an undefined property App\Models\Program::$department.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :84    Access to an undefined property App\Models\Program::$department.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :88    Access to an undefined property App\Models\Program::$department.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :102   Access to an undefined property App\Models\Program::$department.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :103   Access to an undefined property App\Models\Program::$department.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :104   Access to an undefined property App\Models\Program::$department.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :108   Access to an undefined property App\Models\Program::$department.       
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Policies/SyllabusPolicy.php                                        
+ ------ ----------------------------------------------------------------------- 
+  :61    Access to an undefined property App\Models\Syllabus::$college_id.      
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :62    Access to an undefined property App\Models\Syllabus::$college.         
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :63    Access to an undefined property App\Models\Syllabus::$college.         
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :68    Access to an undefined property App\Models\Syllabus::$college_id.      
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :72    Access to an undefined property App\Models\Syllabus::$created_by.      
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :85    Access to an undefined property App\Models\Syllabus::$college_id.      
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :86    Access to an undefined property App\Models\Syllabus::$college.         
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :87    Access to an undefined property App\Models\Syllabus::$college.         
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :92    Access to an undefined property App\Models\Syllabus::$college_id.      
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :96    Access to an undefined property App\Models\Syllabus::$created_by.      
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Services/QualityAssuranceService.php                               
+ ------ ----------------------------------------------------------------------- 
+  :54    Access to an undefined property App\Models\Syllabus::$course.          
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :61    Access to an undefined property App\Models\Syllabus::$course.          
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :169   Relation 'qualityChecklist' is not found in                            
+         App\Models\SyllabusQualityCheck model.                                 
+         🪪  larastan.relationExistence                                         
+  :169   Relation 'syllabus' is not found in App\Models\SyllabusQualityCheck    
+         model.                                                                 
+         🪪  larastan.relationExistence                                         
+  :173   Relation 'syllabus' is not found in App\Models\SyllabusQualityCheck    
+         model.                                                                 
+         🪪  larastan.relationExistence                                         
+  :177   Relation 'syllabus' is not found in App\Models\SyllabusQualityCheck    
+         model.                                                                 
+         🪪  larastan.relationExistence                                         
+  :254   Relation 'qualityChecks' is not found in App\Models\Syllabus model.    
+         🪪  larastan.relationExistence                                         
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   app/Services/SyllabusPdfService.php                                    
+ ------ ----------------------------------------------------------------------- 
+  :85    Access to an undefined property App\Models\Syllabus::$course.          
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :103   Variable $prerequisiteIds in empty() always exists and is not falsy.   
+         🪪  empty.variable                                                     
+  :120   Access to an undefined property App\Models\Syllabus::$course.          
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :223   Access to an undefined property                                        
+         App\Models\Syllabus::$principalPreparer.                               
+         🪪  property.notFound                                                  
+         💡  Learn more: https://phpstan.org/blog/solving-phpstan-access-to-und  
+         efined-property                                                        
+  :302   Variable $start might not be defined.                                  
+         🪪  variable.undefined                                                 
+  :303   Variable $end might not be defined.                                    
+         🪪  variable.undefined                                                 
+  :372   Call to an undefined method                                            
+         Spatie\Browsershot\Browsershot::portrait().                            
+         🪪  method.notFound                                                    
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   database/factories/SyllabusFactory.php                                 
+ ------ ----------------------------------------------------------------------- 
+  :20    PHPDoc type string of property                                         
+         Database\Factories\SyllabusFactory::$model is not covariant with       
+         PHPDoc type class-string<App\Models\Syllabus> of overridden property   
+         Illuminate\Database\Eloquent\Factories\Factory<App\Models\Syllabus>::  
+         $model.                                                                
+         🪪  property.phpDocType                                                
+         💡  You can fix 3rd party PHPDoc types with stub files:                
+         💡  https://phpstan.org/user-guide/stub-files                          
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   database/migrations/2025_09_21_162036_add_qa_fields_to_syllabi_table.  
+         php                                                                    
+ ------ ----------------------------------------------------------------------- 
+  :16    Call to an undefined method                                            
+         Illuminate\Database\Schema\ForeignKeyDefinition::after().              
+         🪪  method.notFound                                                    
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   database/seeders/CollegeSeeder.php                                     
+ ------ ----------------------------------------------------------------------- 
+  :103   Offset 'description' on array{name: 'Basic Education…', code:          
+         'BasicEd.', logo_path: 'images/logos/logo…', sort_order: 9, mission:   
+         '<p>The Basic…', vision: '<p>To be a leading…', objectives: '<ul><li>  
+         To provide…'}|array{name: 'College of Arts and…', code: 'CAS',         
+         logo_path: 'images/logos/logo…', sort_order: 4, mission: '<p>The Coll  
+         ege of…', vision: '<p>To develop a…', objectives: '<ul><li>To equip…'  
+         }|array{name: 'College of Business…', code: 'CBA', logo_path:          
+         'images/logos/logo…', sort_order: 5, mission: '<p>The UE College…', v  
+         ision: '<p>The UE College…', objectives: '<p>The UE College…'}|array{  
+         name: 'College of Computer…', code: 'CCSS', logo_path:                 
+         'images/logos/logo…', sort_order: 6, mission: '<p>The College of…', v  
+         ision: '<p>College of…', objectives: '<ul><li>To train…'}|array{name:  
+          'College of Dentistry', code: 'CDent', logo_path:                     
+         'images/logos/logo…', sort_order: 3, mission: '<p>The College of…', v  
+         ision: '<p>The College of…', objectives: '<p>A graduate of…'}|array{n  
+         ame: 'College of Education', code: 'CEduc', logo_path:                 
+         'images/logos/logo…', sort_order: 7, mission: '<p>The College of…', v  
+         ision: '<p>Developing a…', objectives: '<ul><li>Critical…'}|array{nam  
+         e: 'College of Law', code: 'CLaw', logo_path: 'images/logos/logo…',    
+         sort_order: 2, mission: '<p>Every member of…', vision: '<p>To prepare  
+          the…', objectives: '<p>The observance…'}|array{name: 'College of…',   
+         code: 'CEng\'g', logo_path: 'images/logos/logo…', sort_order: 8,       
+         mission: '<p>The College of…', vision: '<p>The College of…', objectiv  
+         es: '<ul><li>To produce…'}|array{name: 'Graduate School', code: 'GS',  
+          logo_path: 'images/logos/logo…', sort_order: 1, mission: '<p>The Uni  
+         versity…', vision: '<p>The University…', objectives: '<p>The Universi  
+         ty…'} on left side of ?? does not exist.                               
+         🪪  nullCoalesce.offset                                                
+  :104   Offset 'mission' on array{name: 'Basic Education…', code: 'BasicEd.',  
+         logo_path: 'images/logos/logo…', sort_order: 9, mission: '<p>The Basi  
+         c…', vision: '<p>To be a leading…', objectives: '<ul><li>To provide…'  
+         }|array{name: 'College of Arts and…', code: 'CAS', logo_path:          
+         'images/logos/logo…', sort_order: 4, mission: '<p>The College of…', v  
+         ision: '<p>To develop a…', objectives: '<ul><li>To equip…'}|array{nam  
+         e: 'College of Business…', code: 'CBA', logo_path:                     
+         'images/logos/logo…', sort_order: 5, mission: '<p>The UE College…', v  
+         ision: '<p>The UE College…', objectives: '<p>The UE College…'}|array{  
+         name: 'College of Computer…', code: 'CCSS', logo_path:                 
+         'images/logos/logo…', sort_order: 6, mission: '<p>The College of…', v  
+         ision: '<p>College of…', objectives: '<ul><li>To train…'}|array{name:  
+          'College of Dentistry', code: 'CDent', logo_path:                     
+         'images/logos/logo…', sort_order: 3, mission: '<p>The College of…', v  
+         ision: '<p>The College of…', objectives: '<p>A graduate of…'}|array{n  
+         ame: 'College of Education', code: 'CEduc', logo_path:                 
+         'images/logos/logo…', sort_order: 7, mission: '<p>The College of…', v  
+         ision: '<p>Developing a…', objectives: '<ul><li>Critical…'}|array{nam  
+         e: 'College of Law', code: 'CLaw', logo_path: 'images/logos/logo…',    
+         sort_order: 2, mission: '<p>Every member of…', vision: '<p>To prepare  
+          the…', objectives: '<p>The observance…'}|array{name: 'College of…',   
+         code: 'CEng\'g', logo_path: 'images/logos/logo…', sort_order: 8,       
+         mission: '<p>The College of…', vision: '<p>The College of…', objectiv  
+         es: '<ul><li>To produce…'}|array{name: 'Graduate School', code: 'GS',  
+          logo_path: 'images/logos/logo…', sort_order: 1, mission: '<p>The Uni  
+         versity…', vision: '<p>The University…', objectives: '<p>The Universi  
+         ty…'} on left side of ?? always exists and is not nullable.            
+         🪪  nullCoalesce.offset                                                
+  :105   Offset 'vision' on array{name: 'Basic Education…', code: 'BasicEd.',   
+         logo_path: 'images/logos/logo…', sort_order: 9, mission: '<p>The Basi  
+         c…', vision: '<p>To be a leading…', objectives: '<ul><li>To provide…'  
+         }|array{name: 'College of Arts and…', code: 'CAS', logo_path:          
+         'images/logos/logo…', sort_order: 4, mission: '<p>The College of…', v  
+         ision: '<p>To develop a…', objectives: '<ul><li>To equip…'}|array{nam  
+         e: 'College of Business…', code: 'CBA', logo_path:                     
+         'images/logos/logo…', sort_order: 5, mission: '<p>The UE College…', v  
+         ision: '<p>The UE College…', objectives: '<p>The UE College…'}|array{  
+         name: 'College of Computer…', code: 'CCSS', logo_path:                 
+         'images/logos/logo…', sort_order: 6, mission: '<p>The College of…', v  
+         ision: '<p>College of…', objectives: '<ul><li>To train…'}|array{name:  
+          'College of Dentistry', code: 'CDent', logo_path:                     
+         'images/logos/logo…', sort_order: 3, mission: '<p>The College of…', v  
+         ision: '<p>The College of…', objectives: '<p>A graduate of…'}|array{n  
+         ame: 'College of Education', code: 'CEduc', logo_path:                 
+         'images/logos/logo…', sort_order: 7, mission: '<p>The College of…', v  
+         ision: '<p>Developing a…', objectives: '<ul><li>Critical…'}|array{nam  
+         e: 'College of Law', code: 'CLaw', logo_path: 'images/logos/logo…',    
+         sort_order: 2, mission: '<p>Every member of…', vision: '<p>To prepare  
+          the…', objectives: '<p>The observance…'}|array{name: 'College of…',   
+         code: 'CEng\'g', logo_path: 'images/logos/logo…', sort_order: 8,       
+         mission: '<p>The College of…', vision: '<p>The College of…', objectiv  
+         es: '<ul><li>To produce…'}|array{name: 'Graduate School', code: 'GS',  
+          logo_path: 'images/logos/logo…', sort_order: 1, mission: '<p>The Uni  
+         versity…', vision: '<p>The University…', objectives: '<p>The Universi  
+         ty…'} on left side of ?? always exists and is not nullable.            
+         🪪  nullCoalesce.offset                                                
+  :106   Offset 'core_values' on array{name: 'Basic Education…', code:          
+         'BasicEd.', logo_path: 'images/logos/logo…', sort_order: 9, mission:   
+         '<p>The Basic…', vision: '<p>To be a leading…', objectives: '<ul><li>  
+         To provide…'}|array{name: 'College of Arts and…', code: 'CAS',         
+         logo_path: 'images/logos/logo…', sort_order: 4, mission: '<p>The Coll  
+         ege of…', vision: '<p>To develop a…', objectives: '<ul><li>To equip…'  
+         }|array{name: 'College of Business…', code: 'CBA', logo_path:          
+         'images/logos/logo…', sort_order: 5, mission: '<p>The UE College…', v  
+         ision: '<p>The UE College…', objectives: '<p>The UE College…'}|array{  
+         name: 'College of Computer…', code: 'CCSS', logo_path:                 
+         'images/logos/logo…', sort_order: 6, mission: '<p>The College of…', v  
+         ision: '<p>College of…', objectives: '<ul><li>To train…'}|array{name:  
+          'College of Dentistry', code: 'CDent', logo_path:                     
+         'images/logos/logo…', sort_order: 3, mission: '<p>The College of…', v  
+         ision: '<p>The College of…', objectives: '<p>A graduate of…'}|array{n  
+         ame: 'College of Education', code: 'CEduc', logo_path:                 
+         'images/logos/logo…', sort_order: 7, mission: '<p>The College of…', v  
+         ision: '<p>Developing a…', objectives: '<ul><li>Critical…'}|array{nam  
+         e: 'College of Law', code: 'CLaw', logo_path: 'images/logos/logo…',    
+         sort_order: 2, mission: '<p>Every member of…', vision: '<p>To prepare  
+          the…', objectives: '<p>The observance…'}|array{name: 'College of…',   
+         code: 'CEng\'g', logo_path: 'images/logos/logo…', sort_order: 8,       
+         mission: '<p>The College of…', vision: '<p>The College of…', objectiv  
+         es: '<ul><li>To produce…'}|array{name: 'Graduate School', code: 'GS',  
+          logo_path: 'images/logos/logo…', sort_order: 1, mission: '<p>The Uni  
+         versity…', vision: '<p>The University…', objectives: '<p>The Universi  
+         ty…'} on left side of ?? does not exist.                               
+         🪪  nullCoalesce.offset                                                
+  :107   Offset 'objectives' on array{name: 'Basic Education…', code:           
+         'BasicEd.', logo_path: 'images/logos/logo…', sort_order: 9, mission:   
+         '<p>The Basic…', vision: '<p>To be a leading…', objectives: '<ul><li>  
+         To provide…'}|array{name: 'College of Arts and…', code: 'CAS',         
+         logo_path: 'images/logos/logo…', sort_order: 4, mission: '<p>The Coll  
+         ege of…', vision: '<p>To develop a…', objectives: '<ul><li>To equip…'  
+         }|array{name: 'College of Business…', code: 'CBA', logo_path:          
+         'images/logos/logo…', sort_order: 5, mission: '<p>The UE College…', v  
+         ision: '<p>The UE College…', objectives: '<p>The UE College…'}|array{  
+         name: 'College of Computer…', code: 'CCSS', logo_path:                 
+         'images/logos/logo…', sort_order: 6, mission: '<p>The College of…', v  
+         ision: '<p>College of…', objectives: '<ul><li>To train…'}|array{name:  
+          'College of Dentistry', code: 'CDent', logo_path:                     
+         'images/logos/logo…', sort_order: 3, mission: '<p>The College of…', v  
+         ision: '<p>The College of…', objectives: '<p>A graduate of…'}|array{n  
+         ame: 'College of Education', code: 'CEduc', logo_path:                 
+         'images/logos/logo…', sort_order: 7, mission: '<p>The College of…', v  
+         ision: '<p>Developing a…', objectives: '<ul><li>Critical…'}|array{nam  
+         e: 'College of Law', code: 'CLaw', logo_path: 'images/logos/logo…',    
+         sort_order: 2, mission: '<p>Every member of…', vision: '<p>To prepare  
+          the…', objectives: '<p>The observance…'}|array{name: 'College of…',   
+         code: 'CEng\'g', logo_path: 'images/logos/logo…', sort_order: 8,       
+         mission: '<p>The College of…', vision: '<p>The College of…', objectiv  
+         es: '<ul><li>To produce…'}|array{name: 'Graduate School', code: 'GS',  
+          logo_path: 'images/logos/logo…', sort_order: 1, mission: '<p>The Uni  
+         versity…', vision: '<p>The University…', objectives: '<p>The Universi  
+         ty…'} on left side of ?? always exists and is not nullable.            
+         🪪  nullCoalesce.offset                                                
+ ------ ----------------------------------------------------------------------- 
+
+ [ERROR] Found 287 errors                                                       
+
+Script ./vendor/bin/phpstan analyse --memory-limit=2G handling the analyse event returned with error code 1

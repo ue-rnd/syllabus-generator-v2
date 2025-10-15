@@ -63,9 +63,9 @@ class Profile extends Component
         // Build full name from components
         $name = $validated['firstname'];
         if (! empty($validated['middlename'])) {
-            $name .= ' '.$validated['middlename'];
+            $name .= ' ' . $validated['middlename'];
         }
-        $name .= ' '.$validated['lastname'];
+        $name .= ' ' . $validated['lastname'];
 
         $validated['name'] = $name;
 

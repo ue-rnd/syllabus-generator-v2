@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('syllabus/{syllabus}/pdf/download', [\App\Http\Controllers\SyllabusPdfController::class, 'download'])
         ->middleware('auth')
         ->name('syllabus.pdf.download');
-    
+
     // Database Backup Download Route
     Route::get('admin/backups/{backup}/download', [\App\Http\Controllers\DatabaseBackupController::class, 'download'])
         ->middleware(['auth', 'can:manage backups'])
@@ -58,4 +58,4 @@ Route::middleware('auth')->group(function () {
     Route::get('bookmarks', Bookmarks::class)->name('bookmarks');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

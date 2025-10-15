@@ -118,6 +118,7 @@ class UserResource extends Resource
             // Deans and Associate Deans can see users from their colleges
             if (in_array($user->position, ['dean', 'associate_dean'])) {
                 $collegeIds = $user->getAccessibleColleges()->pluck('id');
+
                 return $query->whereIn('college_id', $collegeIds)
                     ->orWhere('id', $user->id)
                     ->withoutGlobalScopes([SoftDeletingScope::class]);
@@ -126,6 +127,7 @@ class UserResource extends Resource
             // Department Chairs can see users from their departments
             if ($user->position === 'department_chair') {
                 $departmentIds = $user->getAccessibleDepartments()->pluck('id');
+
                 return $query->whereIn('department_id', $departmentIds)
                     ->orWhere('id', $user->id)
                     ->withoutGlobalScopes([SoftDeletingScope::class]);

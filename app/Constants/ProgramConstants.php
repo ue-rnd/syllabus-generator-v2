@@ -5,7 +5,7 @@ namespace App\Constants;
 class ProgramConstants
 {
     /**
-     * Program levels
+     * Program levels.
      */
     public const LEVELS = [
         'associate' => 'Associate',
@@ -15,7 +15,7 @@ class ProgramConstants
     ];
 
     /**
-     * Program status options
+     * Program status options.
      */
     public const STATUSES = [
         'active' => 'Active',
@@ -25,7 +25,7 @@ class ProgramConstants
     ];
 
     /**
-     * Get level color for badges
+     * Get level color for badges.
      */
     public static function getLevelColor(string $level): string
     {
@@ -39,7 +39,7 @@ class ProgramConstants
     }
 
     /**
-     * Get status color for badges
+     * Get status color for badges.
      */
     public static function getStatusColor(string $status): string
     {
@@ -53,7 +53,7 @@ class ProgramConstants
     }
 
     /**
-     * Get levels as options for select fields
+     * Get levels as options for select fields.
      */
     public static function getLevelOptions(): array
     {
@@ -61,7 +61,7 @@ class ProgramConstants
     }
 
     /**
-     * Get statuses as options for select fields
+     * Get statuses as options for select fields.
      */
     public static function getStatusOptions(): array
     {

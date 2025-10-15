@@ -81,6 +81,7 @@ class CustomReport extends Model
         if ($scopeId) {
             $query->where('scope_id', $scopeId);
         }
+
         return $query;
     }
 
@@ -127,18 +128,22 @@ class CustomReport extends Model
 
     public function getFileSizeFormattedAttribute(): string
     {
-        if (!$this->file_size) return 'N/A';
+        if (! $this->file_size) {
+            return 'N/A';
+        }
 
         $bytes = $this->file_size;
         $units = ['B', 'KB', 'MB', 'GB'];
         $factor = floor((strlen($bytes) - 1) / 3);
 
-        return sprintf("%.2f %s", $bytes / pow(1024, $factor), $units[$factor]);
+        return sprintf('%.2f %s', $bytes / pow(1024, $factor), $units[$factor]);
     }
 
     public function getExecutionTimeFormattedAttribute(): string
     {
-        if (!$this->execution_time) return 'N/A';
+        if (! $this->execution_time) {
+            return 'N/A';
+        }
 
         $seconds = $this->execution_time;
         if ($seconds < 60) {
@@ -146,10 +151,12 @@ class CustomReport extends Model
         } elseif ($seconds < 3600) {
             $minutes = floor($seconds / 60);
             $remainingSeconds = $seconds % 60;
+
             return "{$minutes}m {$remainingSeconds}s";
         } else {
             $hours = floor($seconds / 3600);
             $minutes = floor(($seconds % 3600) / 60);
+
             return "{$hours}h {$minutes}m";
         }
     }
@@ -278,9 +285,9 @@ class CustomReport extends Model
                 'metric_type' => $metric->metric_type,
                 'scope' => $metric->scope,
                 'scope_id' => $metric->scope_id,
-                'period_start' => $metric->period_start?->format('Y-m-d'),
-                'period_end' => $metric->period_end?->format('Y-m-d'),
-                'calculated_at' => $metric->calculated_at?->format('Y-m-d H:i:s'),
+                'period_start' => $metric->period_start ? \Carbon\Carbon::parse($metric->period_start)->format('Y-m-d') : null,
+                'period_end' => $metric->period_end ? \Carbon\Carbon::parse($metric->period_end)->format('Y-m-d') : null,
+                'calculated_at' => $metric->calculated_at->format('Y-m-d H:i:s'),
             ];
         })->toArray();
     }
@@ -299,8 +306,8 @@ class CustomReport extends Model
                 'audit_name' => $audit->name,
                 'audit_type' => $audit->audit_type,
                 'scope' => $audit->scope,
-                'start_date' => $audit->start_date?->format('Y-m-d'),
-                'end_date' => $audit->end_date?->format('Y-m-d'),
+                'start_date' => $audit->start_date->format('Y-m-d'),
+                'end_date' => $audit->end_date->format('Y-m-d'),
                 'status' => $audit->status,
                 'findings' => $audit->findings->map(function ($finding) {
                     return [
@@ -322,7 +329,7 @@ class CustomReport extends Model
         return [];
     }
 
-    private function applyScopeFilters($query, string $relation = null): void
+    private function applyScopeFilters($query, ?string $relation = null): void
     {
         if ($this->scope && $this->scope !== 'institution') {
             $scopeField = $relation ? "{$relation}.{$this->scope}_id" : "{$this->scope}_id";
@@ -347,7 +354,7 @@ class CustomReport extends Model
     {
         if ($this->filters) {
             foreach ($this->filters as $field => $value) {
-                if (!empty($value)) {
+                if (! empty($value)) {
                     if (is_array($value)) {
                         $query->whereIn($field, $value);
                     } else {
@@ -403,7 +410,7 @@ class CustomReport extends Model
 
         // Ensure directory exists
         $directory = dirname($fullPath);
-        if (!is_dir($directory)) {
+        if (! is_dir($directory)) {
             mkdir($directory, 0755, true);
         }
 
@@ -430,12 +437,14 @@ class CustomReport extends Model
         };
 
         $safeName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $this->name);
+
         return "{$safeName}_{$timestamp}.{$extension}";
     }
 
     private function saveAsJson(array $data, string $path): string
     {
         file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT));
+
         return $path;
     }
 
@@ -443,7 +452,7 @@ class CustomReport extends Model
     {
         $file = fopen($path, 'w');
 
-        if (!empty($data)) {
+        if (! empty($data)) {
             // Write headers
             $headers = array_keys($data[0]);
             fputcsv($file, $headers);
@@ -455,6 +464,7 @@ class CustomReport extends Model
         }
 
         fclose($file);
+
         return $path;
     }
 
@@ -476,6 +486,7 @@ class CustomReport extends Model
     {
         $html = $this->generateHtmlReport($data);
         file_put_contents($path, $html);
+
         return $path;
     }
 
@@ -507,7 +518,7 @@ class CustomReport extends Model
     </div>
 HTML;
 
-        if (!empty($data)) {
+        if (! empty($data)) {
             $html .= '<table><thead><tr>';
 
             // Headers
@@ -532,6 +543,7 @@ HTML;
         }
 
         $html .= '</body></html>';
+
         return $html;
     }
 

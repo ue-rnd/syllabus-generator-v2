@@ -6,7 +6,6 @@ use App\Models\SecurityAuditLog;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -54,6 +53,7 @@ class SecurityAuditLogsTable
                         if (strlen($state) <= 50) {
                             return null;
                         }
+
                         return $state;
                     })
                     ->searchable(),
@@ -95,7 +95,7 @@ class SecurityAuditLogsTable
                     ->preload(),
 
                 Filter::make('created_at')
-                    ->form([
+                    ->schema([
                         \Filament\Forms\Components\DatePicker::make('created_from')
                             ->label('From Date'),
                         \Filament\Forms\Components\DatePicker::make('created_until')
@@ -122,10 +122,10 @@ class SecurityAuditLogsTable
                     ->label('High Severity')
                     ->query(fn (Builder $query): Builder => $query->whereIn('severity', ['high', 'critical'])),
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
                         ->requiresConfirmation()

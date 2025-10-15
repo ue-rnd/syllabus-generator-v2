@@ -6,12 +6,10 @@
 
 namespace App\Constants;
 
-
-
 class SyllabusConstants
 {
     /**
-     * Action verbs for course outcomes and learning outcomes
+     * Action verbs for course outcomes and learning outcomes.
      */
     public const ACTION_VERBS = [
         'Remember' => [
@@ -302,7 +300,7 @@ class SyllabusConstants
     ];
 
     /**
-     * Learning activity modalities
+     * Learning activity modalities.
      */
     public const LEARNING_MODALITIES = [
         'onsite' => 'Onsite',
@@ -323,7 +321,7 @@ class SyllabusConstants
     ];
 
     /**
-     * Assessment types for weekly assessments
+     * Assessment types for weekly assessments.
      */
     public const ASSESSMENT_TYPES = [
         'Formative Assessments' => [
@@ -407,7 +405,7 @@ class SyllabusConstants
     ];
 
     /**
-     * Syllabus statuses with enhanced approval workflow
+     * Syllabus statuses with enhanced approval workflow.
      */
     public const STATUSES = [
         'draft' => 'Draft',
@@ -424,7 +422,7 @@ class SyllabusConstants
     ];
 
     /**
-     * User roles for approval workflow
+     * User roles for approval workflow.
      */
     public const APPROVAL_ROLES = [
         'faculty' => 'Faculty',
@@ -436,7 +434,7 @@ class SyllabusConstants
     ];
 
     /**
-     * Status transitions mapping
+     * Status transitions mapping.
      */
     public const STATUS_TRANSITIONS = [
         'draft' => ['pending_approval'],
@@ -453,7 +451,7 @@ class SyllabusConstants
     ];
 
     /**
-     * Get status color for badges
+     * Get status color for badges.
      */
     public static function getStatusColor(string $status): string
     {
@@ -484,7 +482,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get role color for badges
+     * Get role color for badges.
      */
     public static function getRoleColor(string $role): string
     {
@@ -500,7 +498,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get action verb color for badges
+     * Get action verb color for badges.
      */
     public static function getActionVerbColor(string $verb): string
     {
@@ -827,7 +825,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get learning modality color for badges
+     * Get learning modality color for badges.
      */
     public static function getLearningModalityColor(string $modality): string
     {
@@ -850,7 +848,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get assessment type color for badges
+     * Get assessment type color for badges.
      */
     public static function getAssessmentTypeColor(string $assessment): string
     {
@@ -919,7 +917,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get next status based on user role
+     * Get next status based on user role.
      */
     public static function getNextStatusForRole(string $currentStatus, string $userRole): ?string
     {
@@ -950,7 +948,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get action verbs as options for select fields
+     * Get action verbs as options for select fields.
      */
     public static function getActionVerbOptions(): array
     {
@@ -974,7 +972,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get action verbs grouped by category for select fields
+     * Get action verbs grouped by category for select fields.
      */
     public static function getActionVerbOptionsGrouped(): array
     {
@@ -1006,7 +1004,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get learning modalities as options for select fields
+     * Get learning modalities as options for select fields.
      */
     public static function getLearningModalityOptions(): array
     {
@@ -1014,7 +1012,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get assessment types as options for select fields
+     * Get assessment types as options for select fields.
      */
     public static function getAssessmentTypeOptions(): array
     {
@@ -1030,7 +1028,7 @@ class SyllabusConstants
     }
 
     /**
-     * Get syllabus statuses as options for select fields
+     * Get syllabus statuses as options for select fields.
      */
     public static function getStatusOptions(): array
     {

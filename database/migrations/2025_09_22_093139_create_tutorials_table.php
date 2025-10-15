@@ -32,7 +32,7 @@ return new class extends Migration
             $table->integer('not_helpful_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
-            
+
             // Indexes
             $table->index(['category']);
             $table->index(['difficulty_level']);

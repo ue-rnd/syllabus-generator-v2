@@ -5,7 +5,7 @@ namespace App\Constants;
 class UserConstants
 {
     /**
-     * User positions/roles
+     * User positions/roles.
      */
     public const POSITIONS = [
         'superadmin' => 'Super Admin',
@@ -34,7 +34,7 @@ class UserConstants
     ];
 
     /**
-     * User status options
+     * User status options.
      */
     public const STATUSES = [
         'active' => 'Active',
@@ -45,7 +45,7 @@ class UserConstants
     ];
 
     /**
-     * Employment types
+     * Employment types.
      */
     public const EMPLOYMENT_TYPES = [
         'full_time' => 'Full-time',
@@ -57,7 +57,7 @@ class UserConstants
     ];
 
     /**
-     * Get position color for badges
+     * Get position color for badges.
      */
     public static function getPositionColor(string $position): string
     {
@@ -77,7 +77,7 @@ class UserConstants
     }
 
     /**
-     * Get status color for badges
+     * Get status color for badges.
      */
     public static function getStatusColor(string $status): string
     {
@@ -92,7 +92,7 @@ class UserConstants
     }
 
     /**
-     * Get employment type color for badges
+     * Get employment type color for badges.
      */
     public static function getEmploymentTypeColor(string $type): string
     {
@@ -108,7 +108,7 @@ class UserConstants
     }
 
     /**
-     * Get positions as options for select fields
+     * Get positions as options for select fields.
      */
     public static function getPositionOptions(): array
     {
@@ -116,7 +116,7 @@ class UserConstants
     }
 
     /**
-     * Get statuses as options for select fields
+     * Get statuses as options for select fields.
      */
     public static function getStatusOptions(): array
     {
@@ -124,7 +124,7 @@ class UserConstants
     }
 
     /**
-     * Get employment types as options for select fields
+     * Get employment types as options for select fields.
      */
     public static function getEmploymentTypeOptions(): array
     {

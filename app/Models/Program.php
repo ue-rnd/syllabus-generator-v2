@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property-read \App\Models\Department $department
+ */
 class Program extends Model
 {
     use HasFactory, SoftDeletes;
@@ -34,7 +37,6 @@ class Program extends Model
         'sort_order' => 'integer',
         'department_id' => 'integer',
         'objectives' => 'array',
-        'outcomes' => 'array',
     ];
 
     /**

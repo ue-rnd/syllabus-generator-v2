@@ -98,7 +98,8 @@ class DatabaseBackupResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $failedCount = static::getModel()::failed()->count();
+        $failedCount = static::getModel()::query()->failed()->count();
+
         return $failedCount > 0 ? (string) $failedCount : null;
     }
 

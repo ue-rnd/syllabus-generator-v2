@@ -5,10 +5,10 @@ namespace App\Filament\Admin\Clusters\BackupRecovery\Resources\DatabaseBackups\S
 use App\Models\DatabaseBackup;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -71,8 +71,8 @@ class DatabaseBackupForm
                 Section::make('Important Information')
                     ->description('Please read before proceeding')
                     ->schema([
-                        Placeholder::make('backup_info')
-                            ->content('
+                        TextEntry::make('backup_info')
+                            ->state('
                                 <div class="space-y-2 text-sm">
                                     <p><strong>What happens when I create a backup?</strong></p>
                                     <ul class="list-disc list-inside space-y-1 ml-4">
@@ -86,6 +86,7 @@ class DatabaseBackupForm
                                     <p>Backup files contain sensitive data. Keep them secure and delete old backups when no longer needed.</p>
                                 </div>
                             ')
+                            ->html()
                             ->columnSpanFull(),
                     ])
                     ->collapsible()

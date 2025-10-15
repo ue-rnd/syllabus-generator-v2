@@ -109,6 +109,7 @@ class FaqResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         $unpublishedCount = static::getModel()::where('is_published', false)->count();
+
         return $unpublishedCount > 0 ? (string) $unpublishedCount : null;
     }
 

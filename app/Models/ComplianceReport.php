@@ -67,6 +67,7 @@ class ComplianceReport extends Model
         if ($scopeId) {
             $query->where('scope_id', $scopeId);
         }
+
         return $query;
     }
 
@@ -124,9 +125,16 @@ class ComplianceReport extends Model
 
     public function getComplianceRateColorAttribute(): string
     {
-        if ($this->compliance_rate >= 90) return 'success';
-        if ($this->compliance_rate >= 75) return 'warning';
-        if ($this->compliance_rate >= 50) return 'orange';
+        if ($this->compliance_rate >= 90) {
+            return 'success';
+        }
+        if ($this->compliance_rate >= 75) {
+            return 'warning';
+        }
+        if ($this->compliance_rate >= 50) {
+            return 'orange';
+        }
+
         return 'danger';
     }
 
@@ -160,7 +168,7 @@ class ComplianceReport extends Model
         } catch (\Exception $e) {
             $this->update([
                 'status' => 'failed',
-                'summary' => ['error' => $e->getMessage()]
+                'summary' => ['error' => $e->getMessage()],
             ]);
         }
     }
@@ -189,9 +197,9 @@ class ComplianceReport extends Model
 
         // Apply scope filters
         if ($this->scope === 'college' && $this->scope_id) {
-            $query->whereHas('course.college', fn($q) => $q->where('id', $this->scope_id));
+            $query->whereHas('course.college', fn ($q) => $q->where('id', $this->scope_id));
         } elseif ($this->scope === 'department' && $this->scope_id) {
-            $query->whereHas('course.college.departments', fn($q) => $q->where('id', $this->scope_id));
+            $query->whereHas('course.college.departments', fn ($q) => $q->where('id', $this->scope_id));
         }
 
         // Apply period filters
@@ -202,7 +210,7 @@ class ComplianceReport extends Model
         // Apply custom filters
         if ($this->filters) {
             foreach ($this->filters as $field => $value) {
-                if (!empty($value)) {
+                if (! empty($value)) {
                     $query->where($field, $value);
                 }
             }
@@ -280,7 +288,7 @@ class ComplianceReport extends Model
             ],
             'generated' => [
                 'at' => now()->toISOString(),
-                'by' => $this->generatedBy?->name ?? 'System',
+                'by' => $this->generatedBy->name ?? 'System',
             ],
         ];
 
@@ -302,8 +310,8 @@ class ComplianceReport extends Model
         // Group by compliance status
         $statusCounts = collect($data['compliance_details'])->groupBy('is_compliant');
         $breakdown['by_status'] = [
-            'compliant' => $statusCounts->get(true, collect())->count(),
-            'non_compliant' => $statusCounts->get(false, collect())->count(),
+            'compliant' => $statusCounts->get('1', collect())->count(),
+            'non_compliant' => $statusCounts->get('0', collect())->count(),
         ];
 
         return $breakdown;

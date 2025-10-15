@@ -4,12 +4,12 @@ namespace App\Filament\Admin\Clusters\BackupRecovery\Resources\DatabaseBackups\T
 
 use App\Models\DatabaseBackup;
 use App\Services\DatabaseBackupService;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Notifications\Notification;
-use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -131,7 +131,7 @@ class DatabaseBackupsTable
                         $record->deleteFile();
                     }),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
                         ->after(function ($records) {

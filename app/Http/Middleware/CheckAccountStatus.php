@@ -18,24 +18,31 @@ class CheckAccountStatus
             $user = Auth::user();
 
             // Check if account is active
-            if (!$user->is_active) {
+            if (! $user->is_active) {
                 Auth::logout();
+
                 return redirect('/admin/login')->withErrors([
-                    'email' => 'Your account has been deactivated. Please contact an administrator.'
+                    'email' => 'Your account has been deactivated. Please contact an administrator.',
                 ]);
             }
 
             // Check if account is locked
             if ($user->isLocked()) {
                 Auth::logout();
+                
+                $lockedUntil = $user->locked_until;
+                if (is_string($lockedUntil)) {
+                    $lockedUntil = \Carbon\Carbon::parse($lockedUntil);
+                }
+
                 return redirect('/admin/login')->withErrors([
-                    'email' => "Your account is locked until {$user->locked_until->format('M j, Y g:i A')}. Please try again later or contact an administrator."
+                    'email' => "Your account is locked until {$lockedUntil->format('M j, Y g:i A')}. Please try again later or contact an administrator.",
                 ]);
             }
 
             // Check if password must be changed
             if ($user->mustChangePassword()) {
-                if (!$request->routeIs('filament.admin.pages.change-password')) {
+                if (! $request->routeIs('filament.admin.pages.change-password')) {
                     return redirect()->route('filament.admin.pages.change-password')
                         ->with('warning', 'You must change your password before continuing.');
                 }

@@ -5,8 +5,8 @@ namespace App\Filament\Admin\Clusters\SupportTraining\Resources\Faqs\Pages;
 use App\Filament\Admin\Clusters\SupportTraining\Resources\Faqs\FaqResource;
 use App\Models\Faq;
 use Filament\Actions;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListFaqs extends ListRecords

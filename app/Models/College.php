@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $departments_count
+ * @property int $programs_count
+ * @property int $courses_count
+ */
 class College extends Model
 {
     use HasFactory, SoftDeletes;
@@ -85,7 +90,7 @@ class College extends Model
      */
     public function getLogoUrlAttribute()
     {
-        return $this->logo_path ? asset('storage/'.$this->logo_path) : null;
+        return $this->logo_path ? asset('storage/' . $this->logo_path) : null;
     }
 
     /**

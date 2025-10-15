@@ -7,11 +7,12 @@ use App\Models\Setting;
 use App\Models\Syllabus;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use Livewire\Component;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
+
 // use Livewire\Component;
 
 #[Layout('livewire.client.dashboard.base')]
@@ -151,7 +152,7 @@ class CreateSyllabus extends Component
                     } catch (\Exception $e) {
                         // If parsing fails, set empty array
                         $this->program_outcomes = [];
-                        Log::warning('Failed to parse program outcomes: '.$e->getMessage());
+                        Log::warning('Failed to parse program outcomes: ' . $e->getMessage());
                     }
                 } else {
                     $this->program_outcomes = [];
@@ -352,7 +353,7 @@ class CreateSyllabus extends Component
                 $this->dispatch('step-changed');
             } else {
                 // Prevent jumping to unvalidated future steps
-                session()->flash('error', 'Please complete the current step before proceeding to step '.$step.'.');
+                session()->flash('error', 'Please complete the current step before proceeding to step ' . $step . '.');
             }
         }
     }
@@ -417,7 +418,7 @@ class CreateSyllabus extends Component
                     'learning_matrix.*.week_range.start.max' => 'This field cannot be greater than 20',
                     'learning_matrix.*.week_range.end.max' => 'This field cannot be greater than 20.',
                     'learning_matrix.*.week_range.start.min' => 'This field cannot be lesser than 1',
-                    'learning_matrix.*.week_range.end.min' => 'This field cannot be lesser than 1.'
+                    'learning_matrix.*.week_range.end.min' => 'This field cannot be lesser than 1.',
                 ]);
 
                 // Additional validation: if is_range is true, end must be >= start

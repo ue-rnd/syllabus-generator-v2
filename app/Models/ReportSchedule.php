@@ -109,7 +109,7 @@ class ReportSchedule extends Model
 
     public function executeSchedule(): void
     {
-        if (!$this->is_active || $this->next_run_at > now()) {
+        if (! $this->is_active || $this->next_run_at > now()) {
             return;
         }
 

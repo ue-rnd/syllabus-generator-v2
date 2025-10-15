@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property-read \App\Models\Course $course
+ * @property-read \App\Models\College|null $college
+ * @property-read \App\Models\User|null $principalPreparer
+ * @property-read \App\Models\User|null $reviewer
+ * @property-read \App\Models\User|null $recommendingApprover
+ * @property-read \App\Models\User|null $approver
+ * @property-read \App\Models\User|null $qaReviewer
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\StandardsCompliance> $standardsCompliances
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SyllabusQualityCheck> $qualityChecks
+ */
 class Syllabus extends Model
 {
     use HasFactory, SoftDeletes;
@@ -106,7 +117,7 @@ class Syllabus extends Model
             if (empty($syllabus->name) && $syllabus->course_id) {
                 $course = Course::find($syllabus->course_id);
                 if ($course) {
-                    $syllabus->name = $course->name.' Syllabus';
+                    $syllabus->name = $course->name . ' Syllabus';
                 }
             }
 
@@ -219,7 +230,7 @@ class Syllabus extends Model
     /**
      * Get the course that owns this syllabus.
      */
-    public function course()
+    public function course(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Course::class);
     }
@@ -227,7 +238,7 @@ class Syllabus extends Model
     /**
      * Get the principal preparer (current user who created it).
      */
-    public function principalPreparer()
+    public function principalPreparer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'principal_prepared_by');
     }
@@ -235,7 +246,7 @@ class Syllabus extends Model
     /**
      * Get the reviewer (department chair).
      */
-    public function reviewer()
+    public function reviewer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewed_by');
     }
@@ -243,7 +254,7 @@ class Syllabus extends Model
     /**
      * Get the recommending approver (associate dean).
      */
-    public function recommendingApprover()
+    public function recommendingApprover(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'recommending_approval');
     }
@@ -251,7 +262,7 @@ class Syllabus extends Model
     /**
      * Get the final approver (dean).
      */
-    public function approver()
+    public function approver(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
@@ -262,6 +273,46 @@ class Syllabus extends Model
     public function qaReviewer()
     {
         return $this->belongsTo(User::class, 'qa_reviewed_by');
+    }
+
+    /**
+     * Get the standards compliances for this syllabus.
+     */
+    public function standardsCompliances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StandardsCompliance::class);
+    }
+
+    /**
+     * Get the college through the course.
+     */
+    public function college(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
+    {
+        return $this->hasOneThrough(College::class, Course::class, 'id', 'id', 'course_id', 'college_id');
+    }
+
+    /**
+     * Get the quality checks for this syllabus.
+     */
+    public function qualityChecks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SyllabusQualityCheck::class);
+    }
+
+    /**
+     * Get the college_id through the course relationship.
+     */
+    public function getCollegeIdAttribute(): ?int
+    {
+        return $this->course?->college_id;
+    }
+
+    /**
+     * Get the created_by user ID (alias for principal_prepared_by).
+     */
+    public function getCreatedByAttribute(): ?int
+    {
+        return $this->principal_prepared_by;
     }
 
     /**
@@ -320,7 +371,7 @@ class Syllabus extends Model
                 if (isset($preparer['user_id'])) {
                     $user = User::find($preparer['user_id']);
                     if ($user) {
-                        $signers['prepared_by_'.($index + 1)] = $user;
+                        $signers['prepared_by_' . ($index + 1)] = $user;
                     }
                 }
             }
@@ -371,7 +422,7 @@ class Syllabus extends Model
      */
     public function getFullNameAttribute()
     {
-        return $this->name.' ('.$this->created_at->format('M j, Y').')';
+        return $this->name . ' (' . $this->created_at->format('M j, Y') . ')';
     }
 
     /**
@@ -460,13 +511,13 @@ class Syllabus extends Model
             $end = $weekRange['end'] ?? $start;
 
             if (! $start) {
-                $errors[] = 'Item '.($index + 1).': Week range is required';
+                $errors[] = 'Item ' . ($index + 1) . ': Week range is required';
 
                 continue;
             }
 
             if (isset($weekRange['is_range']) && $weekRange['is_range'] && $start > $end) {
-                $errors[] = 'Item '.($index + 1).': Start week must be less than or equal to end week';
+                $errors[] = 'Item ' . ($index + 1) . ': Start week must be less than or equal to end week';
 
                 continue;
             }
@@ -487,7 +538,7 @@ class Syllabus extends Model
     // ============= APPROVAL WORKFLOW METHODS =============
 
     /**
-     * Submit syllabus for approval
+     * Submit syllabus for approval.
      */
     public function submitForApproval(User $user): bool
     {
@@ -506,7 +557,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Approve syllabus at current stage
+     * Approve syllabus at current stage.
      */
     public function approve(User $user, ?string $comments = null): bool
     {
@@ -541,7 +592,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Reject syllabus with comments
+     * Reject syllabus with comments.
      */
     public function reject(User $user, string $comments): bool
     {
@@ -565,7 +616,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Create a revision from rejected syllabus
+     * Create a revision from rejected syllabus.
      */
     public function createRevision(): self
     {
@@ -588,7 +639,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Check if user can submit for approval
+     * Check if user can submit for approval.
      */
     public function canSubmitForApproval(User $user): bool
     {
@@ -597,7 +648,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Check if user can approve at current stage
+     * Check if user can approve at current stage.
      */
     public function canApprove(User $user): bool
     {
@@ -620,7 +671,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Check if user can reject
+     * Check if user can reject.
      */
     public function canReject(User $user): bool
     {
@@ -628,7 +679,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Get next approval status based on current user role
+     * Get next approval status based on current user role.
      */
     private function getNextApprovalStatus(User $user): string
     {
@@ -666,7 +717,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Get timestamp field for approval tracking
+     * Get timestamp field for approval tracking.
      */
     private function getTimestampField(User $user): ?string
     {
@@ -691,7 +742,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Get approver field for relationship tracking
+     * Get approver field for relationship tracking.
      */
     private function getApproverField(User $user): ?string
     {
@@ -716,7 +767,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Get appropriate approval message based on user role and status
+     * Get appropriate approval message based on user role and status.
      */
     private function getApprovalMessage(User $user, string $currentStatus): string
     {
@@ -736,12 +787,12 @@ class Syllabus extends Model
             ['department_chair', 'dept_chair_review'] => 'Approved by Department Chair',
             ['associate_dean', 'assoc_dean_review'] => 'Approved by Associate Dean',
             ['dean', 'dean_review'] => 'Approved by Dean',
-            default => 'Approved at '.$user->primary_role.' level',
+            default => 'Approved at ' . $user->primary_role . ' level',
         };
     }
 
     /**
-     * Add entry to approval history
+     * Add entry to approval history.
      */
     private function addToApprovalHistory(string $action, User $user, ?string $comments = null): void
     {
@@ -763,7 +814,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Check if user is in prepared_by array
+     * Check if user is in prepared_by array.
      */
     private function isUserInPreparedBy(User $user): bool
     {
@@ -775,7 +826,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Get syllabus approval status with details
+     * Get syllabus approval status with details.
      */
     public function getApprovalStatusDetails(): array
     {
@@ -796,7 +847,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Parent syllabus relationship (for revisions)
+     * Parent syllabus relationship (for revisions).
      */
     public function parentSyllabus()
     {
@@ -804,7 +855,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Child syllabi relationship (revisions)
+     * Child syllabi relationship (revisions).
      */
     public function revisions()
     {
@@ -812,7 +863,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Get all suggestions for this syllabus
+     * Get all suggestions for this syllabus.
      */
     public function suggestions()
     {
@@ -820,7 +871,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Get pending suggestions for this syllabus
+     * Get pending suggestions for this syllabus.
      */
     public function pendingSuggestions()
     {
@@ -828,7 +879,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Check if user can directly edit this syllabus
+     * Check if user can directly edit this syllabus.
      */
     public function canBeDirectlyEditedBy(User $user): bool
     {
@@ -838,7 +889,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Check if user can suggest changes to this syllabus
+     * Check if user can suggest changes to this syllabus.
      */
     public function canSuggestChanges(User $user): bool
     {
@@ -849,7 +900,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Check if user can view suggestions for this syllabus
+     * Check if user can view suggestions for this syllabus.
      */
     public function canViewSuggestions(User $user): bool
     {
@@ -863,7 +914,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Get suggestions count by status
+     * Get suggestions count by status.
      */
     public function getSuggestionsCountAttribute(): array
     {
@@ -876,7 +927,7 @@ class Syllabus extends Model
     }
 
     /**
-     * Create a suggestion for a field change
+     * Create a suggestion for a field change.
      */
     public function createSuggestion(User $user, string $fieldName, $suggestedValue, ?string $reason = null, ?array $metadata = null): SyllabusSuggestion
     {

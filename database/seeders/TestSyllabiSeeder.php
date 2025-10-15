@@ -60,6 +60,6 @@ class TestSyllabiSeeder extends Seeder
             Syllabus::create($syllabusData);
         }
 
-        $this->command->info('Created '.count($syllabi).' test syllabi.');
+        $this->command->info('Created ' . count($syllabi) . ' test syllabi.');
     }
 }

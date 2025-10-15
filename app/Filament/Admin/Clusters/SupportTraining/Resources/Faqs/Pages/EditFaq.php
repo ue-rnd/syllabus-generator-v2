@@ -21,6 +21,7 @@ class EditFaq extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data['last_updated_by'] = auth()->id();
+
         return $data;
     }
 }

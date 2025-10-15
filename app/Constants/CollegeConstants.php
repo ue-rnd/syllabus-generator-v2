@@ -5,7 +5,7 @@ namespace App\Constants;
 class CollegeConstants
 {
     /**
-     * College status options
+     * College status options.
      */
     public const STATUSES = [
         'active' => 'Active',
@@ -16,7 +16,7 @@ class CollegeConstants
     ];
 
     /**
-     * College types
+     * College types.
      */
     public const TYPES = [
         'undergraduate' => 'Undergraduate College',
@@ -32,7 +32,7 @@ class CollegeConstants
     ];
 
     /**
-     * Accreditation levels
+     * Accreditation levels.
      */
     public const ACCREDITATION_LEVELS = [
         'level_1' => 'Level 1 - Candidate Status',
@@ -46,7 +46,7 @@ class CollegeConstants
     ];
 
     /**
-     * Get status color for badges
+     * Get status color for badges.
      */
     public static function getStatusColor(string $status): string
     {
@@ -61,7 +61,7 @@ class CollegeConstants
     }
 
     /**
-     * Get type color for badges
+     * Get type color for badges.
      */
     public static function getTypeColor(string $type): string
     {
@@ -81,7 +81,7 @@ class CollegeConstants
     }
 
     /**
-     * Get accreditation level color for badges
+     * Get accreditation level color for badges.
      */
     public static function getAccreditationLevelColor(string $level): string
     {
@@ -99,7 +99,7 @@ class CollegeConstants
     }
 
     /**
-     * Get statuses as options for select fields
+     * Get statuses as options for select fields.
      */
     public static function getStatusOptions(): array
     {
@@ -107,7 +107,7 @@ class CollegeConstants
     }
 
     /**
-     * Get types as options for select fields
+     * Get types as options for select fields.
      */
     public static function getTypeOptions(): array
     {
@@ -115,7 +115,7 @@ class CollegeConstants
     }
 
     /**
-     * Get accreditation levels as options for select fields
+     * Get accreditation levels as options for select fields.
      */
     public static function getAccreditationLevelOptions(): array
     {

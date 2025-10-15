@@ -57,7 +57,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // Note: college_id and department_id are handled by separate migrations
-            
+
             $table->dropIndex(['is_active', 'position']);
             $table->dropIndex(['college_id', 'is_active']);
             $table->dropIndex(['department_id', 'is_active']);

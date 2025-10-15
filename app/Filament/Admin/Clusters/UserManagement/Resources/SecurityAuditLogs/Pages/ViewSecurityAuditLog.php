@@ -4,8 +4,12 @@ namespace App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLogs
 
 use App\Filament\Admin\Clusters\UserManagement\Resources\SecurityAuditLogs\SecurityAuditLogResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 
+/**
+ * @property \App\Models\SecurityAuditLog $record
+ */
 class ViewSecurityAuditLog extends ViewRecord
 {
     protected static string $resource = SecurityAuditLogResource::class;
@@ -21,7 +25,10 @@ class ViewSecurityAuditLog extends ViewRecord
                 ->visible(fn () => $this->record->status === 'logged' && auth()->user()->can('manage system settings'))
                 ->action(function () {
                     $this->record->update(['status' => 'investigating']);
-                    $this->notify('success', 'Audit log marked as under investigation');
+                    Notification::make()
+                        ->success()
+                        ->title('Audit log marked as under investigation')
+                        ->send();
                 }),
 
             Actions\Action::make('markAsResolved')
@@ -32,14 +39,16 @@ class ViewSecurityAuditLog extends ViewRecord
                 ->visible(fn () => in_array($this->record->status, ['logged', 'investigating']) && auth()->user()->can('manage system settings'))
                 ->action(function () {
                     $this->record->update(['status' => 'resolved']);
-                    $this->notify('success', 'Audit log marked as resolved');
+                    Notification::make()
+                        ->success()
+                        ->title('Audit log marked as resolved')
+                        ->send();
                 }),
 
             Actions\DeleteAction::make()
                 ->visible(fn () => auth()->user()->can('manage system settings')),
         ];
     }
-
 
     public function getTitle(): string
     {

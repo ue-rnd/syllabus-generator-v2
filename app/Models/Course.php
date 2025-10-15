@@ -4,8 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property-read \App\Models\College|null $college
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Program> $programs
+ */
 class Course extends Model
 {
     use HasFactory, SoftDeletes;
@@ -67,7 +75,7 @@ class Course extends Model
     /**
      * Get the college that owns this course.
      */
-    public function college()
+    public function college(): BelongsTo
     {
         return $this->belongsTo(College::class);
     }
@@ -75,7 +83,7 @@ class Course extends Model
     /**
      * Get the programs associated with this course.
      */
-    public function programs()
+    public function programs(): BelongsToMany
     {
         return $this->belongsToMany(Program::class, 'course_program');
     }
@@ -83,7 +91,7 @@ class Course extends Model
     /**
      * Get all syllabi for this course.
      */
-    public function syllabi()
+    public function syllabi(): HasMany
     {
         return $this->hasMany(Syllabus::class);
     }
@@ -91,7 +99,7 @@ class Course extends Model
     /**
      * Get the active (latest) syllabus for this course.
      */
-    public function activeSyllabus()
+    public function activeSyllabus(): HasOne
     {
         return $this->hasOne(Syllabus::class)->latest('created_at');
     }
@@ -99,7 +107,7 @@ class Course extends Model
     /**
      * Get the latest syllabus for this course.
      */
-    public function latestSyllabus()
+    public function latestSyllabus(): HasOne
     {
         return $this->activeSyllabus();
     }

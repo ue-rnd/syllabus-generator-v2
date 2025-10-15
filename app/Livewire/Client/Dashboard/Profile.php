@@ -62,9 +62,9 @@ class Profile extends Component
 
         $name = $validated['firstname'];
         if (! empty($validated['middlename'])) {
-            $name .= ' '.$validated['middlename'];
+            $name .= ' ' . $validated['middlename'];
         }
-        $name .= ' '.$validated['lastname'];
+        $name .= ' ' . $validated['lastname'];
 
         $validated['name'] = $name;
 

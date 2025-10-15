@@ -72,8 +72,8 @@ class ProgramsTable
                 ReplicateAction::make('duplicate')
                     ->label('Duplicate')
                     ->beforeReplicaSaved(function (array $data): array {
-                        $data['name'] = $data['name'].' (Copy)';
-                        $data['code'] = $data['code'].'_copy_'.now()->timestamp;
+                        $data['name'] = $data['name'] . ' (Copy)';
+                        $data['code'] = $data['code'] . '_copy_' . now()->timestamp;
 
                         return $data;
                     }),

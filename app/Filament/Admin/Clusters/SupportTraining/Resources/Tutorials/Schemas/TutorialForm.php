@@ -4,18 +4,16 @@ namespace App\Filament\Admin\Clusters\SupportTraining\Resources\Tutorials\Schema
 
 use App\Models\Tutorial;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
@@ -38,8 +36,7 @@ class TutorialForm
                                                     ->required()
                                                     ->maxLength(255)
                                                     ->live(onBlur: true)
-                                                    ->afterStateUpdated(fn (string $context, $state, callable $set) =>
-                                                        $context === 'edit' ? null : $set('slug', Str::slug($state))),
+                                                    ->afterStateUpdated(fn (string $context, $state, callable $set) => $context === 'edit' ? null : $set('slug', Str::slug($state))),
 
                                                 TextInput::make('slug')
                                                     ->label('URL Slug')
@@ -102,23 +99,11 @@ class TutorialForm
                                         RichEditor::make('content')
                                             ->label('Content')
                                             ->required()
-                                            ->toolbarButtons([
-                                                'attachFiles',
-                                                'blockquote',
-                                                'bold',
-                                                'bulletList',
-                                                'codeBlock',
-                                                'h2',
-                                                'h3',
-                                                'h4',
-                                                'italic',
-                                                'link',
-                                                'orderedList',
-                                                'redo',
-                                                'strike',
-                                                'table',
-                                                'undo',
-                                            ])
+                                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                                ['table', 'attachFiles'],
+                                                ['undo', 'redo']])
                                             ->columnSpanFull(),
                                     ]),
                             ]),
@@ -136,7 +121,7 @@ class TutorialForm
                                                     ->required()
                                                     ->maxLength(255),
 
-                                                MarkdownEditor::make('content')
+                                                RichEditor::make('content')
                                                     ->label('Step Content')
                                                     ->required()
                                                     ->toolbarButtons([
@@ -161,7 +146,7 @@ class TutorialForm
                                                             ->url(),
                                                     ]),
 
-                                                MarkdownEditor::make('code_snippet')
+                                                RichEditor::make('code_snippet')
                                                     ->label('Code Snippet')
                                                     ->helperText('Optional code example for this step'),
 
@@ -170,7 +155,9 @@ class TutorialForm
                                                     ->rows(2)
                                                     ->helperText('Additional notes or tips for this step'),
 
-                                                Hidden::make('step_order')
+                                                TextInput::make('step_order')
+                                                    ->numeric()
+                                                    ->hidden()
                                                     ->default(fn (callable $get) => count($get('../../steps')) + 1),
                                             ])
                                             ->orderColumn('step_order')
@@ -220,7 +207,8 @@ class TutorialForm
                                                     ->helperText('Show in featured tutorials section'),
                                             ]),
 
-                                        Hidden::make('author_id')
+                                        TextInput::make('author_id')
+                                            ->hidden()
                                             ->default(auth()->id()),
                                     ]),
                             ]),

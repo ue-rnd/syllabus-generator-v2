@@ -76,9 +76,9 @@ class ReportTemplate extends Model
     {
         return $query->where(function ($q) use ($user) {
             $q->where('is_public', true)
-              ->orWhere('created_by', $user->id)
-              ->orWhere('college_id', $user->college_id)
-              ->orWhere('department_id', $user->department_id);
+                ->orWhere('created_by', $user->id)
+                ->orWhere('college_id', $user->college_id)
+                ->orWhere('department_id', $user->department_id);
         });
     }
 
@@ -131,7 +131,7 @@ class ReportTemplate extends Model
         $requiredFields = $this->getRequiredConfigFields();
 
         foreach ($requiredFields as $field) {
-            if (!isset($config[$field]) || empty($config[$field])) {
+            if (! isset($config[$field]) || empty($config[$field])) {
                 $errors[] = "Required field '{$field}' is missing";
             }
         }

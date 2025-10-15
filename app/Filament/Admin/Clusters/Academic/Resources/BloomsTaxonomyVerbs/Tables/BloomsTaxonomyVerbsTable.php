@@ -7,7 +7,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ReplicateAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -24,8 +23,9 @@ class BloomsTaxonomyVerbsTable
                     ->searchable()
                     ->sortable(),
 
-                BadgeColumn::make('category')
+                TextColumn::make('category')
                     ->label('Category')
+                    ->badge()
                     ->color(fn ($record) => $record->category_color)
                     ->sortable(),
 
@@ -84,8 +84,8 @@ class BloomsTaxonomyVerbsTable
                 ReplicateAction::make('duplicate')
                     ->label('Duplicate')
                     ->beforeReplicaSaved(function (array $data): array {
-                        $data['key'] = $data['key'].'_copy_'.now()->timestamp;
-                        $data['label'] = $data['label'].' (Copy)';
+                        $data['key'] = $data['key'] . '_copy_' . now()->timestamp;
+                        $data['label'] = $data['label'] . ' (Copy)';
 
                         return $data;
                     }),

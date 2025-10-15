@@ -12,7 +12,7 @@ class QualityAssuranceService
     public function runAutomatedQualityCheck(Syllabus $syllabus, ?QualityChecklist $checklist = null): SyllabusQualityCheck
     {
         // Use default checklist if none provided
-        if (!$checklist) {
+        if (! $checklist) {
             $checklist = $this->getDefaultChecklistForSyllabus($syllabus);
         }
 
@@ -56,7 +56,7 @@ class QualityAssuranceService
             ->first();
 
         // Fall back to college-specific checklist
-        if (!$checklist) {
+        if (! $checklist) {
             $checklist = QualityChecklist::active()
                 ->where('college_id', $syllabus->course->college_id)
                 ->where('is_default', true)
@@ -64,7 +64,7 @@ class QualityAssuranceService
         }
 
         // Fall back to institution-wide default checklist
-        if (!$checklist) {
+        if (! $checklist) {
             $checklist = QualityChecklist::active()
                 ->whereNull('college_id')
                 ->whereNull('department_id')
@@ -73,7 +73,7 @@ class QualityAssuranceService
         }
 
         // Create a basic checklist if none exists
-        if (!$checklist) {
+        if (! $checklist) {
             $checklist = $this->createBasicQualityChecklist();
         }
 
@@ -170,11 +170,11 @@ class QualityAssuranceService
 
         // Apply filters
         if (isset($filters['college_id'])) {
-            $query->whereHas('syllabus.course.college', fn($q) => $q->where('id', $filters['college_id']));
+            $query->whereHas('syllabus.course.college', fn ($q) => $q->where('id', $filters['college_id']));
         }
 
         if (isset($filters['department_id'])) {
-            $query->whereHas('syllabus.course.college.departments', fn($q) => $q->where('id', $filters['department_id']));
+            $query->whereHas('syllabus.course.college.departments', fn ($q) => $q->where('id', $filters['department_id']));
         }
 
         if (isset($filters['period_start']) && isset($filters['period_end'])) {
@@ -213,11 +213,17 @@ class QualityAssuranceService
         foreach ($qualityChecks->where('overall_score', '>', 0) as $check) {
             $score = $check->overall_score;
 
-            if ($score >= 90) $distribution['90-100']++;
-            elseif ($score >= 80) $distribution['80-89']++;
-            elseif ($score >= 70) $distribution['70-79']++;
-            elseif ($score >= 60) $distribution['60-69']++;
-            else $distribution['0-59']++;
+            if ($score >= 90) {
+                $distribution['90-100']++;
+            } elseif ($score >= 80) {
+                $distribution['80-89']++;
+            } elseif ($score >= 70) {
+                $distribution['70-79']++;
+            } elseif ($score >= 60) {
+                $distribution['60-69']++;
+            } else {
+                $distribution['0-59']++;
+            }
         }
 
         return $distribution;
@@ -238,6 +244,7 @@ class QualityAssuranceService
         }
 
         arsort($failures);
+
         return array_slice($failures, 0, 10, true); // Top 10 common failures
     }
 
@@ -247,7 +254,7 @@ class QualityAssuranceService
         $syllabi = Syllabus::whereIn('status', ['pending_approval', 'dept_chair_review'])
             ->whereDoesntHave('qualityChecks', function ($query) {
                 $query->where('auto_generated', true)
-                      ->where('checked_at', '>=', now()->subDays(7)); // Check if checked in last 7 days
+                    ->where('checked_at', '>=', now()->subDays(7)); // Check if checked in last 7 days
             })
             ->limit(50) // Process in batches
             ->get();

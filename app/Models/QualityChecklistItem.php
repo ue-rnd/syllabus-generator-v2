@@ -110,11 +110,12 @@ class QualityChecklistItem extends Model
 
     private function validateRequired($value): array
     {
-        $passed = !empty($value) && $value !== null && trim(strip_tags($value)) !== '';
+        $passed = ! empty($value) && $value !== null && trim(strip_tags($value)) !== '';
+
         return [
             'passed' => $passed,
             'score' => $passed ? 100 : 0,
-            'message' => $passed ? 'Field is present and not empty' : 'Field is required but missing or empty'
+            'message' => $passed ? 'Field is present and not empty' : 'Field is required but missing or empty',
         ];
     }
 
@@ -129,7 +130,7 @@ class QualityChecklistItem extends Model
             'score' => $passed ? 100 : round(($length / $minLength) * 100, 1),
             'message' => $passed
                 ? "Content meets minimum length requirement ({$length}/{$minLength} characters)"
-                : "Content too short: {$length} characters, minimum required: {$minLength}"
+                : "Content too short: {$length} characters, minimum required: {$minLength}",
         ];
     }
 
@@ -144,7 +145,7 @@ class QualityChecklistItem extends Model
             'score' => $passed ? 100 : max(0, 100 - round((($length - $maxLength) / $maxLength) * 100, 1)),
             'message' => $passed
                 ? "Content within length limit ({$length}/{$maxLength} characters)"
-                : "Content too long: {$length} characters, maximum allowed: {$maxLength}"
+                : "Content too long: {$length} characters, maximum allowed: {$maxLength}",
         ];
     }
 
@@ -163,7 +164,7 @@ class QualityChecklistItem extends Model
             }
         }
 
-        $passed = !empty($foundKeywords);
+        $passed = ! empty($foundKeywords);
         $score = round((count($foundKeywords) / count($keywords)) * 100, 1);
 
         return [
@@ -171,7 +172,7 @@ class QualityChecklistItem extends Model
             'score' => $score,
             'message' => $passed
                 ? 'Found keywords: ' . implode(', ', $foundKeywords)
-                : 'Required keywords not found: ' . implode(', ', $keywords)
+                : 'Required keywords not found: ' . implode(', ', $keywords),
         ];
     }
 
@@ -186,7 +187,7 @@ class QualityChecklistItem extends Model
             'score' => $passed ? 100 : round(($count / $minItems) * 100, 1),
             'message' => $passed
                 ? "Has sufficient items ({$count}/{$minItems})"
-                : "Insufficient items: {$count}, minimum required: {$minItems}"
+                : "Insufficient items: {$count}, minimum required: {$minItems}",
         ];
     }
 
@@ -201,13 +202,13 @@ class QualityChecklistItem extends Model
             'score' => $passed ? 100 : max(0, 100 - round((($count - $maxItems) / $maxItems) * 100, 1)),
             'message' => $passed
                 ? "Within item limit ({$count}/{$maxItems})"
-                : "Too many items: {$count}, maximum allowed: {$maxItems}"
+                : "Too many items: {$count}, maximum allowed: {$maxItems}",
         ];
     }
 
     private function validateNumericRange($value, $min, $max): array
     {
-        $number = is_numeric($value) ? (float)$value : 0;
+        $number = is_numeric($value) ? (float) $value : 0;
         $passed = $number >= $min && $number <= $max;
 
         return [
@@ -215,13 +216,13 @@ class QualityChecklistItem extends Model
             'score' => $passed ? 100 : 0,
             'message' => $passed
                 ? "Value ({$number}) within acceptable range ({$min}-{$max})"
-                : "Value ({$number}) outside acceptable range ({$min}-{$max})"
+                : "Value ({$number}) outside acceptable range ({$min}-{$max})",
         ];
     }
 
     private function validateDateRange($value, $startDate, $endDate): array
     {
-        if (!$value) {
+        if (! $value) {
             return ['passed' => false, 'score' => 0, 'message' => 'No date provided'];
         }
 
@@ -243,13 +244,13 @@ class QualityChecklistItem extends Model
         return [
             'passed' => $passed,
             'score' => $passed ? 100 : 0,
-            'message' => $message
+            'message' => $message,
         ];
     }
 
     private function validateFormat($value, string $pattern): array
     {
-        if (!$pattern) {
+        if (! $pattern) {
             return ['passed' => true, 'score' => 100, 'message' => 'No format pattern specified'];
         }
 
@@ -257,11 +258,11 @@ class QualityChecklistItem extends Model
         $passed = preg_match($pattern, $text);
 
         return [
-            'passed' => (bool)$passed,
+            'passed' => (bool) $passed,
             'score' => $passed ? 100 : 0,
             'message' => $passed
                 ? 'Content matches required format'
-                : 'Content does not match required format pattern'
+                : 'Content does not match required format pattern',
         ];
     }
 
@@ -278,7 +279,7 @@ class QualityChecklistItem extends Model
         return [
             'passed' => $passed,
             'score' => $completeness,
-            'message' => "Content completeness: {$completeness}%"
+            'message' => "Content completeness: {$completeness}%",
         ];
     }
 
@@ -298,7 +299,7 @@ class QualityChecklistItem extends Model
                 $completedFields = 0;
 
                 foreach ($item as $value) {
-                    if (!empty($value) && $value !== null && trim(strip_tags($value)) !== '') {
+                    if (! empty($value) && $value !== null && trim(strip_tags($value)) !== '') {
                         $completedFields++;
                     }
                 }
@@ -306,7 +307,7 @@ class QualityChecklistItem extends Model
                 $itemCompleteness = $itemFields > 0 ? ($completedFields / $itemFields) : 1;
                 $completeItems += $itemCompleteness;
             } else {
-                if (!empty($item) && $item !== null && trim(strip_tags($item)) !== '') {
+                if (! empty($item) && $item !== null && trim(strip_tags($item)) !== '') {
                     $completeItems++;
                 }
             }

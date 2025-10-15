@@ -26,7 +26,7 @@ class ListDatabaseBackups extends ListRecords
                 ->label('Import Backup')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->color('success')
-                ->form([
+                ->schema([
                     FileUpload::make('backup_file')
                         ->label('Backup File')
                         ->required()
@@ -92,12 +92,12 @@ class ListDatabaseBackups extends ListRecords
                     try {
                         $service = app(DatabaseBackupService::class);
                         $stats = $service->getBackupStatistics();
-                        
+
                         $content = '<div class="space-y-6">';
-                        
+
                         // Overview Section
                         $content .= '<div class="grid grid-cols-2 gap-4">';
-                        
+
                         // Total backups
                         if (isset($stats['total_backups'])) {
                             $content .= '<div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">';
@@ -105,7 +105,7 @@ class ListDatabaseBackups extends ListRecords
                             $content .= '<span class="text-lg font-semibold text-gray-900 dark:text-white">' . $stats['total_backups'] . '</span>';
                             $content .= '</div>';
                         }
-                        
+
                         // Successful backups
                         if (isset($stats['successful_backups'])) {
                             $content .= '<div class="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">';
@@ -113,7 +113,7 @@ class ListDatabaseBackups extends ListRecords
                             $content .= '<span class="text-lg font-semibold text-green-900 dark:text-green-100">' . $stats['successful_backups'] . '</span>';
                             $content .= '</div>';
                         }
-                        
+
                         // Failed backups
                         if (isset($stats['failed_backups'])) {
                             $content .= '<div class="flex justify-between items-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">';
@@ -121,7 +121,7 @@ class ListDatabaseBackups extends ListRecords
                             $content .= '<span class="text-lg font-semibold text-red-900 dark:text-red-100">' . $stats['failed_backups'] . '</span>';
                             $content .= '</div>';
                         }
-                        
+
                         // Total size
                         if (isset($stats['total_size'])) {
                             $content .= '<div class="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">';
@@ -129,37 +129,37 @@ class ListDatabaseBackups extends ListRecords
                             $content .= '<span class="text-lg font-semibold text-blue-900 dark:text-blue-100">' . number_format($stats['total_size'] / 1024, 2) . ' MB</span>';
                             $content .= '</div>';
                         }
-                        
+
                         $content .= '</div>';
-                        
+
                         // Latest Backup Section
                         if (isset($stats['latest']) && is_array($stats['latest'])) {
                             $latest = $stats['latest'];
                             $content .= '<div class="border-t border-gray-200 dark:border-gray-700 pt-4">';
                             $content .= '<h4 class="font-semibold text-gray-900 dark:text-white mb-3">Latest Backup</h4>';
                             $content .= '<div class="space-y-2 text-sm">';
-                            
+
                             if (isset($latest['name'])) {
                                 $content .= '<div class="flex justify-between">';
                                 $content .= '<span class="text-gray-600 dark:text-gray-400">Name:</span>';
                                 $content .= '<span class="font-medium text-gray-900 dark:text-white">' . htmlspecialchars($latest['name']) . '</span>';
                                 $content .= '</div>';
                             }
-                            
+
                             if (isset($latest['created_at'])) {
                                 $content .= '<div class="flex justify-between">';
                                 $content .= '<span class="text-gray-600 dark:text-gray-400">Created:</span>';
                                 $content .= '<span class="font-medium text-gray-900 dark:text-white">' . htmlspecialchars($latest['created_at']) . '</span>';
                                 $content .= '</div>';
                             }
-                            
+
                             if (isset($latest['backup_type'])) {
                                 $content .= '<div class="flex justify-between">';
                                 $content .= '<span class="text-gray-600 dark:text-gray-400">Type:</span>';
                                 $content .= '<span class="font-medium text-gray-900 dark:text-white capitalize">' . htmlspecialchars($latest['backup_type']) . '</span>';
                                 $content .= '</div>';
                             }
-                            
+
                             if (isset($latest['tables_included']) && is_array($latest['tables_included'])) {
                                 $tableCount = count($latest['tables_included']);
                                 $content .= '<div class="flex justify-between">';
@@ -167,39 +167,39 @@ class ListDatabaseBackups extends ListRecords
                                 $content .= '<span class="font-medium text-gray-900 dark:text-white">' . $tableCount . ' table' . ($tableCount !== 1 ? 's' : '') . '</span>';
                                 $content .= '</div>';
                             }
-                            
+
                             $content .= '</div>';
                             $content .= '</div>';
                         }
-                        
+
                         // Oldest Backup Section
                         if (isset($stats['oldest']) && is_array($stats['oldest'])) {
                             $oldest = $stats['oldest'];
                             $content .= '<div class="border-t border-gray-200 dark:border-gray-700 pt-4">';
                             $content .= '<h4 class="font-semibold text-gray-900 dark:text-white mb-3">Oldest Backup</h4>';
                             $content .= '<div class="space-y-2 text-sm">';
-                            
+
                             if (isset($oldest['name'])) {
                                 $content .= '<div class="flex justify-between">';
                                 $content .= '<span class="text-gray-600 dark:text-gray-400">Name:</span>';
                                 $content .= '<span class="font-medium text-gray-900 dark:text-white">' . htmlspecialchars($oldest['name']) . '</span>';
                                 $content .= '</div>';
                             }
-                            
+
                             if (isset($oldest['created_at'])) {
                                 $content .= '<div class="flex justify-between">';
                                 $content .= '<span class="text-gray-600 dark:text-gray-400">Created:</span>';
                                 $content .= '<span class="font-medium text-gray-900 dark:text-white">' . htmlspecialchars($oldest['created_at']) . '</span>';
                                 $content .= '</div>';
                             }
-                            
+
                             if (isset($oldest['backup_type'])) {
                                 $content .= '<div class="flex justify-between">';
                                 $content .= '<span class="text-gray-600 dark:text-gray-400">Type:</span>';
                                 $content .= '<span class="font-medium text-gray-900 dark:text-white capitalize">' . htmlspecialchars($oldest['backup_type']) . '</span>';
                                 $content .= '</div>';
                             }
-                            
+
                             if (isset($oldest['tables_included']) && is_array($oldest['tables_included'])) {
                                 $tableCount = count($oldest['tables_included']);
                                 $content .= '<div class="flex justify-between">';
@@ -207,13 +207,13 @@ class ListDatabaseBackups extends ListRecords
                                 $content .= '<span class="font-medium text-gray-900 dark:text-white">' . $tableCount . ' table' . ($tableCount !== 1 ? 's' : '') . '</span>';
                                 $content .= '</div>';
                             }
-                            
+
                             $content .= '</div>';
                             $content .= '</div>';
                         }
-                        
+
                         $content .= '</div>';
-                        
+
                         return new \Illuminate\Support\HtmlString($content);
                     } catch (\Exception $e) {
                         return new \Illuminate\Support\HtmlString('<div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400">Unable to load statistics: ' . htmlspecialchars($e->getMessage()) . '</div>');

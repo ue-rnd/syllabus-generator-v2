@@ -13,11 +13,11 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Notifications\Notification;
+use Filament\Pages\Page;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Notifications\Notification;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Pages\Page;
 use Filament\Support\Exceptions\Halt;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
@@ -37,13 +37,13 @@ class ProfileManagement extends Page
     protected static ?int $navigationSort = 100;
 
     public ?array $data = [];
-    
+
     public User $user;
 
     public function mount(): void
     {
         $this->user = Auth::user();
-        
+
         $this->form->fill([
             'firstname' => $this->user->firstname ?? '',
             'middlename' => $this->user->middlename ?? '',
@@ -230,12 +230,12 @@ class ProfileManagement extends Page
                         ->schema([
                             TextInput::make('college_display')
                                 ->label('College')
-                                ->default(fn () => Auth::user()->college?->name ?? 'Not Assigned')
+                                ->default(fn () => Auth::user()->college->name ?? 'Not Assigned')
                                 ->disabled(),
 
                             TextInput::make('department_display')
                                 ->label('Department')
-                                ->default(fn () => Auth::user()->department?->name ?? 'Not Assigned')
+                                ->default(fn () => Auth::user()->department->name ?? 'Not Assigned')
                                 ->disabled(),
                         ]),
 

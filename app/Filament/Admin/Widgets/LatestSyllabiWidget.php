@@ -37,7 +37,7 @@ class LatestSyllabiWidget extends BaseWidget
                 Tables\Columns\TextColumn::make('name')
                     ->label('Academic Year')
                     ->formatStateUsing(function ($record) {
-                        return $record->ay_start.'-'.$record->ay_end;
+                        return $record->ay_start . '-' . $record->ay_end;
                     })
                     ->sortable(),
 
@@ -47,7 +47,7 @@ class LatestSyllabiWidget extends BaseWidget
                     ->sortable()
                     ->since(),
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('view')
                     ->icon('heroicon-m-eye')
                     ->url(fn (Syllabus $record): string => route('syllabus.pdf.view', $record)),

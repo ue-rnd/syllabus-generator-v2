@@ -11,7 +11,7 @@ use Filament\Notifications\Notification;
 class SyllabusApprovalActions
 {
     /**
-     * Submit for approval action
+     * Submit for approval action.
      */
     public static function submitForApproval(): Action
     {
@@ -19,7 +19,8 @@ class SyllabusApprovalActions
             ->label('Submit for Approval')
             ->icon('heroicon-o-paper-airplane')
             ->color('warning')
-            ->visible(fn (Syllabus $record): bool => $record->canSubmitForApproval(auth()->user())
+            ->visible(
+                fn (Syllabus $record): bool => $record->canSubmitForApproval(auth()->user())
             )
             ->requiresConfirmation()
             ->modalHeading('Submit Syllabus for Approval')
@@ -41,7 +42,7 @@ class SyllabusApprovalActions
     }
 
     /**
-     * Approve action
+     * Approve action.
      */
     public static function approve(): Action
     {
@@ -49,9 +50,10 @@ class SyllabusApprovalActions
             ->label('Approve')
             ->icon('heroicon-o-check-circle')
             ->color('success')
-            ->visible(fn (Syllabus $record): bool => $record->canApprove(auth()->user())
+            ->visible(
+                fn (Syllabus $record): bool => $record->canApprove(auth()->user())
             )
-            ->form([
+            ->schema([
                 Textarea::make('comments')
                     ->label('Approval Comments (Optional)')
                     ->placeholder('Add any comments about this approval...')
@@ -77,7 +79,7 @@ class SyllabusApprovalActions
     }
 
     /**
-     * Reject action
+     * Reject action.
      */
     public static function reject(): Action
     {
@@ -85,9 +87,10 @@ class SyllabusApprovalActions
             ->label('Reject')
             ->icon('heroicon-o-x-circle')
             ->color('danger')
-            ->visible(fn (Syllabus $record): bool => $record->canReject(auth()->user())
+            ->visible(
+                fn (Syllabus $record): bool => $record->canReject(auth()->user())
             )
-            ->form([
+            ->schema([
                 Textarea::make('comments')
                     ->label('Rejection Comments')
                     ->placeholder('Please provide reasons for rejection...')
@@ -115,7 +118,7 @@ class SyllabusApprovalActions
     }
 
     /**
-     * Create revision action
+     * Create revision action.
      */
     public static function createRevision(): Action
     {
@@ -123,7 +126,8 @@ class SyllabusApprovalActions
             ->label('Create Revision')
             ->icon('heroicon-o-document-duplicate')
             ->color('primary')
-            ->visible(fn (Syllabus $record): bool => $record->status === 'rejected' &&
+            ->visible(
+                fn (Syllabus $record): bool => $record->status === 'rejected' &&
                 ($record->principal_prepared_by === auth()->id() ||
                  collect($record->prepared_by)->contains('user_id', auth()->id()))
             )
@@ -146,7 +150,7 @@ class SyllabusApprovalActions
     }
 
     /**
-     * View approval history action
+     * View approval history action.
      */
     public static function viewApprovalHistory(): Action
     {
@@ -174,7 +178,7 @@ class SyllabusApprovalActions
     }
 
     /**
-     * Export PDF action
+     * Export PDF action.
      */
     public static function exportPdf(): Action
     {
@@ -190,7 +194,7 @@ class SyllabusApprovalActions
                 } catch (\Exception $e) {
                     Notification::make()
                         ->title('PDF Export Failed')
-                        ->body('Error: '.$e->getMessage())
+                        ->body('Error: ' . $e->getMessage())
                         ->danger()
                         ->send();
 
@@ -204,7 +208,7 @@ class SyllabusApprovalActions
     }
 
     /**
-     * View PDF action (stream in browser)
+     * View PDF action (stream in browser).
      */
     public static function viewPdf(): Action
     {
@@ -217,7 +221,7 @@ class SyllabusApprovalActions
     }
 
     /**
-     * Get all available actions for a syllabus
+     * Get all available actions for a syllabus.
      */
     public static function getActionsForSyllabus(Syllabus $record): array
     {

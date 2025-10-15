@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Clusters\BackupRecovery\Resources\DatabaseBackups\S
 
 use App\Models\DatabaseBackup;
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -61,36 +60,37 @@ class DatabaseBackupInfolist
                         TextEntry::make('tables_count')
                             ->label('Total Tables')
                             ->state(fn ($record) => is_array($record->tables_included) ? count($record->tables_included) : 0),
-                        
+
                         TextEntry::make('tables_list')
                             ->label('Tables')
                             ->state(function ($record) {
-                                if (empty($record->tables_included) || !is_array($record->tables_included)) {
+                                if (empty($record->tables_included) || ! is_array($record->tables_included)) {
                                     return 'No tables specified';
                                 }
-                                
+
                                 // Limit to first 20 tables to prevent memory issues
                                 $tables = array_slice($record->tables_included, 0, 20);
                                 $mainTables = DatabaseBackup::getMainTables();
-                                
+
                                 $tableList = collect($tables)->map(function ($table) use ($mainTables) {
                                     if (is_array($table)) {
                                         $tableName = key($table);
                                     } else {
                                         $tableName = $table;
                                     }
+
                                     return $mainTables[$tableName] ?? $tableName;
                                 })->join(', ');
-                                
+
                                 $remaining = count($record->tables_included) - count($tables);
                                 if ($remaining > 0) {
                                     $tableList .= " ... and {$remaining} more";
                                 }
-                                
+
                                 return $tableList;
                             })
                             ->columnSpanFull()
-                            ->visible(fn ($record) => !empty($record->tables_included)),
+                            ->visible(fn ($record) => ! empty($record->tables_included)),
                     ])
                     ->columns(2)
                     ->columnSpanFull(),
@@ -103,7 +103,7 @@ class DatabaseBackupInfolist
                             ->color('danger')
                             ->columnSpanFull(),
                     ])
-                    ->visible(fn ($record) => $record->status === 'failed' && !empty($record->error_message))
+                    ->visible(fn ($record) => $record->status === 'failed' && ! empty($record->error_message))
                     ->columnSpanFull(),
 
                 Section::make('Metadata')

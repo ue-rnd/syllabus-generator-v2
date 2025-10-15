@@ -121,7 +121,7 @@ class QualityAuditAction extends Model
         return $this->status === 'completed';
     }
 
-    public function complete(string $notes = null): void
+    public function complete(?string $notes = null): void
     {
         $this->update([
             'status' => 'completed',
@@ -131,7 +131,7 @@ class QualityAuditAction extends Model
         ]);
     }
 
-    public function updateProgress(int $percentage, string $notes = null): void
+    public function updateProgress(int $percentage, ?string $notes = null): void
     {
         $status = $this->status;
         if ($percentage >= 100) {
@@ -150,11 +150,11 @@ class QualityAuditAction extends Model
 
     public function getDaysUntilDueAttribute(): ?int
     {
-        if (!$this->due_date) {
+        if (! $this->due_date) {
             return null;
         }
 
-        return now()->diffInDays($this->due_date, false);
+        return (int) now()->diffInDays($this->due_date, false);
     }
 
     public static function getPriorityOptions(): array

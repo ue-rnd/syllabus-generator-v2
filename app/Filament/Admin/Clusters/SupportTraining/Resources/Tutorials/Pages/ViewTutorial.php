@@ -6,6 +6,9 @@ use App\Filament\Admin\Clusters\SupportTraining\Resources\Tutorials\TutorialReso
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
+/**
+ * @property \App\Models\Tutorial $record
+ */
 class ViewTutorial extends ViewRecord
 {
     protected static string $resource = TutorialResource::class;
@@ -17,7 +20,7 @@ class ViewTutorial extends ViewRecord
         ];
     }
 
-    public function mount(int | string $record): void
+    public function mount(int|string $record): void
     {
         parent::mount($record);
 

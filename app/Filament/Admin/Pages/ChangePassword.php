@@ -19,7 +19,7 @@ use Illuminate\Validation\Rules\Password;
 class ChangePassword extends Page implements HasForms
 {
     use InteractsWithForms;
-    
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Key;
 
     protected string $view = 'filament.admin.pages.change-password';
@@ -57,7 +57,7 @@ class ChangePassword extends Page implements HasForms
                             ->letters()
                             ->mixedCase()
                             ->numbers()
-                            ->symbols()
+                            ->symbols(),
                     ])
                     ->validationAttribute('new password')
                     ->helperText('Password must be at least 8 characters long and contain uppercase, lowercase, numbers, and symbols.'),
@@ -79,13 +79,13 @@ class ChangePassword extends Page implements HasForms
             $authService = app(AuthSecurityService::class);
 
             // Verify current password
-            if (!Hash::check($data['current_password'], $user->password)) {
+            if (! Hash::check($data['current_password'], $user->password)) {
                 throw new Halt('The current password is incorrect.');
             }
 
             // Check password strength
             $passwordErrors = $authService->validatePasswordStrength($data['password']);
-            if (!empty($passwordErrors)) {
+            if (! empty($passwordErrors)) {
                 throw new Halt(implode(' ', $passwordErrors));
             }
 
@@ -146,8 +146,15 @@ class ChangePassword extends Page implements HasForms
             return 'You must change your password before continuing to use the system.';
         }
 
-        if ($user->password_changed_at && $user->password_changed_at->diffInDays(now()) > 60) {
-            return 'Your password is over 60 days old. Consider changing it for security.';
+        $passwordChangedAt = $user->password_changed_at;
+        if ($passwordChangedAt) {
+            if (!($passwordChangedAt instanceof \Carbon\Carbon)) {
+                $passwordChangedAt = \Carbon\Carbon::parse($passwordChangedAt);
+            }
+            
+            if ($passwordChangedAt->diffInDays(now()) > 60) {
+                return 'Your password is over 60 days old. Consider changing it for security.';
+            }
         }
 
         return 'Update your password to keep your account secure.';

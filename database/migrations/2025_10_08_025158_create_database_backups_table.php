@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('error_message')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             // Add indexes for common queries
             $table->index(['status']);
             $table->index(['backup_type']);

@@ -92,10 +92,10 @@ class SettingResource extends Resource
                     ->searchable(),
             ])
             ->defaultSort('sort_order')
-            ->actions([
+            ->recordActions([
                 EditAction::make()
-                    ->modalHeading(fn ($record) => 'Edit '.$record->label)
-                    ->form(function (Setting $record) {
+                    ->modalHeading(fn ($record) => 'Edit ' . $record->label)
+                    ->schema(function (Setting $record) {
                         return match ($record->type) {
                             'select' => [
                                 Select::make('value')

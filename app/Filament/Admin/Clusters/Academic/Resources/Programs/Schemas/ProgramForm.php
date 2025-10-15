@@ -5,7 +5,6 @@ namespace App\Filament\Admin\Clusters\Academic\Resources\Programs\Schemas;
 use App\Constants\ProgramConstants;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -70,7 +69,12 @@ class ProgramForm
                 Section::make('Academic Content')
                     ->description('Program outcomes, objectives, and detailed description')
                     ->schema([
-                        Textarea::make('description')
+                        RichEditor::make('description')
+                            ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                ['table', 'attachFiles'],
+                                ['undo', 'redo']])
                             ->columnSpanFull(),
                         RichEditor::make('outcomes')
                             ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
