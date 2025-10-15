@@ -591,6 +591,7 @@
                             <!-- Assessments -->
                             <div>
                                 <label class="block text-sm font-medium text-accent-desc mb-2">Weekly Assessments</label>
+                                {{-- You mean quill-editor? I dunno what u tryna do so ill comment --}}
                                 <x-rich-editor
                                     wire:model.live="learning_matrix.{{ $index }}.assessments"
                                     placeholder="Describe the assessments for this week..."
