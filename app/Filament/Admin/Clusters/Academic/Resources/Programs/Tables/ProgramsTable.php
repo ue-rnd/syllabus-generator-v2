@@ -7,6 +7,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
@@ -25,8 +26,8 @@ class ProgramsTable
                 TextColumn::make('level')
                     ->searchable()
                     ->badge()
-                    ->color(fn($state): string => is_string($state) ? ProgramConstants::getLevelColor($state) : 'gray')
-                    ->formatStateUsing(fn(string $state): string => ProgramConstants::getLevelOptions()[$state]),
+                    ->color(fn ($state): string => is_string($state) ? ProgramConstants::getLevelColor($state) : 'gray')
+                    ->formatStateUsing(fn (string $state): string => ProgramConstants::getLevelOptions()[$state]),
                 TextColumn::make('code')
                     ->searchable(),
                 TextColumn::make('department.name')
@@ -68,6 +69,14 @@ class ProgramsTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                ReplicateAction::make('duplicate')
+                    ->label('Duplicate')
+                    ->beforeReplicaSaved(function (array $data): array {
+                        $data['name'] = $data['name'].' (Copy)';
+                        $data['code'] = $data['code'].'_copy_'.now()->timestamp;
+
+                        return $data;
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

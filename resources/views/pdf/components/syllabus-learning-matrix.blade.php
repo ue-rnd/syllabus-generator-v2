@@ -10,7 +10,7 @@
 {{-- Learning Matrix Component --}}
 @if (!empty($learning_matrix))
     <div>
-        <table>
+        <table class="learning-matrix">
             <thead>
                 <tr>
                     <th colspan="11">
@@ -38,16 +38,17 @@
             <tbody>
                 @foreach ($learning_matrix as $weekItem)
                     @php
-                        // Parse week range
-                        $weekRange = $weekItem['week_display'] ?? 'N/A';
-                        preg_match('/(\d+)(?:-(\d+))?/', $weekRange, $matches);
-                        $startWeek = isset($matches[1]) ? (int) $matches[1] : 1;
-                        $endWeek = isset($matches[2]) ? (int) $matches[2] : $startWeek;
+                        // Use processed data from SyllabusPdfService
+                        $startWeek = (int) ($weekItem['start'] ?? 1);
+                        $endWeek = (int) ($weekItem['end'] ?? $startWeek);
+                        $weekDisplay = $weekItem['week_display'] ?? 'N/A';
 
                         // Calculate total activities to determine rowspan
                         $totalActivities = max(1, count($weekItem['learning_activities'] ?? []));
                         $totalOutcomes = max(1, count($weekItem['learning_outcomes'] ?? []));
                         $maxRows = $totalActivities;
+
+                        $weekMultiplier = $endWeek - $startWeek + 1;
 
                         $prelim = $startWeek <= $week_prelim && $week_prelim <= $endWeek;
                         $midterm = $startWeek <= $week_midterm && $week_midterm <= $endWeek;
@@ -56,19 +57,13 @@
 
                     <tr>
                         <td rowspan="{{ $prelim || $midterm || $finals ? $maxRows + 1 : $maxRows }}" class="center">
-                            @if ($startWeek === $endWeek)
-                                {{ $startWeek }}<sup>{{ $startWeek === 1 ? 'st' : ($startWeek === 2 ? 'nd' : ($startWeek === 3 ? 'rd' : 'th')) }}</sup>
-                            @else
-                                {{ $startWeek }}<sup>{{ $startWeek === 1 ? 'st' : ($startWeek === 2 ? 'nd' : ($startWeek === 3 ? 'rd' : 'th')) }}</sup>
-                                -
-                                {{ $endWeek }}<sup>{{ $endWeek === 1 ? 'st' : ($endWeek === 2 ? 'nd' : ($endWeek === 3 ? 'rd' : 'th')) }}</sup>
-                            @endif
+                            {!! $weekDisplay !!}
                         </td>
                         <td rowspan="{{ $maxRows }}" class="center">
-                            {{ $syllabus->default_lecture_hours }}
+                            {{ $syllabus->default_lecture_hours * $weekMultiplier }}
                         </td>
                         <td rowspan="{{ $maxRows }}" class="center">
-                            {{ $syllabus->default_laboratory_hours }}
+                            {{ $syllabus->default_laboratory_hours * $weekMultiplier }}
                         </td>
                         {{-- Learning Outcome --}}
                         <td rowspan="{{ $maxRows }}">
@@ -85,22 +80,23 @@
                         </td>
 
                         {{-- Content --}}
-                        <td rowspan="{{ $maxRows }}" class="center">
-                            No content
-                            {{-- @foreach ($weekItem['content'] as $content)
-                                {{ $content }}
-                            @endforeach --}}
+                        <td rowspan="{{ $maxRows }}">
+                            {!! $weekItem['content'] ?? '' !!}
                         </td>
 
                         @for ($row = 0; $row < $maxRows; $row++)
+                            @if ($row > 0)
+                                <tr>
+                            @endif
+                            
                             {{-- Teaching-Learning Activity --}}
                             @if (isset($weekItem['learning_activities'][$row]))
                                 @php
                                     $activity = $weekItem['learning_activities'][$row];
                                     $modalities = $activity['modality'] ?? [];
-                                    $hasOnsite = in_array('onsite', $modalities);
-                                    $hasAsync = in_array('offsite_asynchronous', $modalities);
-                                    $hasSync = in_array('offsite_synchronous', $modalities);
+                                    $hasOnsite = in_array('Onsite', $modalities) || in_array('onsite', $modalities);
+                                    $hasAsync = in_array('Offsite Asynchronous', $modalities) || in_array('offsite_asynchronous', $modalities);
+                                    $hasSync = in_array('Offsite Synchronous', $modalities) || in_array('offsite_synchronous', $modalities);
                                 @endphp
 
                                 <td class="center">
@@ -127,31 +123,50 @@
                             {{-- Assessment --}}
                             @if ($row === 0)
                                 <td rowspan="{{ $maxRows }}">
-                                    @if (isset($weekItem['assessments']))
-                                        <ul>
-                                            @foreach ($weekItem['assessments'] as $assessment)
-                                                <li>{{ SyllabusConstants::getAssessmentTypeOptions()[$assessment] }}</li>
-                                            @endforeach
-                                        </ul>
+                                    @if (!empty($weekItem['assessments']))
+                                        @if (is_array($weekItem['assessments']))
+                                            <ul>
+                                                @foreach ($weekItem['assessments'] as $assessment)
+                                                    @php
+                                                        $options = SyllabusConstants::getAssessmentTypeOptions();
+                                                        $label = $options[$assessment] ?? null;
+                                                        if (!$label) {
+                                                            // If $assessment is a label, try to find its key (case-insensitive)
+                                                            $match = array_search(strtolower($assessment), array_map('strtolower', array_values($options)), true);
+                                                            $label = $match !== false ? array_values($options)[$match] : $assessment;
+                                                        }
+                                                    @endphp
+                                                    <li>{{ $label }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            {!! $weekItem['assessments'] !!}
+                                        @endif
                                     @else
                                         No assessment
                                     @endif
-
                                 </td>
                             @endif
-                    </tr>
+                            
+                            @if ($row > 0)
+                                </tr>
+                            @endif
+                        @endfor
 
-                    {{-- if prelim or midterm or finals --}}
-                    <tr>
-                        @if ($prelim)
-                            <td colspan="11" class="center">Preliminary Examination</td>
-                        @elseif ($midterm)
-                            <td colspan="11" class="center">Midterm Examination</td>
-                        @elseif ($finals)
-                            <td colspan="11" class="center">Final Examination</td>
+                        {{-- Examination rows --}}
+                        @if ($prelim || $midterm || $finals)
+                            <tr>
+                                <td colspan="11" class="center">
+                                    @if ($prelim)
+                                        Preliminary Examination
+                                    @elseif ($midterm)
+                                        Midterm Examination
+                                    @elseif ($finals)
+                                        Final Examination
+                                    @endif
+                                </td>
+                            </tr>
                         @endif
-                    </tr>
-                @endfor
 @endforeach
 </tbody>
 </table>
@@ -199,3 +214,6 @@
         </table>
     </div>
     @endif
+</div>
+
+<div class="page-break"></div>

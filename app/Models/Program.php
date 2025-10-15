@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Constants\ProgramConstants;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Program extends Model
@@ -33,6 +33,8 @@ class Program extends Model
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'department_id' => 'integer',
+        'objectives' => 'array',
+        'outcomes' => 'array',
     ];
 
     /**

@@ -4,8 +4,9 @@ namespace App\Services;
 
 use App\Models\Setting;
 use App\Models\Syllabus;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Spatie\Browsershot\Browsershot;
-use Illuminate\Support\Facades\View;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class SyllabusPdfService
@@ -22,7 +23,7 @@ class SyllabusPdfService
                 'principalPreparer',
                 'reviewer',
                 'recommendingApprover',
-                'approver'
+                'approver',
             ]);
 
             // Prepare data for the PDF
@@ -32,7 +33,7 @@ class SyllabusPdfService
             $template = 'pdf.syllabus';
 
             // Create temporary directory for PDF generation
-            $temporaryDirectory = (new TemporaryDirectory())->create();
+            $temporaryDirectory = (new TemporaryDirectory)->create();
             $pdfPath = $temporaryDirectory->path('syllabus.pdf');
 
             // Use Spatie LaravelPdf for PDF generation with footerView
@@ -51,13 +52,14 @@ class SyllabusPdfService
             }
 
             $pdf->save($pdfPath);
+
             return $pdfPath;
         } catch (\Exception $e) {
             // Log the error for debugging
-            \Log::error('PDF Generation Error: ' . $e->getMessage(), [
+            Log::error('PDF Generation Error: '.$e->getMessage(), [
                 'syllabus_id' => $syllabus->id,
                 'course_id' => $syllabus->course_id,
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
             // Return error PDF with basic information
@@ -82,23 +84,23 @@ class SyllabusPdfService
             // Basic data with error handling
             $course = $syllabus->course;
             $college = $course->college ?? null;
-            
-            if (!$course) {
+
+            if (! $course) {
                 $errors[] = 'Course information is missing';
             }
-            
-            if (!$college) {
+
+            if (! $college) {
                 $errors[] = 'College information is missing';
             }
 
             // Prepare prerequisites
             $prerequisites = [];
-            if ($course && !empty($course->prerequisite_courses)) {
+            if ($course && ! empty($course->prerequisite_courses)) {
                 try {
                     // prerequisite_courses is cast as array in the Course model
                     $prerequisiteIds = $course->prerequisite_courses;
-                    
-                    if (!empty($prerequisiteIds) && is_array($prerequisiteIds)) {
+
+                    if (! empty($prerequisiteIds) && is_array($prerequisiteIds)) {
                         $prerequisites = \App\Models\Course::whereIn('id', $prerequisiteIds)
                             ->get(['id', 'code', 'name'])
                             ->map(function ($prereq) {
@@ -111,7 +113,7 @@ class SyllabusPdfService
                             })->toArray();
                     }
                 } catch (\Exception $e) {
-                    $errors[] = 'Error loading prerequisites: ' . $e->getMessage();
+                    $errors[] = 'Error loading prerequisites: '.$e->getMessage();
                 }
             }
 
@@ -120,10 +122,10 @@ class SyllabusPdfService
             $programObjectives = $program->objectives;
 
             $programOutcomes = $syllabus->program_outcomes ?? [];
-            
+
             // Prepare preparers data
             $preparers = $this->getPreparersData($syllabus);
-            
+
             // Prepare approvers data
             $approvers = [
                 'departmentChair' => $syllabus->reviewer->full_name ?? '',
@@ -148,10 +150,10 @@ class SyllabusPdfService
 
             return [
                 'university_mission' => $university_mission,
-                'university_vision'=> $university_vision,
+                'university_vision' => $university_vision,
                 'university_core_values' => $university_core_values,
                 'university_guiding_principles' => $university_guiding_principles,
-                'university_institutional_outcomes'=> $university_institutional_outcomes,
+                'university_institutional_outcomes' => $university_institutional_outcomes,
 
                 'syllabus' => $syllabus,
                 'course' => $course,
@@ -169,25 +171,25 @@ class SyllabusPdfService
                 'approval_details' => $syllabus->getApprovalStatusDetails(),
                 'academicYear' => $this->getCurrentAcademicYear(),
                 'generated_at' => now(),
-                'generated_by' => auth()->user(),
+                'generated_by' => Auth::user(),
                 'logo_path' => public_path('images/logo_ue.png'),
                 'logo_url' => asset('images/logo_ue.png'),
                 'logo_base64' => $this->getLogoBase64(),
                 'errors' => $errors,
             ];
         } catch (\Exception $e) {
-            $errors[] = 'Data preparation error: ' . $e->getMessage();
-            
+            $errors[] = 'Data preparation error: '.$e->getMessage();
+
             // Return minimal data structure to prevent template errors
             return [
                 'university_mission' => $university_mission,
-                'university_vision'=> $university_vision,
+                'university_vision' => $university_vision,
                 'university_core_values' => $university_core_values,
                 'university_guiding_principles' => $university_guiding_principles,
-                'university_institutional_outcomes'=> $university_institutional_outcomes,
+                'university_institutional_outcomes' => $university_institutional_outcomes,
 
                 'syllabus' => $syllabus,
-                'course' => $syllabus->course ?? new \App\Models\Course(),
+                'course' => $syllabus->course ?? new \App\Models\Course,
                 'college' => null,
                 'prerequisites' => [],
                 'preparers' => [],
@@ -199,9 +201,9 @@ class SyllabusPdfService
                 'course_outcomes' => [],
                 'total_hours' => ['lecture' => 0, 'laboratory' => 0, 'total' => 0, 'weeks' => 0],
                 'approval_details' => ['status' => 'error'],
-                'academicYear' => date('Y') . '-' . (date('Y') + 1),
+                'academicYear' => date('Y').'-'.(date('Y') + 1),
                 'generated_at' => now(),
-                'generated_by' => auth()->user(),
+                'generated_by' => Auth::user(),
                 'logo_path' => public_path('images/logo_ue.png'),
                 'logo_url' => asset('images/logo_ue.png'),
                 'logo_base64' => $this->getLogoBase64(),
@@ -229,7 +231,7 @@ class SyllabusPdfService
         }
 
         // Additional preparers
-        if (!empty($syllabus->prepared_by)) {
+        if (! empty($syllabus->prepared_by)) {
             foreach ($syllabus->prepared_by as $preparer) {
                 if (isset($preparer['user_id'])) {
                     $user = \App\Models\User::find($preparer['user_id']);
@@ -277,7 +279,7 @@ class SyllabusPdfService
                 return [
                     'verb' => ucfirst($outcome['verb'] ?? ''),
                     'content' => $outcome['content'] ?? '',
-                    'full_text' => ucfirst($outcome['verb'] ?? '') . ' ' . ($outcome['content'] ?? ''),
+                    'full_text' => ucfirst($outcome['verb'] ?? '').' '.($outcome['content'] ?? ''),
                 ];
             })->toArray();
 
@@ -291,15 +293,16 @@ class SyllabusPdfService
             })->toArray();
 
             // Process assessments
-            $assessments = $item['assessments'];
+            $assessments = $item['assessments'] ?? [];
 
             return [
                 'week_prelim' => $syllabus->week_prelim,
-                'week_midterm'=> $syllabus->week_midterm,
+                'week_midterm' => $syllabus->week_midterm,
                 'week_final' => $syllabus->week_final,
                 'start' => $start,
-                'end'=> $end,
+                'end' => $end,
                 'week_display' => $weekDisplay,
+                'content' => $item['content'] ?? '',
                 'learning_outcomes' => $learningOutcomes,
                 'learning_activities' => $learningActivities,
                 'assessments' => $assessments,
@@ -307,6 +310,7 @@ class SyllabusPdfService
         })->sortBy(function ($item) {
             // Sort by week number for proper ordering
             preg_match('/(\d+)/', $item['week_display'], $matches);
+
             return isset($matches[1]) ? (int) $matches[1] : 999;
         })->values()->toArray();
     }
@@ -317,8 +321,8 @@ class SyllabusPdfService
     public function downloadPdf(Syllabus $syllabus, ?string $filename = null): \Symfony\Component\HttpFoundation\Response
     {
         $pdfPath = $this->generatePdf($syllabus);
-        
-        if (!$filename) {
+
+        if (! $filename) {
             $courseCode = $syllabus->course->code ?? 'COURSE';
             $courseName = str_replace(' ', '_', $syllabus->course->name ?? 'Syllabus');
             $version = $syllabus->version ?? 1;
@@ -334,13 +338,13 @@ class SyllabusPdfService
     public function streamPdf(Syllabus $syllabus): \Symfony\Component\HttpFoundation\Response
     {
         $pdfPath = $this->generatePdf($syllabus);
-        
+
         $courseCode = $syllabus->course->code ?? 'COURSE';
         $filename = "{$courseCode}_Syllabus.pdf";
 
         return response()->file($pdfPath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $filename . '"'
+            'Content-Disposition' => 'inline; filename="'.$filename.'"',
         ]);
     }
 
@@ -357,14 +361,14 @@ class SyllabusPdfService
         ];
 
         $html = view('pdf.error', $errorData)->render();
-        
+
         // Create temporary directory for error PDF
-        $temporaryDirectory = (new TemporaryDirectory())->create();
+        $temporaryDirectory = (new TemporaryDirectory)->create();
         $pdfPath = $temporaryDirectory->path('error.pdf');
 
         // Generate simple error PDF
         $config = config('browsershot');
-        
+
         Browsershot::html($html)
             ->format($config['pdf']['format'])
             ->portrait()
@@ -390,12 +394,12 @@ class SyllabusPdfService
     {
         $currentYear = date('Y');
         $currentMonth = date('n');
-        
+
         // Academic year typically starts in August/September
         if ($currentMonth >= 8) {
-            return $currentYear . '-' . ($currentYear + 1);
+            return $currentYear.'-'.($currentYear + 1);
         } else {
-            return ($currentYear - 1) . '-' . $currentYear;
+            return ($currentYear - 1).'-'.$currentYear;
         }
     }
 
@@ -405,12 +409,13 @@ class SyllabusPdfService
     private function getLogoBase64(): ?string
     {
         $logoPath = public_path('images/logo_ue.png');
-        
+
         if (file_exists($logoPath)) {
             $imageData = base64_encode(file_get_contents($logoPath));
-            return 'data:image/png;base64,' . $imageData;
+
+            return 'data:image/png;base64,'.$imageData;
         }
-        
+
         return null;
     }
 }

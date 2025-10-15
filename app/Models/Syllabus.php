@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Constants\SyllabusConstants;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Syllabus extends Model
@@ -41,6 +40,8 @@ class Syllabus extends Model
         'dept_chair_reviewed_at',
         'assoc_dean_reviewed_at',
         'dean_approved_at',
+        'qa_reviewed_at',
+        'qa_reviewed_by',
         'approval_history',
         'rejection_comments',
         'rejected_by_role',
@@ -51,7 +52,7 @@ class Syllabus extends Model
         'week_final',
         'ay_start',
         'ay_end',
-        'program_outcomes'
+        'program_outcomes',
     ];
 
     /**
@@ -77,13 +78,15 @@ class Syllabus extends Model
         'dept_chair_reviewed_at' => 'datetime',
         'assoc_dean_reviewed_at' => 'datetime',
         'dean_approved_at' => 'datetime',
+        'qa_reviewed_at' => 'datetime',
+        'qa_reviewed_by' => 'integer',
         'rejected_at' => 'datetime',
         'week_prelim' => 'integer',
         'week_midterm' => 'integer',
         'week_final' => 'integer',
         'ay_start' => 'integer',
         'ay_end' => 'integer',
-        'program_outcomes' => 'array'
+        'program_outcomes' => 'array',
     ];
 
     /**
@@ -99,22 +102,22 @@ class Syllabus extends Model
             if (empty($syllabus->principal_prepared_by) && auth()->check()) {
                 $syllabus->principal_prepared_by = auth()->id();
             }
-            
+
             if (empty($syllabus->name) && $syllabus->course_id) {
                 $course = Course::find($syllabus->course_id);
                 if ($course) {
-                    $syllabus->name = $course->name . ' Syllabus';
+                    $syllabus->name = $course->name.' Syllabus';
                 }
             }
 
             // Set default values for policy fields if not provided
-            if (empty($syllabus->classroom_policies) && !empty($syllabus->default_classroom_policies)) {
+            if (empty($syllabus->classroom_policies) && ! empty($syllabus->default_classroom_policies)) {
                 $syllabus->classroom_policies = $syllabus->default_classroom_policies;
             }
-            if (empty($syllabus->consultation_hours) && !empty($syllabus->default_consultation_hours)) {
+            if (empty($syllabus->consultation_hours) && ! empty($syllabus->default_consultation_hours)) {
                 $syllabus->consultation_hours = $syllabus->default_consultation_hours;
             }
-            if (empty($syllabus->grading_system) && !empty($syllabus->default_grading_system)) {
+            if (empty($syllabus->grading_system) && ! empty($syllabus->default_grading_system)) {
                 $syllabus->grading_system = $syllabus->default_grading_system;
             }
         });
@@ -125,7 +128,7 @@ class Syllabus extends Model
      */
     public function scopeLatest($query)
     {
-        return $query->whereIn('id', function($subquery) {
+        return $query->whereIn('id', function ($subquery) {
             $subquery->select('id')
                 ->from('syllabi')
                 ->whereNull('deleted_at')
@@ -149,7 +152,7 @@ class Syllabus extends Model
         $latestSyllabus = static::where('course_id', $this->course_id)
             ->orderBy('created_at', 'desc')
             ->first();
-        
+
         return $latestSyllabus && $latestSyllabus->id === $this->id;
     }
 
@@ -163,13 +166,13 @@ class Syllabus extends Model
 
     /**
      * Get the dynamic version number based on chronological order within the course.
-     * This calculates the version by finding the position of this syllabus 
+     * This calculates the version by finding the position of this syllabus
      * among all syllabi for the same course, ordered by creation date.
      */
     public function getVersionAttribute($value)
     {
         // If we're in the process of creating a new record, return the stored value or calculate
-        if (!$this->exists) {
+        if (! $this->exists) {
             return $value ?? $this->calculateNextVersionForCourse();
         }
 
@@ -182,7 +185,7 @@ class Syllabus extends Model
      */
     private function calculateVersionFromPosition(): int
     {
-        if (!$this->course_id || !$this->created_at) {
+        if (! $this->course_id || ! $this->created_at) {
             return 1;
         }
 
@@ -202,7 +205,7 @@ class Syllabus extends Model
      */
     private function calculateNextVersionForCourse(): int
     {
-        if (!$this->course_id) {
+        if (! $this->course_id) {
             return 1;
         }
 
@@ -254,6 +257,14 @@ class Syllabus extends Model
     }
 
     /**
+     * Get the QA reviewer.
+     */
+    public function qaReviewer()
+    {
+        return $this->belongsTo(User::class, 'qa_reviewed_by');
+    }
+
+    /**
      * Get all preparers with their roles/descriptions.
      * Note: This method is disabled to prevent memory issues in InfoLists.
      * Use the prepared_by JSON array directly instead.
@@ -263,20 +274,20 @@ class Syllabus extends Model
         // Disabled to prevent memory exhaustion in Filament InfoLists
         // Use the prepared_by JSON array directly instead
         return collect();
-        
+
         /* Original implementation commented out to prevent memory issues:
         if (empty($this->prepared_by)) {
             return collect();
         }
 
         $userIds = collect($this->prepared_by)->pluck('user_id')->filter();
-        
+
         if ($userIds->isEmpty()) {
             return collect();
         }
 
         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
-        
+
         return collect($this->prepared_by)->map(function ($preparer) use ($users) {
             $user = $users->get($preparer['user_id']);
             return [
@@ -298,24 +309,32 @@ class Syllabus extends Model
     public function getAllSignersAttribute()
     {
         $signers = [];
-        
-        if ($this->principalPreparer) $signers['principal_prepared_by'] = $this->principalPreparer;
-        
+
+        if ($this->principalPreparer) {
+            $signers['principal_prepared_by'] = $this->principalPreparer;
+        }
+
         // Use raw prepared_by data instead of accessor to prevent memory issues
-        if (!empty($this->prepared_by)) {
+        if (! empty($this->prepared_by)) {
             foreach ($this->prepared_by as $index => $preparer) {
                 if (isset($preparer['user_id'])) {
                     $user = User::find($preparer['user_id']);
                     if ($user) {
-                        $signers['prepared_by_' . ($index + 1)] = $user;
+                        $signers['prepared_by_'.($index + 1)] = $user;
                     }
                 }
             }
         }
-        
-        if ($this->reviewer) $signers['reviewed_by'] = $this->reviewer;
-        if ($this->recommendingApprover) $signers['recommending_approval'] = $this->recommendingApprover;
-        if ($this->approver) $signers['approved_by'] = $this->approver;
+
+        if ($this->reviewer) {
+            $signers['reviewed_by'] = $this->reviewer;
+        }
+        if ($this->recommendingApprover) {
+            $signers['recommending_approval'] = $this->recommendingApprover;
+        }
+        if ($this->approver) {
+            $signers['approved_by'] = $this->approver;
+        }
 
         return $signers;
     }
@@ -325,9 +344,9 @@ class Syllabus extends Model
      */
     public function getIsFullySignedAttribute()
     {
-        return $this->principal_prepared_by && 
-               $this->reviewed_by && 
-               $this->recommending_approval && 
+        return $this->principal_prepared_by &&
+               $this->reviewed_by &&
+               $this->recommending_approval &&
                $this->approved_by;
     }
 
@@ -352,7 +371,7 @@ class Syllabus extends Model
      */
     public function getFullNameAttribute()
     {
-        return $this->name . ' (' . $this->created_at->format('M j, Y') . ')';
+        return $this->name.' ('.$this->created_at->format('M j, Y').')';
     }
 
     /**
@@ -395,7 +414,7 @@ class Syllabus extends Model
         // Count unique weeks and multiply by default hours
         $weeks = [];
         foreach ($this->learning_matrix as $item) {
-            if (!empty($item['week_range'])) {
+            if (! empty($item['week_range'])) {
                 $weekRange = $item['week_range'];
                 if (isset($weekRange['is_range']) && $weekRange['is_range']) {
                     for ($w = $weekRange['start']; $w <= $weekRange['end']; $w++) {
@@ -415,7 +434,7 @@ class Syllabus extends Model
             'lecture' => $totalLecture,
             'laboratory' => $totalLab,
             'total' => $totalLecture + $totalLab,
-            'weeks' => $totalWeeks
+            'weeks' => $totalWeeks,
         ];
     }
 
@@ -440,13 +459,15 @@ class Syllabus extends Model
             $start = $weekRange['start'] ?? null;
             $end = $weekRange['end'] ?? $start;
 
-            if (!$start) {
-                $errors[] = "Item " . ($index + 1) . ": Week range is required";
+            if (! $start) {
+                $errors[] = 'Item '.($index + 1).': Week range is required';
+
                 continue;
             }
 
             if (isset($weekRange['is_range']) && $weekRange['is_range'] && $start > $end) {
-                $errors[] = "Item " . ($index + 1) . ": Start week must be less than or equal to end week";
+                $errors[] = 'Item '.($index + 1).': Start week must be less than or equal to end week';
+
                 continue;
             }
 
@@ -470,7 +491,7 @@ class Syllabus extends Model
      */
     public function submitForApproval(User $user): bool
     {
-        if (!$this->canSubmitForApproval($user)) {
+        if (! $this->canSubmitForApproval($user)) {
             return false;
         }
 
@@ -489,7 +510,7 @@ class Syllabus extends Model
      */
     public function approve(User $user, ?string $comments = null): bool
     {
-        if (!$this->canApprove($user)) {
+        if (! $this->canApprove($user)) {
             return false;
         }
 
@@ -512,7 +533,9 @@ class Syllabus extends Model
 
         $this->update($updateData);
 
-        $this->addToApprovalHistory('approved', $user, $comments ?? 'Approved at ' . $user->primary_role . ' level');
+        // Generate appropriate approval message based on status
+        $approvalMessage = $this->getApprovalMessage($user, $this->status);
+        $this->addToApprovalHistory('approved', $user, $comments ?? $approvalMessage);
 
         return true;
     }
@@ -522,14 +545,17 @@ class Syllabus extends Model
      */
     public function reject(User $user, string $comments): bool
     {
-        if (!$this->canReject($user)) {
+        if (! $this->canReject($user)) {
             return false;
         }
+
+        // For superadmin, show their position, otherwise use primary_role
+        $rejectedByRole = $user->position === 'superadmin' ? 'superadmin' : $user->primary_role;
 
         $this->update([
             'status' => 'rejected',
             'rejection_comments' => $comments,
-            'rejected_by_role' => $user->primary_role,
+            'rejected_by_role' => $rejectedByRole,
             'rejected_at' => now(),
         ]);
 
@@ -555,7 +581,7 @@ class Syllabus extends Model
         $revision->rejection_comments = null;
         $revision->rejected_by_role = null;
         $revision->rejected_at = null;
-        
+
         $revision->save();
 
         return $revision;
@@ -566,8 +592,8 @@ class Syllabus extends Model
      */
     public function canSubmitForApproval(User $user): bool
     {
-        return in_array($this->status, ['draft', 'for_revisions']) && 
-               ($user->id === $this->principal_prepared_by || $this->isUserInPreparedBy($user));
+        return in_array($this->status, ['draft', 'for_revisions']) &&
+               $user->id === $this->principal_prepared_by; // Only principal preparer can submit
     }
 
     /**
@@ -575,11 +601,16 @@ class Syllabus extends Model
      */
     public function canApprove(User $user): bool
     {
+        // Check for superadmin position first
+        if ($user->position === 'superadmin') {
+            return in_array($this->status, ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review', 'qa_review', 'approved']);
+        }
+
         $roleStatusMap = [
             'department_chair' => ['pending_approval', 'dept_chair_review'],
             'associate_dean' => ['assoc_dean_review'],
             'dean' => ['dean_review'],
-            'superadmin' => ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review'],
+            'qa_representative' => ['qa_review'],
         ];
 
         $userRole = $user->primary_role;
@@ -601,6 +632,20 @@ class Syllabus extends Model
      */
     private function getNextApprovalStatus(User $user): string
     {
+        // Superadmin progresses through each step sequentially
+        if ($user->position === 'superadmin') {
+            $superadminTransitions = [
+                'pending_approval' => 'dept_chair_review',
+                'dept_chair_review' => 'assoc_dean_review',
+                'assoc_dean_review' => 'dean_review',
+                'dean_review' => 'qa_review',
+                'qa_review' => 'approved',
+                'approved' => 'published',
+            ];
+
+            return $superadminTransitions[$this->status] ?? $this->status;
+        }
+
         $transitions = [
             'department_chair' => [
                 'pending_approval' => 'dept_chair_review',
@@ -610,13 +655,10 @@ class Syllabus extends Model
                 'assoc_dean_review' => 'dean_review',
             ],
             'dean' => [
-                'dean_review' => 'approved',
+                'dean_review' => 'qa_review',
             ],
-            'superadmin' => [
-                'pending_approval' => 'approved',
-                'dept_chair_review' => 'approved',
-                'assoc_dean_review' => 'approved',
-                'dean_review' => 'approved',
+            'qa_representative' => [
+                'qa_review' => 'approved',
             ],
         ];
 
@@ -628,10 +670,22 @@ class Syllabus extends Model
      */
     private function getTimestampField(User $user): ?string
     {
+        // For superadmin, determine field based on current status
+        if ($user->position === 'superadmin') {
+            return match ($this->status) {
+                'pending_approval' => 'dept_chair_reviewed_at',
+                'dept_chair_review' => 'assoc_dean_reviewed_at',
+                'assoc_dean_review' => 'dean_approved_at',
+                'dean_review' => 'qa_reviewed_at',
+                default => null,
+            };
+        }
+
         return match ($user->primary_role) {
             'department_chair' => 'dept_chair_reviewed_at',
             'associate_dean' => 'assoc_dean_reviewed_at',
             'dean' => 'dean_approved_at',
+            'qa_representative' => 'qa_reviewed_at',
             default => null,
         };
     }
@@ -641,11 +695,48 @@ class Syllabus extends Model
      */
     private function getApproverField(User $user): ?string
     {
+        // For superadmin, determine field based on current status
+        if ($user->position === 'superadmin') {
+            return match ($this->status) {
+                'pending_approval' => 'reviewed_by',
+                'dept_chair_review' => 'recommending_approval',
+                'assoc_dean_review' => 'approved_by',
+                'dean_review' => 'qa_reviewed_by',
+                default => null,
+            };
+        }
+
         return match ($user->primary_role) {
             'department_chair' => 'reviewed_by',
             'associate_dean' => 'recommending_approval',
             'dean' => 'approved_by',
+            'qa_representative' => 'qa_reviewed_by',
             default => null,
+        };
+    }
+
+    /**
+     * Get appropriate approval message based on user role and status
+     */
+    private function getApprovalMessage(User $user, string $currentStatus): string
+    {
+        // Special handling for superadmin position
+        if ($user->position === 'superadmin') {
+            return match ($currentStatus) {
+                'pending_approval' => 'External review completed (Super Admin)',
+                'dept_chair_review' => 'Approved by Super Admin (Department Chair level)',
+                'assoc_dean_review' => 'Approved by Super Admin (Associate Dean level)',
+                'dean_review' => 'Approved by Super Admin (Dean level)',
+                default => 'Approved by Super Admin',
+            };
+        }
+
+        return match ([$user->primary_role, $currentStatus]) {
+            ['department_chair', 'pending_approval'] => 'External review completed',
+            ['department_chair', 'dept_chair_review'] => 'Approved by Department Chair',
+            ['associate_dean', 'assoc_dean_review'] => 'Approved by Associate Dean',
+            ['dean', 'dean_review'] => 'Approved by Dean',
+            default => 'Approved at '.$user->primary_role.' level',
         };
     }
 
@@ -655,12 +746,15 @@ class Syllabus extends Model
     private function addToApprovalHistory(string $action, User $user, ?string $comments = null): void
     {
         $history = $this->approval_history ?? [];
-        
+
+        // For superadmin, show their position, otherwise use primary_role
+        $userRole = $user->position === 'superadmin' ? 'superadmin' : $user->primary_role;
+
         $history[] = [
             'action' => $action,
             'user_id' => $user->id,
             'user_name' => $user->full_name,
-            'user_role' => $user->primary_role,
+            'user_role' => $userRole,
             'comments' => $comments,
             'timestamp' => now()->toISOString(),
         ];
@@ -715,5 +809,88 @@ class Syllabus extends Model
     public function revisions()
     {
         return $this->hasMany(self::class, 'parent_syllabus_id');
+    }
+
+    /**
+     * Get all suggestions for this syllabus
+     */
+    public function suggestions()
+    {
+        return $this->hasMany(SyllabusSuggestion::class);
+    }
+
+    /**
+     * Get pending suggestions for this syllabus
+     */
+    public function pendingSuggestions()
+    {
+        return $this->hasMany(SyllabusSuggestion::class)->pending();
+    }
+
+    /**
+     * Check if user can directly edit this syllabus
+     */
+    public function canBeDirectlyEditedBy(User $user): bool
+    {
+        // Only principal preparer can directly edit
+        return $user->id === $this->principal_prepared_by &&
+               in_array($this->status, ['draft', 'for_revisions']);
+    }
+
+    /**
+     * Check if user can suggest changes to this syllabus
+     */
+    public function canSuggestChanges(User $user): bool
+    {
+        // Additional preparers can suggest changes, but not when it's already submitted
+        return $this->isUserInPreparedBy($user) &&
+               in_array($this->status, ['draft', 'for_revisions']) &&
+               $user->id !== $this->principal_prepared_by;
+    }
+
+    /**
+     * Check if user can view suggestions for this syllabus
+     */
+    public function canViewSuggestions(User $user): bool
+    {
+        // Principal preparer can view all suggestions
+        if ($user->id === $this->principal_prepared_by) {
+            return true;
+        }
+
+        // Additional preparers can view their own suggestions
+        return $this->isUserInPreparedBy($user);
+    }
+
+    /**
+     * Get suggestions count by status
+     */
+    public function getSuggestionsCountAttribute(): array
+    {
+        return [
+            'pending' => $this->suggestions()->pending()->count(),
+            'approved' => $this->suggestions()->approved()->count(),
+            'rejected' => $this->suggestions()->rejected()->count(),
+            'total' => $this->suggestions()->count(),
+        ];
+    }
+
+    /**
+     * Create a suggestion for a field change
+     */
+    public function createSuggestion(User $user, string $fieldName, $suggestedValue, ?string $reason = null, ?array $metadata = null): SyllabusSuggestion
+    {
+        if (! $this->canSuggestChanges($user)) {
+            throw new \Exception('User cannot suggest changes to this syllabus');
+        }
+
+        return $this->suggestions()->create([
+            'suggested_by' => $user->id,
+            'field_name' => $fieldName,
+            'current_value' => $this->getAttribute($fieldName),
+            'suggested_value' => $suggestedValue,
+            'reason' => $reason,
+            'metadata' => $metadata,
+        ]);
     }
 }

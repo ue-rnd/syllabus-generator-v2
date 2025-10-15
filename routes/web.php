@@ -1,15 +1,21 @@
 <?php
 
+use App\Livewire\Client\Dashboard\Bookmarks;
+use App\Livewire\Client\Dashboard\Home;
+use App\Livewire\Client\Dashboard\Notifications;
+use App\Livewire\Client\Dashboard\Profile as DashboardProfile;
+use App\Livewire\Client\Syllabi\CreateSyllabus;
+use App\Livewire\Client\Syllabi\EditSyllabus as ClientEditSyllabus;
+use App\Livewire\Client\Syllabi\ViewSyllabus as ClientViewSyllabus;
+use App\Livewire\RolePermissionManager;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
-use App\Livewire\RolePermissionManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('login');
-})->name('home');
-
+})->name('root');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -17,7 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
-    
+
     // Role and Permission Management
     Route::get('roles', RolePermissionManager::class)
         ->middleware('can:view roles')
@@ -30,34 +36,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('syllabus/{syllabus}/pdf/download', [\App\Http\Controllers\SyllabusPdfController::class, 'download'])
         ->middleware('auth')
         ->name('syllabus.pdf.download');
+    
+    // Database Backup Download Route
+    Route::get('admin/backups/{backup}/download', [\App\Http\Controllers\DatabaseBackupController::class, 'download'])
+        ->middleware(['auth', 'can:manage backups'])
+        ->name('admin.backups.download');
 });
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('dashboard', function() {
-        return view('livewire.client.dashboard.home');
-    })->name('dashboard');
-    Route::get('home', function() {
-        return view('livewire.client.dashboard.home');
-    })->name('dashboard_home');
+    Route::get('home', Home::class)->name('home');
 
-    Route::get('profile', function(){
-        return view('livewire.client.dashboard.profile');
-    })->name('profile');
+    Route::get('syllabus/create', CreateSyllabus::class)->name('syllabus');
+    Route::get('syllabus/{syllabus}', ClientViewSyllabus::class)->name('syllabus.view');
+    Route::get('syllabus/{syllabus}/edit', ClientEditSyllabus::class)->name('syllabus.edit');
 
-    Route::get('notifications', function(){
-        return view('livewire.client.dashboard.notifications');
-    })->name('notifications');
+    Route::get('profile', DashboardProfile::class)->name('profile');
 
-    Route::get('bookmarks', function(){
-        return view('livewire.client.dashboard.bookmarks');
-    })->name('bookmarks');
+    Route::get('notifications', Notifications::class)->name('notifications');
 
-    Route::get('create_subject', function(){
-        return view('livewire.client.dashboard.create_subject');
-    })->name('create_subject');
+    Route::get('bookmarks', Bookmarks::class)->name('bookmarks');
 });
-
-
 
 require __DIR__.'/auth.php';

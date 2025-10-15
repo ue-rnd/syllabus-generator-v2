@@ -8,6 +8,7 @@ class UserConstants
      * User positions/roles
      */
     public const POSITIONS = [
+        'superadmin' => 'Super Admin',
         'professor' => 'Professor',
         'associate_professor' => 'Associate Professor',
         'assistant_professor' => 'Assistant Professor',
@@ -27,6 +28,7 @@ class UserConstants
         'clinical_instructor' => 'Clinical Instructor',
         'librarian' => 'Librarian',
         'registrar' => 'Registrar',
+        'qa_representative' => 'QA Representative',
         'administrative_staff' => 'Administrative Staff',
         'other' => 'Other',
     ];
@@ -69,6 +71,7 @@ class UserConstants
             'vice_president', 'president' => 'rose',
             'adjunct_faculty', 'visiting_professor' => 'orange',
             'graduate_assistant', 'research_associate' => 'cyan',
+            'qa_representative' => 'indigo',
             default => 'gray',
         };
     }

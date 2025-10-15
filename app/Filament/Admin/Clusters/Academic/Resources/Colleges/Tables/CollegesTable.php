@@ -6,12 +6,12 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -75,6 +75,14 @@ class CollegesTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                ReplicateAction::make('duplicate')
+                    ->label('Duplicate')
+                    ->beforeReplicaSaved(function (array $data): array {
+                        $data['name'] = $data['name'].' (Copy)';
+                        $data['code'] = $data['code'].'_copy_'.now()->timestamp;
+
+                        return $data;
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

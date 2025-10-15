@@ -11,7 +11,9 @@ use Livewire\Component;
 class Profile extends Component
 {
     public string $firstname = '';
+
     public string $lastname = '';
+
     public string $middlename = '';
 
     public string $email = '';
@@ -60,11 +62,11 @@ class Profile extends Component
 
         // Build full name from components
         $name = $validated['firstname'];
-        if (!empty($validated['middlename'])) {
-            $name .= ' ' . $validated['middlename'];
+        if (! empty($validated['middlename'])) {
+            $name .= ' '.$validated['middlename'];
         }
-        $name .= ' ' . $validated['lastname'];
-        
+        $name .= ' '.$validated['lastname'];
+
         $validated['name'] = $name;
 
         $user->fill($validated);
@@ -86,7 +88,7 @@ class Profile extends Component
         $user = $this->user();
 
         if ($user->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('dashboard', absolute: false));
+            $this->redirectIntended(default: route('home', absolute: false));
 
             return;
         }

@@ -71,4 +71,36 @@ class CollegeResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+        $query = parent::getEloquentQuery();
+
+        if ($user->position === 'superadmin') {
+            return $query;
+        }
+
+        if (in_array($user->position, ['dean', 'associate_dean'])) {
+            // Dean and Associate Dean can view all colleges but only edit their own
+            return $query;
+        }
+
+        if (in_array($user->position, ['department_chair', 'faculty'])) {
+            // Department Chair and Faculty can view all colleges (read-only for most)
+            return $query;
+        }
+
+        return $query->whereRaw('0 = 1');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('viewAny', College::class);
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create', College::class);
+    }
 }

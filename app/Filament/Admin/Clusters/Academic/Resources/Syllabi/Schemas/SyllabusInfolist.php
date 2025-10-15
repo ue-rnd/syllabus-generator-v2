@@ -3,14 +3,12 @@
 namespace App\Filament\Admin\Clusters\Academic\Resources\Syllabi\Schemas;
 
 use App\Constants\SyllabusConstants;
-use App\Constants\UserConstants;
 use App\Models\Syllabus;
 use App\Models\User;
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class SyllabusInfolist
@@ -25,8 +23,12 @@ class SyllabusInfolist
                         TextEntry::make('status')
                             ->label('Current Status')
                             ->badge()
-                            ->color(function ($state) { return SyllabusConstants::getStatusColor($state); })
-                            ->formatStateUsing(function ($state) { return SyllabusConstants::getStatusOptions()[$state]; }),
+                            ->color(function ($state) {
+                                return SyllabusConstants::getStatusColor($state);
+                            })
+                            ->formatStateUsing(function ($state) {
+                                return SyllabusConstants::getStatusOptions()[$state];
+                            }),
 
                         TextEntry::make('version')
                             ->label('Version')
@@ -52,7 +54,7 @@ class SyllabusInfolist
                             ->label('Dean Approval')
                             ->dateTime()
                             ->placeholder('-'),
-                        
+
                         // TextEntry::make('version')
                         //     ->label('Dean Approval')
                         //     ->formatStateUsing(function ($record) {
@@ -73,14 +75,16 @@ class SyllabusInfolist
                                 TextEntry::make('user_id')
                                     ->label('Faculty Member')
                                     ->formatStateUsing(function ($state): string {
-                                        if (!$state)
+                                        if (! $state) {
                                             return 'N/A';
+                                        }
 
                                         try {
                                             $user = User::find($state);
+
                                             return $user?->full_name ?? $user?->name ?? 'Unknown User';
                                         } catch (\Exception $e) {
-                                            return 'User ID: ' . $state;
+                                            return 'User ID: '.$state;
                                         }
                                     }),
                                 TextEntry::make('user_role')
@@ -90,7 +94,7 @@ class SyllabusInfolist
                                     ->columnSpanFull(),
                                 TextEntry::make('timestamp')
                                     ->label('Timestamp')
-                                    ->dateTime()
+                                    ->dateTime(),
                             ])
                             ->placeholder('-')
                             ->columns(3)
@@ -99,20 +103,20 @@ class SyllabusInfolist
                         TextEntry::make('rejection_comments')
                             ->label('Rejection Comments')
                             ->placeholder('-')
-                            ->visible(fn($record): bool => !empty($record->rejection_comments))
+                            ->visible(fn ($record): bool => ! empty($record->rejection_comments))
                             ->columnSpanFull(),
 
                         TextEntry::make('rejected_by_role')
                             ->label('Rejected By')
                             ->badge()
-                            ->color(fn($state): string => SyllabusConstants::getRoleColor($state))
-                            ->formatStateUsing(fn($state): string => SyllabusConstants::getApprovalRoleOptions()[$state])
-                            ->visible(fn($record): bool => !empty($record->rejected_by_role)),
+                            ->color(fn ($state): string => SyllabusConstants::getRoleColor($state))
+                            ->formatStateUsing(fn ($state): string => SyllabusConstants::getApprovalRoleOptions()[$state])
+                            ->visible(fn ($record): bool => ! empty($record->rejected_by_role)),
 
                         TextEntry::make('rejected_at')
                             ->label('Rejected At')
                             ->dateTime()
-                            ->visible(fn($record): bool => !empty($record->rejected_at)),
+                            ->visible(fn ($record): bool => ! empty($record->rejected_at)),
                     ])
                     ->columns(3)
                     ->columnSpanFull(),
@@ -128,19 +132,19 @@ class SyllabusInfolist
                             ->numeric()
                             ->columnSpan(3),
                         TextEntry::make('week_prelim')
-                            ->label('Prelims Week')
+                            ->label('Prelims Exam Week')
                             ->numeric()
                             ->columnSpan(2),
                         TextEntry::make('week_midterm')
-                            ->label('Midterms Week')
+                            ->label('Midterms Exam Week')
                             ->numeric(),
                         TextEntry::make('week_final')
-                            ->label('Finals Week')
+                            ->label('Finals Exam Week')
                             ->numeric(),
                     ])
                     ->columns(6)
                     ->columnSpanFull(),
-                
+
                 Section::make('Basic Information')
                     ->description('Course identification and college association')
                     ->schema([
@@ -171,6 +175,7 @@ class SyllabusInfolist
                                     ->columnSpanFull(),
 
                                 TextEntry::make('addressed')
+                                    ->label('How It Was Addressed')
                                     ->formatStateUsing(function ($state): string {
                                         return SyllabusConstants::getOutcomesAddressedOptions()[$state];
                                     })
@@ -231,14 +236,14 @@ class SyllabusInfolist
                                             ->live(),
 
                                         TextEntry::make('week_range.start')
-                                            ->label(fn($get) => $get('week_range.is_range') ? 'Week Start' : 'Week')
+                                            ->label(fn ($get) => $get('week_range.is_range') ? 'Week Start' : 'Week')
                                             ->numeric()
                                             ->placeholder('-'),
 
                                         TextEntry::make('week_range.end')
                                             ->label('Week End')
                                             ->numeric()
-                                            ->visible(fn($get) => $get('week_range.is_range'))
+                                            ->visible(fn ($get) => $get('week_range.is_range'))
                                             ->placeholder('-'),
                                     ]),
 
@@ -285,13 +290,8 @@ class SyllabusInfolist
                                     ]),
 
                                 TextEntry::make('assessments')
-                                    ->badge()
-                                    ->formatStateUsing(function ($state) {
-                                            return SyllabusConstants::getAssessmentTypeOptions()[$state];
-                                        })
-                                    ->color(function ($state) {
-                                            return SyllabusConstants::getAssessmentTypeColor($state);
-                                        })
+                                    ->label('Weekly Assessments')
+                                    ->html()
                                     ->placeholder('-'),
                             ])
                             ->columnSpanFull()
@@ -362,14 +362,16 @@ class SyllabusInfolist
                                 TextEntry::make('user_id')
                                     ->label('Faculty Member')
                                     ->formatStateUsing(function ($state): string {
-                                        if (!$state)
+                                        if (! $state) {
                                             return 'N/A';
+                                        }
 
                                         try {
                                             $user = User::find($state);
+
                                             return $user?->full_name ?? $user?->name ?? 'Unknown User';
                                         } catch (\Exception $e) {
-                                            return 'User ID: ' . $state;
+                                            return 'User ID: '.$state;
                                         }
                                     }),
 
@@ -417,7 +419,7 @@ class SyllabusInfolist
                         TextEntry::make('deleted_at')
                             ->label('Deleted At')
                             ->dateTime()
-                            ->visible(fn(Syllabus $record): bool => $record->trashed())
+                            ->visible(fn (Syllabus $record): bool => $record->trashed())
                             ->columnSpanFull(),
                         TextEntry::make('created_at')
                             ->label('Created At')

@@ -1,10 +1,11 @@
 @import 'tailwindcss';
-@import '../../vendor/livewire/flux/dist/flux.css';
+@import '../../vendor/wireui/wireui/ts/global.css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+@source '../../vendor/wireui/wireui';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -26,6 +27,79 @@
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
     --color-accent-foreground: var(--color-white);
+
+    /* WireUI Color Palette - Red Theme */
+    --color-primary-50: #fef2f2;
+    --color-primary-100: #fee2e2;
+    --color-primary-200: #fecaca;
+    --color-primary-300: #fca5a5;
+    --color-primary-400: #f87171;
+    --color-primary-500: #ef4444;
+    --color-primary-600: #dc2626;
+    --color-primary-700: #b91c1c;
+    --color-primary-800: #991b1b;
+    --color-primary-900: #7f1d1d;
+    --color-primary-950: #450a0a;
+
+    --color-secondary-50: #f9fafb;
+    --color-secondary-100: #f3f4f6;
+    --color-secondary-200: #e5e7eb;
+    --color-secondary-300: #d1d5db;
+    --color-secondary-400: #9ca3af;
+    --color-secondary-500: #6b7280;
+    --color-secondary-600: #4b5563;
+    --color-secondary-700: #374151;
+    --color-secondary-800: #1f2937;
+    --color-secondary-900: #111827;
+    --color-secondary-950: #030712;
+
+    --color-positive-50: #ecfdf5;
+    --color-positive-100: #d1fae5;
+    --color-positive-200: #a7f3d0;
+    --color-positive-300: #6ee7b7;
+    --color-positive-400: #34d399;
+    --color-positive-500: #10b981;
+    --color-positive-600: #059669;
+    --color-positive-700: #047857;
+    --color-positive-800: #065f46;
+    --color-positive-900: #064e3b;
+    --color-positive-950: #022c22;
+
+    --color-negative-50: #fef2f2;
+    --color-negative-100: #fee2e2;
+    --color-negative-200: #fecaca;
+    --color-negative-300: #fca5a5;
+    --color-negative-400: #f87171;
+    --color-negative-500: #ef4444;
+    --color-negative-600: #dc2626;
+    --color-negative-700: #b91c1c;
+    --color-negative-800: #991b1b;
+    --color-negative-900: #7f1d1d;
+    --color-negative-950: #450a0a;
+
+    --color-warning-50: #fffbeb;
+    --color-warning-100: #fef3c7;
+    --color-warning-200: #fde68a;
+    --color-warning-300: #fcd34d;
+    --color-warning-400: #fbbf24;
+    --color-warning-500: #f59e0b;
+    --color-warning-600: #d97706;
+    --color-warning-700: #b45309;
+    --color-warning-800: #92400e;
+    --color-warning-900: #78350f;
+    --color-warning-950: #451a03;
+
+    --color-info-50: #eff6ff;
+    --color-info-100: #dbeafe;
+    --color-info-200: #bfdbfe;
+    --color-info-300: #93c5fd;
+    --color-info-400: #60a5fa;
+    --color-info-500: #3b82f6;
+    --color-info-600: #2563eb;
+    --color-info-700: #1d4ed8;
+    --color-info-800: #1e40af;
+    --color-info-900: #1e3a8a;
+    --color-info-950: #172554;
 }
 
 @layer theme {

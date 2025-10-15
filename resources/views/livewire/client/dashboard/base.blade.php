@@ -3,6 +3,6 @@
 	@include('components.dashboard.topbar')
 	@include('components.dashboard.sidebar')
 	<main class="ml-16 my-10">
-		@yield('content')
+	{{ $slot }}
 	</main>
 @endsection

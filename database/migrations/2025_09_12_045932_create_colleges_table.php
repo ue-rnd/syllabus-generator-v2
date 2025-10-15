@@ -16,7 +16,7 @@ return new class extends Migration
 
             // Basic Information
             $table->string('name')->unique();
-            $table->string('code', 10)->unique(); 
+            $table->string('code', 10)->unique();
             $table->text('description')->nullable();
 
             $table->text('mission')->nullable();

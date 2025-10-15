@@ -26,14 +26,14 @@ class UserFactory extends Factory
         $firstname = fake()->firstName();
         $lastname = fake()->lastName();
         $middlename = fake()->optional(0.3)->firstName(); // 30% chance of having a middle name
-        
+
         // Build full name
         $name = $firstname;
         if ($middlename) {
-            $name .= ' ' . $middlename;
+            $name .= ' '.$middlename;
         }
-        $name .= ' ' . $lastname;
-        
+        $name .= ' '.$lastname;
+
         return [
             'name' => $name,
             'lastname' => $lastname,

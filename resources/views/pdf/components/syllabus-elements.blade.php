@@ -9,8 +9,6 @@
                 <th style="width: 1%; white-space: nowrap; ">Grading System</th>
                 <td style="width: 99%;">
                     <div>
-                        <p>Cumulative Grading System is prescribed by the University. As such, the following
-                            computations are applied:</p>
                         <div>
                             <p>
                                 {!! $otherElements['gradingSystem'] ??
@@ -45,3 +43,5 @@
         </tbody>
     </table>
 </div>
+
+<div class="page-break"></div>

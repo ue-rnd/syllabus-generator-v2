@@ -11,7 +11,7 @@ test('registration screen can be rendered', function () {
     $response->assertStatus(200);
 });
 
-test('new users can register', function () {
+test('new users can register and are redirected to home', function () {
     $response = Livewire::test(Register::class)
         ->set('firstname', 'Test')
         ->set('lastname', 'User')
@@ -23,10 +23,10 @@ test('new users can register', function () {
 
     $response
         ->assertHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
+        ->assertRedirect(route('home', absolute: false));
 
     $this->assertAuthenticated();
-    
+
     // Verify the user was created with correct name fields
     $user = \App\Models\User::where('email', 'test@example.com')->first();
     expect($user->firstname)->toBe('Test');

@@ -71,6 +71,9 @@
                                         @if($prepIndex === 0)
                                             <div class="signatures-label">PREPARED BY:</div>
                                         @endif
+                                        @if($prepIndex === count($chunk) - 1)
+                                            <div class="signatures-label">REVIEWED BY:</div>
+                                        @endif
                                         <div class="signatures-line"></div>
                                         <div class="signatures-name">{{ $preparer['name'] }}</div>
                                         <div class="signatures-role">{{ $preparer['role'] ?? 'Faculty' }}</div>
@@ -107,11 +110,11 @@
                     <tr>
                         {{-- Reviewer --}}
                         <td class="signatures-td">
-                            <div class="signatures-label">REVIEWED BY:</div>
+                            <div class="signatures-label">VERIFIED BY:</div>
                             <div class="signatures-line"></div>
                             <div class="signatures-name">{{ $syllabus->reviewer->full_name ?? $approvers['departmentChair'] ?? '[Department Chair Name]' }}</div>
                             <div class="signatures-title">Department Chair</div>
-                            <div class="signatures-college">{{ $college->name ?? 'Department Name' }}</div>
+                            <div class="signatures-college">{{ $syllabus->course->programs()->first()->department->name ?? 'Department Name' }}</div>
                             @if($approval_details['dept_chair_reviewed_at'])
                                 <div class="signatures-date">Date: {{ \Carbon\Carbon::parse($approval_details['dept_chair_reviewed_at'])->format('M j, Y') }}</div>
                             @endif

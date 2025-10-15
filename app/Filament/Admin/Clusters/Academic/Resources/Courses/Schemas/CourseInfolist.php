@@ -2,13 +2,12 @@
 
 namespace App\Filament\Admin\Clusters\Academic\Resources\Courses\Schemas;
 
-use App\Constants\SyllabusConstants;
 use App\Constants\CourseConstants;
+use App\Constants\SyllabusConstants;
 use App\Models\Course;
-use App\Models\Syllabus;
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -31,6 +30,7 @@ class CourseInfolist
                             ->color(fn ($state): string => is_string($state) ? CourseConstants::getTypeColor($state) : 'gray')
                             ->formatStateUsing(fn (string $state): string => CourseConstants::getTypeOptions()[$state] ?? ucfirst(str_replace('_', ' ', $state))),
                         TextEntry::make('description')
+                            ->html()
                             ->placeholder('-')
                             ->columnSpanFull(),
                     ])
@@ -62,11 +62,11 @@ class CourseInfolist
                             ->label('Prerequisite Courses')
                             ->state(function (Course $record): string {
                                 $prerequisiteCourses = $record->prerequisiteCourses();
-                                
+
                                 if ($prerequisiteCourses->isEmpty()) {
                                     return 'None';
                                 }
-                                
+
                                 return $prerequisiteCourses->pluck('name')->unique()->implode(', ');
                             })
                             ->placeholder('-')
@@ -91,7 +91,7 @@ class CourseInfolist
                             ])
                             ->columns(1)
                             ->columnSpanFull()
-                            ->visible(fn (Course $record): bool => !empty($record->outcomes)),
+                            ->visible(fn (Course $record): bool => ! empty($record->outcomes)),
                         TextEntry::make('outcomes_placeholder')
                             ->label('Course Outcomes')
                             ->default('No outcomes defined')

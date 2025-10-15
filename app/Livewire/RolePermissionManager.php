@@ -2,37 +2,44 @@
 
 namespace App\Livewire;
 
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class RolePermissionManager extends Component
 {
     use WithPagination;
 
     public $activeTab = 'roles';
+
     public $showModal = false;
+
     public $modalType = '';
-    
+
     // Role properties
     public $roleName = '';
+
     public $selectedPermissions = [];
+
     public $editingRole = null;
-    
+
     // Permission properties
     public $permissionName = '';
+
     public $editingPermission = null;
-    
+
     // User assignment properties
     public $selectedUser = '';
+
     public $selectedRole = '';
+
     public $selectedPermission = '';
-    
+
     // Search and filter
     public $search = '';
+
     public $roleFilter = '';
 
     protected $rules = [
@@ -52,19 +59,19 @@ class RolePermissionManager extends Component
     {
         $roles = Role::with('permissions')
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%'.$this->search.'%');
             })
             ->paginate(10);
 
         $permissions = Permission::when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
-            })
+            $query->where('name', 'like', '%'.$this->search.'%');
+        })
             ->paginate(10);
 
         $users = User::with('roles', 'permissions')
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                      ->orWhere('email', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email', 'like', '%'.$this->search.'%');
             })
             ->paginate(10);
 

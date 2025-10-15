@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('programs', function (Blueprint $table) {
             // Revert the level column back to NOT NULL with default
-            $table->string('level')->default('ASSOCIATE')->change();
+            $table->string('level')->default('associate')->change();
         });
     }
 };

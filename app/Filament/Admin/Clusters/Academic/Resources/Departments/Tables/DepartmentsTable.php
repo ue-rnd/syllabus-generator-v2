@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
@@ -63,6 +64,13 @@ class DepartmentsTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                ReplicateAction::make('duplicate')
+                    ->label('Duplicate')
+                    ->beforeReplicaSaved(function (array $data): array {
+                        $data['name'] = $data['name'].' (Copy)';
+
+                        return $data;
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
