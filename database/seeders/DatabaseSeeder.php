@@ -160,6 +160,20 @@ class DatabaseSeeder extends Seeder
             'department_chair_id' => $ccssDC3->id,
         ]);
 
+        // Create QA Representative user
+        $qaUser = User::create([
+            'name' => 'Maria Santos',
+            'email' => 'qa@example.com',
+            'password' => bcrypt('password'),
+            'firstname' => 'Maria',
+            'middlename' => 'Garcia',
+            'lastname' => 'Santos',
+            'position' => 'qa_representative',
+            'college_id' => null, // QA can review all colleges
+            'department_id' => null,
+            'is_active' => true,
+        ]);
+
         // Assign superadmin role to the super admin user
         $superAdmin->assignRole('superadmin');
         $ccssDean->assignRole('admin');
@@ -168,5 +182,6 @@ class DatabaseSeeder extends Seeder
         $ccssDC2->assignRole('admin');
         $ccssDC3->assignRole('admin');
         $ccssFaculty->assignRole('faculty');
+        $qaUser->assignRole('admin'); // QA gets admin permissions
     }
 }

@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\College;
 use App\Models\Course;
 use App\Models\Program;
-use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
 class CourseSeeder extends Seeder

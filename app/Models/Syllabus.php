@@ -40,6 +40,8 @@ class Syllabus extends Model
         'dept_chair_reviewed_at',
         'assoc_dean_reviewed_at',
         'dean_approved_at',
+        'qa_reviewed_at',
+        'qa_reviewed_by',
         'approval_history',
         'rejection_comments',
         'rejected_by_role',
@@ -76,6 +78,8 @@ class Syllabus extends Model
         'dept_chair_reviewed_at' => 'datetime',
         'assoc_dean_reviewed_at' => 'datetime',
         'dean_approved_at' => 'datetime',
+        'qa_reviewed_at' => 'datetime',
+        'qa_reviewed_by' => 'integer',
         'rejected_at' => 'datetime',
         'week_prelim' => 'integer',
         'week_midterm' => 'integer',
@@ -250,6 +254,14 @@ class Syllabus extends Model
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * Get the QA reviewer.
+     */
+    public function qaReviewer()
+    {
+        return $this->belongsTo(User::class, 'qa_reviewed_by');
     }
 
     /**
@@ -581,7 +593,7 @@ class Syllabus extends Model
     public function canSubmitForApproval(User $user): bool
     {
         return in_array($this->status, ['draft', 'for_revisions']) &&
-               ($user->id === $this->principal_prepared_by || $this->isUserInPreparedBy($user));
+               $user->id === $this->principal_prepared_by; // Only principal preparer can submit
     }
 
     /**
@@ -591,13 +603,14 @@ class Syllabus extends Model
     {
         // Check for superadmin position first
         if ($user->position === 'superadmin') {
-            return in_array($this->status, ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review']);
+            return in_array($this->status, ['pending_approval', 'dept_chair_review', 'assoc_dean_review', 'dean_review', 'qa_review', 'approved']);
         }
 
         $roleStatusMap = [
             'department_chair' => ['pending_approval', 'dept_chair_review'],
             'associate_dean' => ['assoc_dean_review'],
             'dean' => ['dean_review'],
+            'qa_representative' => ['qa_review'],
         ];
 
         $userRole = $user->primary_role;
@@ -625,7 +638,9 @@ class Syllabus extends Model
                 'pending_approval' => 'dept_chair_review',
                 'dept_chair_review' => 'assoc_dean_review',
                 'assoc_dean_review' => 'dean_review',
-                'dean_review' => 'approved',
+                'dean_review' => 'qa_review',
+                'qa_review' => 'approved',
+                'approved' => 'published',
             ];
 
             return $superadminTransitions[$this->status] ?? $this->status;
@@ -640,7 +655,10 @@ class Syllabus extends Model
                 'assoc_dean_review' => 'dean_review',
             ],
             'dean' => [
-                'dean_review' => 'approved',
+                'dean_review' => 'qa_review',
+            ],
+            'qa_representative' => [
+                'qa_review' => 'approved',
             ],
         ];
 
@@ -658,6 +676,7 @@ class Syllabus extends Model
                 'pending_approval' => 'dept_chair_reviewed_at',
                 'dept_chair_review' => 'assoc_dean_reviewed_at',
                 'assoc_dean_review' => 'dean_approved_at',
+                'dean_review' => 'qa_reviewed_at',
                 default => null,
             };
         }
@@ -666,6 +685,7 @@ class Syllabus extends Model
             'department_chair' => 'dept_chair_reviewed_at',
             'associate_dean' => 'assoc_dean_reviewed_at',
             'dean' => 'dean_approved_at',
+            'qa_representative' => 'qa_reviewed_at',
             default => null,
         };
     }
@@ -681,6 +701,7 @@ class Syllabus extends Model
                 'pending_approval' => 'reviewed_by',
                 'dept_chair_review' => 'recommending_approval',
                 'assoc_dean_review' => 'approved_by',
+                'dean_review' => 'qa_reviewed_by',
                 default => null,
             };
         }
@@ -689,6 +710,7 @@ class Syllabus extends Model
             'department_chair' => 'reviewed_by',
             'associate_dean' => 'recommending_approval',
             'dean' => 'approved_by',
+            'qa_representative' => 'qa_reviewed_by',
             default => null,
         };
     }
@@ -787,5 +809,88 @@ class Syllabus extends Model
     public function revisions()
     {
         return $this->hasMany(self::class, 'parent_syllabus_id');
+    }
+
+    /**
+     * Get all suggestions for this syllabus
+     */
+    public function suggestions()
+    {
+        return $this->hasMany(SyllabusSuggestion::class);
+    }
+
+    /**
+     * Get pending suggestions for this syllabus
+     */
+    public function pendingSuggestions()
+    {
+        return $this->hasMany(SyllabusSuggestion::class)->pending();
+    }
+
+    /**
+     * Check if user can directly edit this syllabus
+     */
+    public function canBeDirectlyEditedBy(User $user): bool
+    {
+        // Only principal preparer can directly edit
+        return $user->id === $this->principal_prepared_by &&
+               in_array($this->status, ['draft', 'for_revisions']);
+    }
+
+    /**
+     * Check if user can suggest changes to this syllabus
+     */
+    public function canSuggestChanges(User $user): bool
+    {
+        // Additional preparers can suggest changes, but not when it's already submitted
+        return $this->isUserInPreparedBy($user) &&
+               in_array($this->status, ['draft', 'for_revisions']) &&
+               $user->id !== $this->principal_prepared_by;
+    }
+
+    /**
+     * Check if user can view suggestions for this syllabus
+     */
+    public function canViewSuggestions(User $user): bool
+    {
+        // Principal preparer can view all suggestions
+        if ($user->id === $this->principal_prepared_by) {
+            return true;
+        }
+
+        // Additional preparers can view their own suggestions
+        return $this->isUserInPreparedBy($user);
+    }
+
+    /**
+     * Get suggestions count by status
+     */
+    public function getSuggestionsCountAttribute(): array
+    {
+        return [
+            'pending' => $this->suggestions()->pending()->count(),
+            'approved' => $this->suggestions()->approved()->count(),
+            'rejected' => $this->suggestions()->rejected()->count(),
+            'total' => $this->suggestions()->count(),
+        ];
+    }
+
+    /**
+     * Create a suggestion for a field change
+     */
+    public function createSuggestion(User $user, string $fieldName, $suggestedValue, ?string $reason = null, ?array $metadata = null): SyllabusSuggestion
+    {
+        if (! $this->canSuggestChanges($user)) {
+            throw new \Exception('User cannot suggest changes to this syllabus');
+        }
+
+        return $this->suggestions()->create([
+            'suggested_by' => $user->id,
+            'field_name' => $fieldName,
+            'current_value' => $this->getAttribute($fieldName),
+            'suggested_value' => $suggestedValue,
+            'reason' => $reason,
+            'metadata' => $metadata,
+        ]);
     }
 }

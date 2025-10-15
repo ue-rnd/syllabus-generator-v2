@@ -55,31 +55,31 @@ class RoleResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()->position === 'superadmin';
+        return auth()->user()->can('assign roles');
     }
 
     public static function canView($record): bool
     {
-        return auth()->user()->position === 'superadmin';
+        return auth()->user()->can('assign roles');
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()->position === 'superadmin';
+        return auth()->user()->can('manage permissions');
     }
 
     public static function canEdit($record): bool
     {
-        return auth()->user()->position === 'superadmin';
+        return auth()->user()->can('manage permissions');
     }
 
     public static function canDelete($record): bool
     {
-        return auth()->user()->position === 'superadmin';
+        return auth()->user()->can('manage permissions');
     }
 
     public static function canDeleteAny(): bool
     {
-        return auth()->user()->position === 'superadmin';
+        return auth()->user()->can('manage permissions');
     }
 }

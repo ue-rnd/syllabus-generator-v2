@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Constants\UserConstants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,7 +14,6 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
     /**
@@ -28,11 +28,34 @@ class User extends Authenticatable
         'lastname',
         'firstname',
         'middlename',
-        'role',
         'position',
+        'employment_type',
+        'employee_id',
+        'phone',
+        'title',
+        'bio',
+        'avatar',
+        'college_id',
+        'department_id',
+        'hire_date',
+        'birth_date',
+        'address',
+        'emergency_contact',
+        'emergency_phone',
+        'two_factor_enabled',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'email_verified_at',
         'is_active',
         'last_login_at',
         'last_login_ip',
+        'login_attempts',
+        'locked_until',
+        'password_changed_at',
+        'must_change_password',
+        'preferences',
+        'timezone',
+        'locale',
     ];
 
     protected static function booted()
@@ -73,6 +96,16 @@ class User extends Authenticatable
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
             'deleted_at' => 'datetime',
+            'hire_date' => 'date',
+            'birth_date' => 'date',
+            'two_factor_enabled' => 'boolean',
+            'two_factor_recovery_codes' => 'array',
+            'locked_until' => 'datetime',
+            'password_changed_at' => 'datetime',
+            'must_change_password' => 'boolean',
+            'preferences' => 'array',
+            'emergency_contact' => 'array',
+            'login_attempts' => 'integer',
         ];
     }
 
@@ -181,20 +214,47 @@ class User extends Authenticatable
     }
 
     /**
-     * Get user's primary role name
+     * Check if the user is a QA Representative
+     */
+    public function isQARepresentative(): bool
+    {
+        return $this->position === 'qa_representative';
+    }
+
+    /**
+     * Get user's primary role name (using Spatie Permissions)
      */
     public function getPrimaryRoleAttribute(): string
     {
-        return $this->position;
+        $roles = $this->roles->pluck('name');
 
-        // $roles = $this->roles->pluck('name');
+        // Priority order: superadmin > admin > dean > associate_dean > department_chair > faculty
+        $roleHierarchy = [
+            'superadmin',
+            'admin',
+            'dean',
+            'associate_dean',
+            'department_chair',
+            'qa_representative',
+            'faculty',
+            'staff'
+        ];
 
-        // // Priority order: superadmin > admin > faculty
-        // if ($roles->contains('superadmin')) return 'superadmin';
-        // if ($roles->contains('admin')) return 'admin';
-        // if ($roles->contains('faculty')) return 'faculty';
+        foreach ($roleHierarchy as $role) {
+            if ($roles->contains($role)) {
+                return $role;
+            }
+        }
 
-        // return $roles->first() ?? 'No Role';
+        return $roles->first() ?? 'No Role';
+    }
+
+    /**
+     * Get user's position title (different from role)
+     */
+    public function getPositionTitleAttribute(): string
+    {
+        return $this->title ?: ($this->position ? UserConstants::getPositionOptions()[$this->position] ?? ucfirst(str_replace('_', ' ', $this->position)) : 'No Position');
     }
 
     /**
@@ -205,7 +265,118 @@ class User extends Authenticatable
         $this->update([
             'last_login_at' => now(),
             'last_login_ip' => $ip ?? request()->ip(),
+            'login_attempts' => 0, // Reset login attempts on successful login
         ]);
+    }
+
+    /**
+     * Increment login attempts
+     */
+    public function incrementLoginAttempts(): void
+    {
+        $this->increment('login_attempts');
+
+        if ($this->login_attempts >= 5) {
+            $this->lockAccount(now()->addMinutes(30));
+        }
+    }
+
+    /**
+     * Lock user account until specified time
+     */
+    public function lockAccount(\DateTime $until): void
+    {
+        $this->update([
+            'locked_until' => $until,
+            'is_active' => false,
+        ]);
+    }
+
+    /**
+     * Unlock user account
+     */
+    public function unlockAccount(): void
+    {
+        $this->update([
+            'locked_until' => null,
+            'login_attempts' => 0,
+            'is_active' => true,
+        ]);
+    }
+
+    /**
+     * Check if account is locked
+     */
+    public function isLocked(): bool
+    {
+        return $this->locked_until && $this->locked_until->isFuture();
+    }
+
+    /**
+     * Check if password must be changed
+     */
+    public function mustChangePassword(): bool
+    {
+        return $this->must_change_password ||
+               ($this->password_changed_at && $this->password_changed_at->diffInDays(now()) > 90);
+    }
+
+    /**
+     * Enable two-factor authentication
+     */
+    public function enableTwoFactor(string $secret, array $recoveryCodes): void
+    {
+        $this->update([
+            'two_factor_enabled' => true,
+            'two_factor_secret' => encrypt($secret),
+            'two_factor_recovery_codes' => encrypt($recoveryCodes),
+        ]);
+    }
+
+    /**
+     * Disable two-factor authentication
+     */
+    public function disableTwoFactor(): void
+    {
+        $this->update([
+            'two_factor_enabled' => false,
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+        ]);
+    }
+
+    /**
+     * Get decrypted two-factor secret
+     */
+    public function getTwoFactorSecret(): ?string
+    {
+        return $this->two_factor_secret ? decrypt($this->two_factor_secret) : null;
+    }
+
+    /**
+     * Get decrypted recovery codes
+     */
+    public function getTwoFactorRecoveryCodes(): array
+    {
+        return $this->two_factor_recovery_codes ? decrypt($this->two_factor_recovery_codes) : [];
+    }
+
+    /**
+     * Use a recovery code
+     */
+    public function useRecoveryCode(string $code): bool
+    {
+        $codes = $this->getTwoFactorRecoveryCodes();
+
+        if (($key = array_search($code, $codes)) !== false) {
+            unset($codes[$key]);
+            $this->update([
+                'two_factor_recovery_codes' => encrypt(array_values($codes))
+            ]);
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -351,6 +522,11 @@ class User extends Authenticatable
     public function getAccessibleSyllabi()
     {
         if ($this->position === 'superadmin') {
+            return Syllabus::query();
+        }
+
+        if ($this->position === 'qa_representative') {
+            // QA representatives can access all syllabi for quality review
             return Syllabus::query();
         }
 

@@ -591,12 +591,10 @@
                             <!-- Assessments -->
                             <div>
                                 <label class="block text-sm font-medium text-accent-desc mb-2">Weekly Assessments</label>
-                                <x-select 
+                                <x-rich-editor
                                     wire:model.live="learning_matrix.{{ $index }}.assessments"
-                                    :options="$assessmentTypes"
-                                    placeholder="Select assessments..."
-                                    multiselect
-                                    class="text-sm bg-accent-ghost" />
+                                    placeholder="Describe the assessments for this week..."
+                                    class="text-sm" />
                             </div>
                         </div>
                     @empty

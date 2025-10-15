@@ -43,17 +43,9 @@
 
     @if ($programObjectives)
         <h3>Program Educational Objectives</h3>
-        @if (is_array($programObjectives))
-            <ul>
-                @foreach ($programObjectives as $objective)
-                    <li>{!! is_array($objective) ? e(json_encode($objective)) : $objective !!}</li>
-                @endforeach
-            </ul>
-        @else
-            <p>
-                {!! $programObjectives !!}
-            </p>
-        @endif
+        <p>
+            {!! $programObjectives !!}
+        </p>
     @endif
 </div>
 

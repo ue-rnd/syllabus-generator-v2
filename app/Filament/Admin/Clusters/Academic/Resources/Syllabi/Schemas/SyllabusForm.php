@@ -246,7 +246,7 @@ class SyllabusForm
                                 ->schema([
                                     Select::make('verb')
                                         ->label('Action Verb')
-                                        ->options(SyllabusConstants::ACTION_VERBS)
+                                        ->options(SyllabusConstants::getActionVerbOptionsGrouped())
                                         ->searchable()
                                         ->required()
                                         ->placeholder('Select an action verb'),
@@ -359,7 +359,7 @@ class SyllabusForm
                                         ->schema([
                                             Select::make('verb')
                                                 ->label('Action Verb')
-                                                ->options(SyllabusConstants::ACTION_VERBS)
+                                                ->options(SyllabusConstants::getActionVerbOptionsGrouped())
                                                 ->searchable()
                                                 ->required()
                                                 ->placeholder('Select an action verb'),
@@ -412,11 +412,14 @@ class SyllabusForm
                                         ->collapsible()
                                         ->columnSpanFull(),
 
-                                    Select::make('assessments')
+                                    RichEditor::make('assessments')
                                         ->label('Weekly Assessments')
-                                        ->options(SyllabusConstants::getAssessmentTypeOptions())
-                                        ->multiple()
-                                        ->searchable()
+                                        ->placeholder('Describe the assessments for this week...')
+                                        ->toolbarButtons([['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                            ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                            ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                            ['table', 'attachFiles'],
+                                            ['undo', 'redo']])
                                         ->columnSpanFull(),
                                 ])
                                 ->columnSpanFull()

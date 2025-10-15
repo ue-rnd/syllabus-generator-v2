@@ -58,38 +58,41 @@ class DatabaseBackupInfolist
                 Section::make('Tables Included')
                     ->inlineLabel()
                     ->schema([
-                        RepeatableEntry::make('tables_included')
-                            ->label('')
-                            ->schema([
-                                TextEntry::make('table')
-                                    ->state(function ($state) {
-                                        // If tables_included is an associative array with keys as table names
-                                        if (is_array($state) && !is_numeric(key($state))) {
-                                            return key($state);
-                                        }
-                                        // If it's just a simple array of table names
-                                        return $state;
-                                    }),
-                                TextEntry::make('display_name')
-                                    ->state(function ($state, $record) {
-                                        // Get the display name from the main tables mapping
-                                        $mainTables = DatabaseBackup::getMainTables();
-                                        if (is_array($state) && !is_numeric(key($state))) {
-                                            return $mainTables[key($state)] ?? key($state);
-                                        }
-                                        return $mainTables[$state] ?? $state;
-                                    }),
-                            ])
-                            ->columns(2)
-                            ->columnSpanFull()
-                            ->visible(fn ($record) => !empty($record->tables_included)),
-                        
                         TextEntry::make('tables_count')
                             ->label('Total Tables')
-                            ->state(fn ($record) => is_array($record->tables_included) ? count($record->tables_included) : 0)
-                            ->visible(fn ($record) => empty($record->tables_included))
-                            ->columnSpanFull(),
+                            ->state(fn ($record) => is_array($record->tables_included) ? count($record->tables_included) : 0),
+                        
+                        TextEntry::make('tables_list')
+                            ->label('Tables')
+                            ->state(function ($record) {
+                                if (empty($record->tables_included) || !is_array($record->tables_included)) {
+                                    return 'No tables specified';
+                                }
+                                
+                                // Limit to first 20 tables to prevent memory issues
+                                $tables = array_slice($record->tables_included, 0, 20);
+                                $mainTables = DatabaseBackup::getMainTables();
+                                
+                                $tableList = collect($tables)->map(function ($table) use ($mainTables) {
+                                    if (is_array($table)) {
+                                        $tableName = key($table);
+                                    } else {
+                                        $tableName = $table;
+                                    }
+                                    return $mainTables[$tableName] ?? $tableName;
+                                })->join(', ');
+                                
+                                $remaining = count($record->tables_included) - count($tables);
+                                if ($remaining > 0) {
+                                    $tableList .= " ... and {$remaining} more";
+                                }
+                                
+                                return $tableList;
+                            })
+                            ->columnSpanFull()
+                            ->visible(fn ($record) => !empty($record->tables_included)),
                     ])
+                    ->columns(2)
                     ->columnSpanFull(),
 
                 Section::make('Error Information')

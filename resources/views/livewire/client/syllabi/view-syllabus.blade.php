@@ -164,11 +164,15 @@
                                     @if($r===0)
                                         <td class="px-3 py-2 text-accent-text" rowspan="{{ $rows }}">
                                             @if(!empty($assessments))
-                                                <ul class="list-disc list-inside space-y-1">
-                                                    @foreach($assessments as $a)
-                                                        <li class="text-accent-text">{{ \App\Constants\SyllabusConstants::getAssessmentTypeOptions()[$a] ?? $a }}</li>
-                                                    @endforeach
-                                                </ul>
+                                                @if(is_array($assessments))
+                                                    <ul class="list-disc list-inside space-y-1">
+                                                        @foreach($assessments as $a)
+                                                            <li>{{ \App\Constants\SyllabusConstants::getAssessmentTypeOptions()[$a] ?? $a }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                @else
+                                                    <div class="prose prose-sm max-w-none text-accent-text">{!! $assessments !!}</div>
+                                                @endif
                                             @else
                                                 <span class="text-accent-desc italic">No assessment</span>
                                             @endif

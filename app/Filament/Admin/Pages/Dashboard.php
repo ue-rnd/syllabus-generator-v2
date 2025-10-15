@@ -40,7 +40,7 @@ class Dashboard extends BaseDashboard
                 ->icon('heroicon-o-book-open')
                 ->color('info')
                 ->url(route('filament.admin.academic.resources.courses.index'))
-                ->visible(fn () => in_array($user->position, ['department_chair', 'associate_dean', 'dean', 'superadmin'])),
+                ->visible(fn () => in_array($user->position, ['department_chair', 'associate_dean', 'dean', 'qa_representative', 'superadmin'])),
 
             Action::make('view_users')
                 ->label('Manage Users')
@@ -61,9 +61,13 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
+            \App\Filament\Admin\Widgets\NotificationsWidget::class,
             \App\Filament\Admin\Widgets\UserProfileWidget::class,
+            \App\Filament\Admin\Widgets\PendingSuggestionsWidget::class,
             \App\Filament\Admin\Widgets\PendingSyllabiWidget::class,
             \App\Filament\Admin\Widgets\StatsOverviewWidget::class,
+            \App\Filament\Admin\Widgets\QualityMetricsWidget::class,
+            \App\Filament\Admin\Widgets\ComplianceOverviewWidget::class,
             \App\Filament\Admin\Widgets\SyllabiGenerationChartWidget::class,
             \App\Filament\Admin\Widgets\CollegesChartWidget::class,
             \App\Filament\Admin\Widgets\LatestSyllabiWidget::class,
