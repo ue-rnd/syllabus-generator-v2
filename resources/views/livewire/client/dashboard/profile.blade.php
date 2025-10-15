@@ -51,10 +51,6 @@
                     <div class="flex items-center gap-2">
                         <button type="button" @click="profileOpen = true" class="px-3 py-1.5 rounded-xl border border-accent-ghost-dark text-sm text-accent-text hover:bg-accent-ghost-dark bg-accent-ghost">Edit profile</button>
                         <button type="button" @click="passwordOpen = true" class="px-3 py-1.5 rounded-xl bg-accent-main text-white text-sm hover:bg-accent-hover">Change password</button>
-                        <button type="button" title="Toggle dark mode" @click="darkMode = !darkMode; if(darkMode) { document.documentElement.classList.add('dark'); localStorage.setItem('darkMode','true') } else { document.documentElement.classList.remove('dark'); localStorage.setItem('darkMode','false') }" class="px-3 py-1.5 rounded-xl border border-accent-ghost-dark text-sm text-accent-text hover:bg-accent-ghost-dark bg-accent-ghost">
-                            <span x-show="!darkMode">Light</span>
-                            <span x-show="darkMode">Dark</span>
-                        </button>
                     </div>
                 </div>
 
