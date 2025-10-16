@@ -2,9 +2,15 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property Carbon $period_start
+ * @property Carbon $period_end
+ * @property Carbon $calculated_at
+ */
 class SyllabusMetric extends Model
 {
     use HasFactory;

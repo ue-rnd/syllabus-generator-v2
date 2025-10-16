@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property Carbon|null $due_date
+ * @property Carbon|null $completion_date
+ */
 class QualityAuditAction extends Model
 {
     use HasFactory;

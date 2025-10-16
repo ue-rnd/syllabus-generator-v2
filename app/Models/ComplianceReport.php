@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property Carbon|null $period_start
+ * @property Carbon|null $period_end
+ * @property Carbon|null $generated_at
+ */
 class ComplianceReport extends Model
 {
     use HasFactory, SoftDeletes;

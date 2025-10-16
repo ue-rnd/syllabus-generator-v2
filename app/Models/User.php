@@ -13,6 +13,8 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
+ * @property \Carbon\Carbon|null $hire_date
+ * @property \Carbon\Carbon|null $birth_date
  * @property-read \App\Models\College|null $college
  * @property-read \App\Models\Department|null $department
  * @property \Carbon\Carbon|null $locked_until

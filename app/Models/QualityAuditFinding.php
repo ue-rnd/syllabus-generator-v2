@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property Carbon|null $due_date
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QualityAuditAction> $actions
  */
 class QualityAuditFinding extends Model

@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * @property Carbon $start_date
+ * @property Carbon|null $end_date
+ * @property Carbon|null $follow_up_date
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QualityAuditFinding> $findings
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Syllabus> $syllabi
  */
