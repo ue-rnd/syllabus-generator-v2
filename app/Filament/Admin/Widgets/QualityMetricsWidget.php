@@ -43,35 +43,19 @@ class QualityMetricsWidget extends BaseWidget
 
     private function getPassRateColor(float $passRate): string
     {
-        if ($passRate >= 90) {
-            return 'emerald';
-        }
-        if ($passRate >= 75) {
-            return 'green';
-        }
-        if ($passRate >= 60) {
-            return 'yellow';
-        }
-
-        return 'red';
+        if ($passRate >= 90) return Color::Emerald[500];
+        if ($passRate >= 75) return Color::Green[500];
+        if ($passRate >= 60) return Color::Yellow[500];
+        return Color::Red[500];
     }
 
     private function getScoreColor(float $score): string
     {
-        if ($score >= 90) {
-            return 'emerald';
-        }
-        if ($score >= 80) {
-            return 'green';
-        }
-        if ($score >= 70) {
-            return 'yellow';
-        }
-        if ($score >= 60) {
-            return 'orange';
-        }
-
-        return 'red';
+        if ($score >= 90) return Color::Emerald[500];
+        if ($score >= 80) return Color::Green[500];
+        if ($score >= 70) return Color::Yellow[500];
+        if ($score >= 60) return Color::Orange[500];
+        return Color::Red[500];
     }
 
     private function getPassRateChart(): array
@@ -94,4 +78,10 @@ class QualityMetricsWidget extends BaseWidget
     {
         return auth()->user()->can('viewAny', \App\Models\SyllabusQualityCheck::class);
     }
+
+    /**
+     * Column span: full on small screens, 5 columns on large screens so it can sit
+     * next to other chart widgets which also use 5 columns (5 + 5 = 10).
+     */
+    protected int|string|array $columnSpan = ['sm' => 'full', 'lg' => 5];
 }

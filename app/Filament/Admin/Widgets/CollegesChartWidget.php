@@ -9,6 +9,8 @@ class CollegesChartWidget extends ChartWidget
 {
     protected static ?int $sort = 2;
 
+    protected int|string|array $columnSpan = ['sm' => 'full', 'lg' => 5];
+
     protected function getData(): array
     {
         $colleges = College::withCount(['departments', 'programs', 'courses'])
