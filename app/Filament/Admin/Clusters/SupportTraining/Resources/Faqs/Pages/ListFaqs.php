@@ -27,8 +27,11 @@ class ListFaqs extends ListRecords
                 ->badge(Faq::count()),
 
             'published' => Tab::make('Published')
-                ->modifyQueryUsing(fn (Builder $query) => $query->published())
-                ->badge(Faq::published()->count()),
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Faq> $query */
+                    return $query->published();
+                })
+                ->badge(Faq::query()->published()->count()),
 
             'draft' => Tab::make('Draft')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('is_published', false))
@@ -36,12 +39,18 @@ class ListFaqs extends ListRecords
                 ->badgeColor('warning'),
 
             'featured' => Tab::make('Featured')
-                ->modifyQueryUsing(fn (Builder $query) => $query->featured())
-                ->badge(Faq::featured()->count())
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Faq> $query */
+                    return $query->featured();
+                })
+                ->badge(Faq::query()->featured()->count())
                 ->badgeColor('success'),
 
             'popular' => Tab::make('Popular')
-                ->modifyQueryUsing(fn (Builder $query) => $query->popular())
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Faq> $query */
+                    return $query->popular();
+                })
                 ->badge(Faq::where('views_count', '>', 50)->count()),
         ];
     }

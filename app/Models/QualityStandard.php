@@ -72,7 +72,9 @@ class QualityStandard extends Model
 
     public function getTypeColorAttribute(): string
     {
-        return match ($this->type) {
+        $type = (string) $this->attributes['type'];
+
+        return match ($type) {
             'institutional' => 'primary',
             'accreditation' => 'success',
             'departmental' => 'warning',
@@ -84,7 +86,9 @@ class QualityStandard extends Model
 
     public function getCategoryColorAttribute(): string
     {
-        return match ($this->category) {
+        $category = (string) $this->attributes['category'];
+
+        return match ($category) {
             'content' => 'blue',
             'structure' => 'green',
             'assessment' => 'orange',

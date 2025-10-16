@@ -15,6 +15,8 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @property-read \App\Models\College|null $college
  * @property-read \App\Models\Department|null $department
+ * @property \Carbon\Carbon|null $locked_until
+ * @property \Carbon\Carbon|null $password_changed_at
  */
 class User extends Authenticatable
 {
@@ -313,17 +315,7 @@ class User extends Authenticatable
      */
     public function isLocked(): bool
     {
-        $lockedUntil = $this->locked_until;
-        
-        if (! $lockedUntil) {
-            return false;
-        }
-        
-        if (is_string($lockedUntil)) {
-            $lockedUntil = \Carbon\Carbon::parse($lockedUntil);
-        }
-        
-        return $lockedUntil->isFuture();
+        return $this->locked_until !== null && $this->locked_until->isFuture();
     }
 
     /**
@@ -334,18 +326,12 @@ class User extends Authenticatable
         if ($this->must_change_password) {
             return true;
         }
-        
-        $passwordChangedAt = $this->password_changed_at;
-        
-        if (! $passwordChangedAt) {
+
+        if ($this->password_changed_at === null) {
             return false;
         }
-        
-        if (is_string($passwordChangedAt)) {
-            $passwordChangedAt = \Carbon\Carbon::parse($passwordChangedAt);
-        }
-        
-        return $passwordChangedAt->diffInDays(now()) > 90;
+
+        return $this->password_changed_at->diffInDays(now()) > 90;
     }
 
     /**

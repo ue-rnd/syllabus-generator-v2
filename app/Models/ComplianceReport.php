@@ -89,7 +89,9 @@ class ComplianceReport extends Model
 
     public function getReportTypeColorAttribute(): string
     {
-        return match ($this->report_type) {
+        $reportType = (string) $this->attributes['report_type'];
+
+        return match ($reportType) {
             'compliance_summary' => 'primary',
             'quality_audit' => 'success',
             'standards_assessment' => 'warning',
@@ -101,7 +103,9 @@ class ComplianceReport extends Model
 
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'pending' => 'gray',
             'generating' => 'warning',
             'completed' => 'success',
@@ -113,7 +117,9 @@ class ComplianceReport extends Model
 
     public function getScopeColorAttribute(): string
     {
-        return match ($this->scope) {
+        $scope = (string) $this->attributes['scope'];
+
+        return match ($scope) {
             'institution' => 'purple',
             'college' => 'primary',
             'department' => 'success',

@@ -90,8 +90,10 @@ class CollegeSeeder extends Seeder
                 'code' => 'BasicEd.',
                 'logo_path' => 'images/logos/logo_be.png',
                 'sort_order' => 9,
+                'description' => null,
                 'mission' => '<p>The Basic Education Department is committed to providing quality education that develops the intellectual, moral, and physical capabilities of students from elementary to high school levels.</p>',
                 'vision' => '<p>To be a leading basic education institution that nurtures young minds and prepares them for higher education and life challenges.</p>',
+                'core_values' => null,
                 'objectives' => '<ul><li>To provide comprehensive basic education that meets national standards</li><li>To develop critical thinking and problem-solving skills</li><li>To instill moral values and character development</li><li>To prepare students for higher education and future careers</li></ul>',
             ],
         ];

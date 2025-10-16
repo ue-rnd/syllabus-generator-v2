@@ -7,6 +7,9 @@ use App\Services\DatabaseBackupService;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
+/**
+ * @property \App\Models\DatabaseBackup $record
+ */
 class CreateDatabaseBackup extends CreateRecord
 {
     protected static string $resource = DatabaseBackupResource::class;

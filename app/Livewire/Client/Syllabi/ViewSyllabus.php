@@ -241,7 +241,7 @@ class ViewSyllabus extends Component
         if ($weekFinal > 0) {
             // Ensure all week numbers are within 1..week_final and coverage is complete
             $covered = [];
-            foreach (($data['learning_matrix'] ?? []) as $idx => $item) {
+            foreach ($data['learning_matrix'] as $idx => $item) {
                 $range = $item['week_range'] ?? [];
                 $start = isset($range['start']) ? intval($range['start']) : null;
                 $isRange = (bool) ($range['is_range'] ?? false);
@@ -301,7 +301,7 @@ class ViewSyllabus extends Component
         // Build prerequisites list from course
         $prerequisites = [];
         try {
-            $prerequisites = $this->syllabus->course?->prerequisiteCourses()?->map(function ($course) {
+            $prerequisites = $this->syllabus->course->prerequisiteCourses()->map(function ($course) {
                 return [
                     'code' => $course->code,
                     'name' => $course->name,
@@ -314,7 +314,7 @@ class ViewSyllabus extends Component
         // Build co-editor display data
         $coEditors = [];
         $preparedBy = $this->syllabus->prepared_by ?? [];
-        if (is_array($preparedBy) && ! empty($preparedBy)) {
+        if (! empty($preparedBy)) {
             $userIds = collect($preparedBy)
                 ->pluck('user_id')
                 ->filter()
@@ -326,7 +326,7 @@ class ViewSyllabus extends Component
                 $user = $userId ? ($users[$userId] ?? null) : null;
 
                 return [
-                    'name' => $user?->full_name ?? $user?->name ?? '[Unknown User]',
+                    'name' => $user->full_name ?? $user->name ?? '[Unknown User]',
                     'role' => $entry['role'] ?? null,
                     'description' => $entry['description'] ?? null,
                 ];

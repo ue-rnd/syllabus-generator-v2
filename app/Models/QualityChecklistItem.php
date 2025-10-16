@@ -89,15 +89,23 @@ class QualityChecklistItem extends Model
         return $syllabus->{$this->field_to_check} ?? null;
     }
 
-    private function performValidation($value): array
+    private function performValidation($fieldValue): array
     {
-        $params = $this->validation_parameters ?? [];
+        return $this->applyValidationRule(
+            $this->validation_rule,
+            $fieldValue,
+            $this->validation_parameters ?? []
+        );
+    }
 
-        return match ($this->validation_rule) {
+    private function applyValidationRule(string $rule, $value, array $params = []): array
+    {
+        $ruleType = (string) $rule;
+
+        return match ($ruleType) {
             'required' => $this->validateRequired($value),
             'min_length' => $this->validateMinLength($value, $params['min_length'] ?? 10),
-            'max_length' => $this->validateMaxLength($value, $params['max_length'] ?? 1000),
-            'contains_keywords' => $this->validateContainsKeywords($value, $params['keywords'] ?? []),
+            'max_length' => $this->validateMaxLength($value, $params['max_length'] ?? 5000),
             'array_min_items' => $this->validateArrayMinItems($value, $params['min_items'] ?? 1),
             'array_max_items' => $this->validateArrayMaxItems($value, $params['max_items'] ?? 50),
             'numeric_range' => $this->validateNumericRange($value, $params['min'] ?? 0, $params['max'] ?? 100),
@@ -110,7 +118,7 @@ class QualityChecklistItem extends Model
 
     private function validateRequired($value): array
     {
-        $passed = ! empty($value) && $value !== null && trim(strip_tags($value)) !== '';
+        $passed = ! empty($value) && trim(strip_tags((string) $value)) !== '';
 
         return [
             'passed' => $passed,
@@ -146,33 +154,6 @@ class QualityChecklistItem extends Model
             'message' => $passed
                 ? "Content within length limit ({$length}/{$maxLength} characters)"
                 : "Content too long: {$length} characters, maximum allowed: {$maxLength}",
-        ];
-    }
-
-    private function validateContainsKeywords($value, array $keywords): array
-    {
-        if (empty($keywords)) {
-            return ['passed' => true, 'score' => 100, 'message' => 'No keywords to check'];
-        }
-
-        $text = strtolower(strip_tags($value ?? ''));
-        $foundKeywords = [];
-
-        foreach ($keywords as $keyword) {
-            if (str_contains($text, strtolower($keyword))) {
-                $foundKeywords[] = $keyword;
-            }
-        }
-
-        $passed = ! empty($foundKeywords);
-        $score = round((count($foundKeywords) / count($keywords)) * 100, 1);
-
-        return [
-            'passed' => $passed,
-            'score' => $score,
-            'message' => $passed
-                ? 'Found keywords: ' . implode(', ', $foundKeywords)
-                : 'Required keywords not found: ' . implode(', ', $keywords),
         ];
     }
 
@@ -299,7 +280,7 @@ class QualityChecklistItem extends Model
                 $completedFields = 0;
 
                 foreach ($item as $value) {
-                    if (! empty($value) && $value !== null && trim(strip_tags($value)) !== '') {
+                    if (! empty($value) && trim(strip_tags((string) $value)) !== '') {
                         $completedFields++;
                     }
                 }
@@ -307,7 +288,7 @@ class QualityChecklistItem extends Model
                 $itemCompleteness = $itemFields > 0 ? ($completedFields / $itemFields) : 1;
                 $completeItems += $itemCompleteness;
             } else {
-                if (! empty($item) && $item !== null && trim(strip_tags($item)) !== '') {
+                if (! empty($item) && trim(strip_tags((string) $item)) !== '') {
                     $completeItems++;
                 }
             }

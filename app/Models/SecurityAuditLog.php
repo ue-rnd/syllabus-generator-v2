@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder|SecurityAuditLog recent(int $days = 30)
+ * @method static \Illuminate\Database\Eloquent\Builder|SecurityAuditLog bySeverity(string $severity)
+ */
 class SecurityAuditLog extends Model
 {
     use HasFactory;
@@ -53,7 +57,9 @@ class SecurityAuditLog extends Model
 
     public function getSeverityColorAttribute(): string
     {
-        return match ($this->severity) {
+        $severity = (string) $this->attributes['severity'];
+
+        return match ($severity) {
             'low' => 'success',
             'medium' => 'warning',
             'high' => 'danger',

@@ -52,7 +52,7 @@ class RolePermissionManager extends Component
 
     public function mount()
     {
-        $this->loadPermissions();
+        // Permissions are loaded in the render method
     }
 
     public function render()
@@ -226,12 +226,6 @@ class RolePermissionManager extends Component
             $user->revokePermissionTo($permissionName);
             session()->flash('message', 'Permission removed from user successfully!');
         }
-    }
-
-    private function loadPermissions()
-    {
-        // This method can be used to load permissions for the role form
-        // The permissions are loaded in the view via the render method
     }
 
     private function resetForm()

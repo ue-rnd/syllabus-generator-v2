@@ -94,11 +94,11 @@ class CreateSyllabus extends Component
     public function mount()
     {
         // Set default values from settings
-        $this->ay_start = Setting::where('key', 'default_ay_start')->first()?->value ?? date('Y');
-        $this->ay_end = Setting::where('key', 'default_ay_end')->first()?->value ?? (date('Y') + 1);
-        $this->week_prelim = Setting::where('key', 'default_week_prelim')->first()?->value ?? 6;
-        $this->week_midterm = Setting::where('key', 'default_week_midterm')->first()?->value ?? 12;
-        $this->week_final = Setting::where('key', 'default_week_final')->first()?->value ?? 18;
+        $this->ay_start = Setting::where('key', 'default_ay_start')->first()->value ?? date('Y');
+        $this->ay_end = Setting::where('key', 'default_ay_end')->first()->value ?? (date('Y') + 1);
+        $this->week_prelim = Setting::where('key', 'default_week_prelim')->first()->value ?? 6;
+        $this->week_midterm = Setting::where('key', 'default_week_midterm')->first()->value ?? 12;
+        $this->week_final = Setting::where('key', 'default_week_final')->first()->value ?? 18;
 
         // Initialize course as null
         $this->course = null;
@@ -145,6 +145,7 @@ class CreateSyllabus extends Component
                 $this->description = preg_replace('/\s+/', ' ', trim($rawDescription));
 
                 // Get program outcomes
+                /** @var \App\Models\Program|null $program */
                 $program = $this->course->programs()->first();
                 if ($program && $program->outcomes) {
                     try {
@@ -162,9 +163,9 @@ class CreateSyllabus extends Component
                 $department = $program?->department;
                 $college = $this->course->college;
 
-                $this->reviewed_by = $department?->department_chair_id ?? null;
-                $this->recommending_approval = $college?->associate_dean_id ?? null;
-                $this->approved_by = $college?->dean_id ?? null;
+                $this->reviewed_by = $department->department_chair_id ?? null;
+                $this->recommending_approval = $college->associate_dean_id ?? null;
+                $this->approved_by = $college->dean_id ?? null;
             }
         } else {
             $this->course = null;
@@ -568,10 +569,10 @@ class CreateSyllabus extends Component
             'currentStep' => $this->currentStep,
             'totalSteps' => $this->totalSteps,
             // Approver display names
-            'principalPreparerName' => $this->principal_prepared_by ? (User::find($this->principal_prepared_by)?->full_name ?? User::find($this->principal_prepared_by)?->name ?? null) : null,
-            'reviewerName' => $this->reviewed_by ? (User::find($this->reviewed_by)?->full_name ?? User::find($this->reviewed_by)?->name ?? null) : null,
-            'recommendingName' => $this->recommending_approval ? (User::find($this->recommending_approval)?->full_name ?? User::find($this->recommending_approval)?->name ?? null) : null,
-            'approverName' => $this->approved_by ? (User::find($this->approved_by)?->full_name ?? User::find($this->approved_by)?->name ?? null) : null,
+            'principalPreparerName' => $this->principal_prepared_by ? (User::find($this->principal_prepared_by)->full_name ?? User::find($this->principal_prepared_by)->name ?? null) : null,
+            'reviewerName' => $this->reviewed_by ? (User::find($this->reviewed_by)->full_name ?? User::find($this->reviewed_by)->name ?? null) : null,
+            'recommendingName' => $this->recommending_approval ? (User::find($this->recommending_approval)->full_name ?? User::find($this->recommending_approval)->name ?? null) : null,
+            'approverName' => $this->approved_by ? (User::find($this->approved_by)->full_name ?? User::find($this->approved_by)->name ?? null) : null,
             'facultyOptions' => User::all()->mapWithKeys(fn ($u) => [$u->id => ($u->full_name ?? $u->name)])->toArray(),
         ]);
     }

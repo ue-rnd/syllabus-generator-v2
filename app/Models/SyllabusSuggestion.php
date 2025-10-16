@@ -123,10 +123,12 @@ class SyllabusSuggestion extends Model
      */
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
-            'pending' => 'warning',
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'approved' => 'success',
             'rejected' => 'danger',
+            'pending' => 'warning',
             default => 'gray',
         };
     }
@@ -136,10 +138,12 @@ class SyllabusSuggestion extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return match ($this->status) {
-            'pending' => 'Pending Review',
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'approved' => 'Approved',
             'rejected' => 'Rejected',
+            'pending' => 'Pending Review',
             default => 'Unknown',
         };
     }

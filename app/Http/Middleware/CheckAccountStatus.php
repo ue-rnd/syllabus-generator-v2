@@ -29,11 +29,8 @@ class CheckAccountStatus
             // Check if account is locked
             if ($user->isLocked()) {
                 Auth::logout();
-                
+
                 $lockedUntil = $user->locked_until;
-                if (is_string($lockedUntil)) {
-                    $lockedUntil = \Carbon\Carbon::parse($lockedUntil);
-                }
 
                 return redirect('/admin/login')->withErrors([
                     'email' => "Your account is locked until {$lockedUntil->format('M j, Y g:i A')}. Please try again later or contact an administrator.",

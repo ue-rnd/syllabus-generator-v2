@@ -115,7 +115,10 @@ class SecurityAuditLogsTable
 
                 Filter::make('recent')
                     ->label('Recent (Last 7 days)')
-                    ->query(fn (Builder $query): Builder => $query->recent(7))
+                    ->query(function (Builder $query): Builder {
+                        /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\SecurityAuditLog> $query */
+                        return $query->recent(7);
+                    })
                     ->default(),
 
                 Filter::make('high_severity')

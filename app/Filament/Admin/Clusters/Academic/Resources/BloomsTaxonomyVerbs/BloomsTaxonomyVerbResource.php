@@ -49,6 +49,9 @@ class BloomsTaxonomyVerbResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getEloquentQuery()->ordered();
+        /** @var \Illuminate\Database\Eloquent\Builder|\App\Models\BloomsTaxonomyVerb $query */
+        $query = parent::getEloquentQuery();
+
+        return $query->ordered();
     }
 }

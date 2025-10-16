@@ -55,8 +55,11 @@ class ListSecurityAuditLogs extends ListRecords
                 ->badge(SecurityAuditLog::count()),
 
             'recent' => Tab::make('Recent (7 days)')
-                ->modifyQueryUsing(fn (Builder $query) => $query->recent(7))
-                ->badge(SecurityAuditLog::recent(7)->count()),
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\SecurityAuditLog> $query */
+                    return $query->recent(7);
+                })
+                ->badge(SecurityAuditLog::query()->recent(7)->count()),
 
             'high_severity' => Tab::make('High Severity')
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('severity', ['high', 'critical']))

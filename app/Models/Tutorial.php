@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder|Tutorial published()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tutorial featured()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tutorial popular()
+ */
 class Tutorial extends Model
 {
     use HasFactory, SoftDeletes;

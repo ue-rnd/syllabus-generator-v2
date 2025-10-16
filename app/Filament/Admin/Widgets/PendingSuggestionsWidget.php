@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Widgets;
 
 use App\Models\SyllabusSuggestion;
 use Filament\Actions\Action;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
@@ -64,7 +63,8 @@ class PendingSuggestionsWidget extends TableWidget
                     ->date()
                     ->sortable(),
 
-                BadgeColumn::make('status')
+                TextColumn::make('status')
+                    ->badge()
                     ->color('warning')
                     ->formatStateUsing(fn (string $state): string => 'Pending'),
             ])

@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder|Faq published()
+ * @method static \Illuminate\Database\Eloquent\Builder|Faq featured()
+ * @method static \Illuminate\Database\Eloquent\Builder|Faq popular()
+ */
 class Faq extends Model
 {
     use HasFactory, SoftDeletes;

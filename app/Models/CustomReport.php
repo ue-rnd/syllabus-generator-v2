@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property string|null $scope
+ */
 class CustomReport extends Model
 {
     use HasFactory, SoftDeletes;
@@ -92,7 +95,9 @@ class CustomReport extends Model
 
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'pending' => 'gray',
             'generating' => 'warning',
             'completed' => 'success',
@@ -104,7 +109,9 @@ class CustomReport extends Model
 
     public function getOutputFormatColorAttribute(): string
     {
-        return match ($this->output_format) {
+        $outputFormat = (string) $this->attributes['output_format'];
+
+        return match ($outputFormat) {
             'pdf' => 'danger',
             'excel' => 'success',
             'csv' => 'warning',
@@ -116,7 +123,9 @@ class CustomReport extends Model
 
     public function getScopeColorAttribute(): string
     {
-        return match ($this->scope) {
+        $scope = (string) $this->attributes['scope'];
+
+        return match ($scope) {
             'institution' => 'purple',
             'college' => 'primary',
             'department' => 'success',
@@ -134,9 +143,9 @@ class CustomReport extends Model
 
         $bytes = $this->file_size;
         $units = ['B', 'KB', 'MB', 'GB'];
-        $factor = floor((strlen($bytes) - 1) / 3);
+        $factor = floor((strlen((string) $bytes) - 1) / 3);
 
-        return sprintf('%.2f %s', $bytes / pow(1024, $factor), $units[$factor]);
+        return sprintf('%.2f %s', $bytes / pow(1024, $factor), $units[(int) $factor]);
     }
 
     public function getExecutionTimeFormattedAttribute(): string
@@ -189,7 +198,7 @@ class CustomReport extends Model
                 'file_path' => $filePath,
                 'file_size' => file_exists($filePath) ? filesize($filePath) : null,
                 'execution_time' => $executionTime,
-                'record_count' => is_array($data) ? count($data) : 1,
+                'record_count' => count($data),
                 'error_message' => null,
             ]);
 
@@ -285,8 +294,8 @@ class CustomReport extends Model
                 'metric_type' => $metric->metric_type,
                 'scope' => $metric->scope,
                 'scope_id' => $metric->scope_id,
-                'period_start' => $metric->period_start ? \Carbon\Carbon::parse($metric->period_start)->format('Y-m-d') : null,
-                'period_end' => $metric->period_end ? \Carbon\Carbon::parse($metric->period_end)->format('Y-m-d') : null,
+                'period_start' => $metric->period_start->format('Y-m-d'),
+                'period_end' => $metric->period_end->format('Y-m-d'),
                 'calculated_at' => $metric->calculated_at->format('Y-m-d H:i:s'),
             ];
         })->toArray();
@@ -307,7 +316,7 @@ class CustomReport extends Model
                 'audit_type' => $audit->audit_type,
                 'scope' => $audit->scope,
                 'start_date' => $audit->start_date->format('Y-m-d'),
-                'end_date' => $audit->end_date->format('Y-m-d'),
+                'end_date' => $audit->end_date?->format('Y-m-d'),
                 'status' => $audit->status,
                 'findings' => $audit->findings->map(function ($finding) {
                     return [
@@ -331,11 +340,9 @@ class CustomReport extends Model
 
     private function applyScopeFilters($query, ?string $relation = null): void
     {
-        if ($this->scope && $this->scope !== 'institution') {
+        if ($this->scope !== null && $this->scope !== 'institution' && $this->scope_id) {
             $scopeField = $relation ? "{$relation}.{$this->scope}_id" : "{$this->scope}_id";
-            if ($this->scope_id) {
-                $query->where($scopeField, $this->scope_id);
-            }
+            $query->where($scopeField, $this->scope_id);
         }
     }
 
@@ -414,7 +421,9 @@ class CustomReport extends Model
             mkdir($directory, 0755, true);
         }
 
-        return match ($this->output_format) {
+        $format = (string) $this->attributes['output_format'];
+
+        return match ($format) {
             'json' => $this->saveAsJson($data, $fullPath),
             'csv' => $this->saveAsCsv($data, $fullPath),
             'excel' => $this->saveAsExcel($data, $fullPath),
@@ -427,7 +436,8 @@ class CustomReport extends Model
     private function generateFilename(): string
     {
         $timestamp = now()->format('Y-m-d_H-i-s');
-        $extension = match ($this->output_format) {
+        $format = (string) $this->attributes['output_format'];
+        $extension = match ($format) {
             'json' => 'json',
             'csv' => 'csv',
             'excel' => 'xlsx',

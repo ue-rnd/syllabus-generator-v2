@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder|BloomsTaxonomyVerb ordered()
+ * @method static \Illuminate\Database\Eloquent\Builder|BloomsTaxonomyVerb active()
+ */
 class BloomsTaxonomyVerb extends Model
 {
     use HasFactory;
@@ -67,9 +71,11 @@ class BloomsTaxonomyVerb extends Model
     /**
      * Get category color for badges.
      */
-    public function getCategoryColorAttribute(): string
+    public function getLevelColorAttribute(): string
     {
-        return match ($this->category) {
+        $level = (string) $this->attributes['level'];
+
+        return match ($level) {
             'Remember' => 'primary',
             'Understand' => 'success',
             'Apply' => 'warning',

@@ -6,22 +6,18 @@ parameters:
         - database
         - routes
     
-    # Reduce strictness on PHPDoc types
-    treatPhpDocTypesAsCertain: false
-    
     # Exclude paths
     excludePaths:
-        - app/Providers/Filament/AdminPanelProvider.php
+    #    - app/Providers/Filament/AdminPanelProvider.php
         - bootstrap
         - storage
         - vendor
     
     # Ignore common Laravel/Filament errors
     ignoreErrors:
-        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
-        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model#'
-        - '#Unsafe usage of new static#'
-        - '#Match arm comparison between .+ and .+ is always true#'
+    #    - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
+    #    - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model#'
+    #    - '#Unsafe usage of new static#'
     
     # Performance
     parallel:

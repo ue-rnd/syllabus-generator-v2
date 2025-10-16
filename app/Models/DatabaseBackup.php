@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseBackup successful()
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseBackup failed()
+ * @method static \Illuminate\Database\Eloquent\Builder|DatabaseBackup byType(string $type)
+ */
 class DatabaseBackup extends Model
 {
     use HasFactory;

@@ -98,7 +98,9 @@ class DatabaseBackupResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $failedCount = static::getModel()::query()->failed()->count();
+        /** @var \Illuminate\Database\Eloquent\Builder|\App\Models\DatabaseBackup $query */
+        $query = static::getModel()::query();
+        $failedCount = $query->failed()->count();
 
         return $failedCount > 0 ? (string) $failedCount : null;
     }

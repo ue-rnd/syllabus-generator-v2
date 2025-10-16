@@ -16,7 +16,7 @@ class ViewSyllabus extends ViewRecord
     {
         /** @var Syllabus $record */
         $record = $this->record;
-        
+
         return [
             ...SyllabusApprovalActions::getActionsForSyllabus($record),
             EditAction::make()

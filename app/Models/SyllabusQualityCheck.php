@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property-read \App\Models\Syllabus $syllabus
- * @property-read \App\Models\QualityChecklist $qualityChecklist
+ * @property-read \App\Models\Syllabus|null $syllabus
+ * @property-read \App\Models\QualityChecklist|null $qualityChecklist
  */
 class SyllabusQualityCheck extends Model
 {
@@ -120,10 +120,12 @@ class SyllabusQualityCheck extends Model
 
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'passed' => 'success',
-            'requires_improvement' => 'warning',
             'failed' => 'danger',
+            'requires_improvement' => 'warning',
             'in_progress' => 'info',
             'completed' => 'primary',
             default => 'gray',
@@ -132,10 +134,12 @@ class SyllabusQualityCheck extends Model
 
     public function getStatusLabelAttribute(): string
     {
-        return match ($this->status) {
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'passed' => 'Passed',
-            'requires_improvement' => 'Requires Improvement',
             'failed' => 'Failed',
+            'requires_improvement' => 'Requires Improvement',
             'in_progress' => 'In Progress',
             'completed' => 'Completed',
             default => 'Unknown',

@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * @property mixed $form
+ */
 class ChangePassword extends Page implements HasForms
 {
     use InteractsWithForms;
@@ -147,14 +150,8 @@ class ChangePassword extends Page implements HasForms
         }
 
         $passwordChangedAt = $user->password_changed_at;
-        if ($passwordChangedAt) {
-            if (!($passwordChangedAt instanceof \Carbon\Carbon)) {
-                $passwordChangedAt = \Carbon\Carbon::parse($passwordChangedAt);
-            }
-            
-            if ($passwordChangedAt->diffInDays(now()) > 60) {
-                return 'Your password is over 60 days old. Consider changing it for security.';
-            }
+        if ($passwordChangedAt && $passwordChangedAt->diffInDays(now()) > 60) {
+            return 'Your password is over 60 days old. Consider changing it for security.';
         }
 
         return 'Update your password to keep your account secure.';

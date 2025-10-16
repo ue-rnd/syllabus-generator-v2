@@ -232,21 +232,33 @@ class ListDatabaseBackups extends ListRecords
                 ->badge(DatabaseBackup::count()),
 
             'completed' => Tab::make('Completed')
-                ->modifyQueryUsing(fn (Builder $query) => $query->successful())
-                ->badge(DatabaseBackup::successful()->count()),
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\DatabaseBackup> $query */
+                    return $query->successful();
+                })
+                ->badge(DatabaseBackup::query()->successful()->count()),
 
             'failed' => Tab::make('Failed')
-                ->modifyQueryUsing(fn (Builder $query) => $query->failed())
-                ->badge(DatabaseBackup::failed()->count())
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\DatabaseBackup> $query */
+                    return $query->failed();
+                })
+                ->badge(DatabaseBackup::query()->failed()->count())
                 ->badgeColor('danger'),
 
             'full' => Tab::make('Full Backups')
-                ->modifyQueryUsing(fn (Builder $query) => $query->byType('full'))
-                ->badge(DatabaseBackup::byType('full')->count()),
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\DatabaseBackup> $query */
+                    return $query->byType('full');
+                })
+                ->badge(DatabaseBackup::query()->byType('full')->count()),
 
             'selective' => Tab::make('Selective')
-                ->modifyQueryUsing(fn (Builder $query) => $query->byType('selective'))
-                ->badge(DatabaseBackup::byType('selective')->count()),
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\DatabaseBackup> $query */
+                    return $query->byType('selective');
+                })
+                ->badge(DatabaseBackup::query()->byType('selective')->count()),
         ];
     }
 

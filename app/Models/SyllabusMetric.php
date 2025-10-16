@@ -62,7 +62,9 @@ class SyllabusMetric extends Model
 
     public function getMetricTypeColorAttribute(): string
     {
-        return match ($this->metric_type) {
+        $metricType = (string) $this->attributes['metric_type'];
+
+        return match ($metricType) {
             'count' => 'primary',
             'percentage' => 'success',
             'score' => 'warning',
@@ -74,7 +76,9 @@ class SyllabusMetric extends Model
 
     public function getScopeColorAttribute(): string
     {
-        return match ($this->scope) {
+        $scope = (string) $this->attributes['scope'];
+
+        return match ($scope) {
             'institution' => 'purple',
             'college' => 'primary',
             'department' => 'success',
@@ -87,7 +91,9 @@ class SyllabusMetric extends Model
 
     public function getFormattedValueAttribute(): string
     {
-        return match ($this->metric_type) {
+        $metricType = (string) $this->attributes['metric_type'];
+
+        return match ($metricType) {
             'percentage' => number_format($this->metric_value, 1) . '%',
             'count' => number_format($this->metric_value),
             'score' => number_format($this->metric_value, 2),

@@ -134,31 +134,38 @@ class SyllabusForm
 
                                                 if ($course) {
                                                     $set('name', $course->name . ' Syllabus ' . '(' . (new \DateTime)->format('Y-m-d') . ')');
-                                                    $set('reviewed_by', $course->programs()->first()?->department?->department_chair_id);
+
+                                                    /** @var \App\Models\Program|null $firstProgram */
+                                                    $firstProgram = $course->programs()->first();
+                                                    $set('reviewed_by', $firstProgram?->department?->department_chair_id);
                                                     $set('recommending_approval', $course->college?->associate_dean_id);
                                                     $set('approved_by', $course->college?->dean_id);
 
+                                                    /** @var \App\Models\Program|null $program */
                                                     $program = $course->programs()->first();
-                                                    $programOutcomes = $program->outcomes;
 
-                                                    $parseOutcome = function (string $outcomes) {
-                                                        $outcome = [];
+                                                    if ($program) {
+                                                        $programOutcomes = $program->outcomes;
 
-                                                        preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $outcomes, $matches);
+                                                        $parseOutcome = function (string $outcomes) {
+                                                            $outcome = [];
 
-                                                        foreach ($matches[1] as $li) {
-                                                            $outcome[] = [
-                                                                'content' => trim($li),
-                                                                'addressed' => [],
-                                                            ];
-                                                        }
+                                                            preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $outcomes, $matches);
 
-                                                        return $outcome;
-                                                    };
+                                                            foreach ($matches[1] as $li) {
+                                                                $outcome[] = [
+                                                                    'content' => trim($li),
+                                                                    'addressed' => [],
+                                                                ];
+                                                            }
 
-                                                    $programOutcomesFormatted = $parseOutcome($programOutcomes);
+                                                            return $outcome;
+                                                        };
 
-                                                    $set('program_outcomes', $programOutcomesFormatted);
+                                                        $programOutcomesFormatted = $parseOutcome($programOutcomes);
+
+                                                        $set('program_outcomes', $programOutcomesFormatted);
+                                                    }
                                                 }
                                             }
                                         }),

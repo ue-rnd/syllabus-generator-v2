@@ -84,7 +84,9 @@ class ReportTemplate extends Model
 
     public function getReportTypeColorAttribute(): string
     {
-        return match ($this->report_type) {
+        $reportType = (string) $this->attributes['report_type'];
+
+        return match ($reportType) {
             'compliance' => 'primary',
             'quality' => 'success',
             'analytics' => 'warning',
@@ -96,7 +98,9 @@ class ReportTemplate extends Model
 
     public function getOutputFormatColorAttribute(): string
     {
-        return match ($this->output_format) {
+        $outputFormat = (string) $this->attributes['output_format'];
+
+        return match ($outputFormat) {
             'pdf' => 'danger',
             'excel' => 'success',
             'csv' => 'warning',
@@ -141,7 +145,9 @@ class ReportTemplate extends Model
 
     public function getRequiredConfigFields(): array
     {
-        return match ($this->report_type) {
+        $reportType = (string) $this->attributes['report_type'];
+
+        return match ($reportType) {
             'compliance' => ['standards', 'period', 'scope'],
             'quality' => ['checklists', 'period', 'scope'],
             'analytics' => ['metrics', 'period', 'scope'],

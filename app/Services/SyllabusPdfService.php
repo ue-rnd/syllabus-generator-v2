@@ -83,43 +83,37 @@ class SyllabusPdfService
 
             // Basic data with error handling
             $course = $syllabus->course;
-            $college = $course->college ?? null;
+            $college = $course->college;
 
-            if (! $course) {
-                $errors[] = 'Course information is missing';
-            }
-
-            if (! $college) {
+            if ($college === null) {
                 $errors[] = 'College information is missing';
             }
 
             // Prepare prerequisites
             $prerequisites = [];
-            if ($course && ! empty($course->prerequisite_courses)) {
-                try {
-                    // prerequisite_courses is cast as array in the Course model
-                    $prerequisiteIds = $course->prerequisite_courses;
+            $prerequisiteIds = $course->prerequisite_courses ?? [];
 
-                    if (! empty($prerequisiteIds) && is_array($prerequisiteIds)) {
-                        $prerequisites = \App\Models\Course::whereIn('id', $prerequisiteIds)
-                            ->get(['id', 'code', 'name'])
-                            ->map(function ($prereq) {
-                                return [
-                                    'courseCode' => $prereq->code,
-                                    'courseTitle' => $prereq->name,
-                                    'code' => $prereq->code,
-                                    'name' => $prereq->name,
-                                ];
-                            })->toArray();
-                    }
+            if (count($prerequisiteIds) > 0) {
+                try {
+                    $prerequisites = \App\Models\Course::whereIn('id', $prerequisiteIds)
+                        ->get(['id', 'code', 'name'])
+                        ->map(function ($prereq) {
+                            return [
+                                'courseCode' => $prereq->code,
+                                'courseTitle' => $prereq->name,
+                                'code' => $prereq->code,
+                                'name' => $prereq->name,
+                            ];
+                        })->toArray();
                 } catch (\Exception $e) {
                     $errors[] = 'Error loading prerequisites: ' . $e->getMessage();
                 }
             }
 
+            /** @var \App\Models\Program|null $program */
             $program = $syllabus->course->programs()->first();
 
-            $programObjectives = $program->objectives;
+            $programObjectives = $program->objectives ?? '';
 
             $programOutcomes = $syllabus->program_outcomes ?? [];
 
@@ -261,7 +255,7 @@ class SyllabusPdfService
             $weekDisplay = 'N/A';
             $start = null;
             $end = null;
-            
+
             if (isset($item['week_range'])) {
                 $weekRange = $item['week_range'];
                 $start = $weekRange['start'] ?? null;

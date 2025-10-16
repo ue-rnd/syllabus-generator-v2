@@ -94,7 +94,9 @@ class QualityAudit extends Model
 
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'planned' => 'gray',
             'in_progress' => 'warning',
             'completed' => 'success',
@@ -105,7 +107,9 @@ class QualityAudit extends Model
 
     public function getAuditTypeColorAttribute(): string
     {
-        return match ($this->audit_type) {
+        $auditType = (string) $this->attributes['audit_type'];
+
+        return match ($auditType) {
             'compliance' => 'primary',
             'quality_improvement' => 'success',
             'accreditation' => 'warning',
@@ -117,7 +121,9 @@ class QualityAudit extends Model
 
     public function getScopeColorAttribute(): string
     {
-        return match ($this->scope) {
+        $scope = (string) $this->attributes['scope'];
+
+        return match ($scope) {
             'institution' => 'purple',
             'college' => 'primary',
             'department' => 'success',

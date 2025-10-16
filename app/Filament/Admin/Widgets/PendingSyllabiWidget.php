@@ -24,7 +24,7 @@ class PendingSyllabiWidget extends BaseWidget
         $user = auth()->user();
 
         return $table
-            ->query($this->getTableQuery())
+            ->query($this->getPendingSyllabi())
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Syllabus Name')
@@ -40,8 +40,9 @@ class PendingSyllabiWidget extends BaseWidget
                     ->badge()
                     ->color('primary'),
 
-                Tables\Columns\BadgeColumn::make('status')
+                Tables\Columns\TextColumn::make('status')
                     ->label('Status')
+                    ->badge()
                     ->formatStateUsing(fn (string $state): string => SyllabusConstants::getStatusOptions()[$state] ?? $state)
                     ->color(fn (string $state): string => SyllabusConstants::getStatusColor($state)),
 
@@ -79,7 +80,7 @@ class PendingSyllabiWidget extends BaseWidget
                     ->icon('heroicon-o-check')
                     ->color('success')
                     ->visible(fn (Syllabus $record) => $record->canApprove($user))
-                    ->form(function (Syllabus $record) use ($user) {
+                    ->schema(function (Syllabus $record) use ($user) {
                         // Show comments field for associate dean, dean, QA, and superadmin
                         if ($user->position === 'associate_dean' ||
                             $user->position === 'dean' ||
@@ -109,7 +110,7 @@ class PendingSyllabiWidget extends BaseWidget
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
                     ->visible(fn (Syllabus $record) => $record->canReject($user))
-                    ->form([
+                    ->schema([
                         Forms\Components\Textarea::make('comments')
                             ->label('Rejection Comments')
                             ->required()
@@ -126,12 +127,10 @@ class PendingSyllabiWidget extends BaseWidget
             ])
             ->emptyStateHeading('No pending syllabi')
             ->emptyStateDescription('There are no syllabi pending your approval at this time.')
-            ->emptyStateIcon('heroicon-o-document-check')
-            ->defaultSort('submitted_at', 'desc')
-            ->poll('30s'); // Auto-refresh every 30 seconds
+            ->emptyStateIcon('heroicon-o-academic-cap');
     }
 
-    protected function getTableQuery(): Builder
+    protected function getPendingSyllabi(): Builder
     {
         $user = auth()->user();
 

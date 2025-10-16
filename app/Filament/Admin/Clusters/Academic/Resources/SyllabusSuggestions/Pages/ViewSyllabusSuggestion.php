@@ -16,7 +16,7 @@ class ViewSyllabusSuggestion extends ViewRecord
     {
         /** @var SyllabusSuggestion $record */
         $record = $this->record;
-        
+
         return [
             Action::make('approve')
                 ->label('Approve Suggestion')

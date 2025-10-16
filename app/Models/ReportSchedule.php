@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property-read \App\Models\ReportTemplate|null $reportTemplate
+ */
 class ReportSchedule extends Model
 {
     use HasFactory, SoftDeletes;
@@ -66,7 +69,9 @@ class ReportSchedule extends Model
 
     public function getFrequencyColorAttribute(): string
     {
-        return match ($this->frequency) {
+        $frequency = (string) $this->attributes['frequency'];
+
+        return match ($frequency) {
             'daily' => 'success',
             'weekly' => 'primary',
             'monthly' => 'warning',
@@ -79,7 +84,9 @@ class ReportSchedule extends Model
 
     public function calculateNextRun(): void
     {
-        $nextRun = match ($this->frequency) {
+        $frequency = (string) $this->attributes['frequency'];
+
+        $nextRun = match ($frequency) {
             'daily' => now()->addDay(),
             'weekly' => now()->addWeek(),
             'monthly' => now()->addMonth(),

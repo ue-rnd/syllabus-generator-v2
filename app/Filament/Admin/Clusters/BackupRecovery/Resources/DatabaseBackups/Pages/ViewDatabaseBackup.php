@@ -24,7 +24,7 @@ class ViewDatabaseBackup extends ViewRecord
     {
         /** @var DatabaseBackup $record */
         $record = $this->record;
-        
+
         return [
             Actions\Action::make('download')
                 ->label('Download Backup')
@@ -78,6 +78,7 @@ class ViewDatabaseBackup extends ViewRecord
     {
         /** @var DatabaseBackup $record */
         $record = $this->record;
+
         return 'Backup Details: ' . $record->name;
     }
 }

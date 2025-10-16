@@ -78,7 +78,9 @@ class QualityChecklist extends Model
 
     public function getTypeColorAttribute(): string
     {
-        return match ($this->type) {
+        $type = (string) $this->attributes['type'];
+
+        return match ($type) {
             'basic' => 'primary',
             'comprehensive' => 'success',
             'accreditation' => 'warning',

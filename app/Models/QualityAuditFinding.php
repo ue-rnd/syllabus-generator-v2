@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QualityAuditAction> $actions
+ */
 class QualityAuditFinding extends Model
 {
     use HasFactory;
@@ -74,7 +77,9 @@ class QualityAuditFinding extends Model
 
     public function getSeverityColorAttribute(): string
     {
-        return match ($this->severity) {
+        $severity = (string) $this->attributes['severity'];
+
+        return match ($severity) {
             'critical' => 'danger',
             'high' => 'warning',
             'medium' => 'primary',
@@ -86,7 +91,9 @@ class QualityAuditFinding extends Model
 
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'open' => 'danger',
             'in_progress' => 'warning',
             'resolved' => 'success',
@@ -97,7 +104,9 @@ class QualityAuditFinding extends Model
 
     public function getCategoryColorAttribute(): string
     {
-        return match ($this->category) {
+        $category = (string) $this->attributes['category'];
+
+        return match ($category) {
             'content' => 'blue',
             'structure' => 'green',
             'compliance' => 'purple',

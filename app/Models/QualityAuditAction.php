@@ -75,7 +75,9 @@ class QualityAuditAction extends Model
 
     public function getPriorityColorAttribute(): string
     {
-        return match ($this->priority) {
+        $priority = (string) $this->attributes['priority'];
+
+        return match ($priority) {
             'critical' => 'danger',
             'high' => 'warning',
             'medium' => 'primary',
@@ -86,7 +88,9 @@ class QualityAuditAction extends Model
 
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
+        $status = (string) $this->attributes['status'];
+
+        return match ($status) {
             'pending' => 'gray',
             'in_progress' => 'warning',
             'completed' => 'success',
@@ -98,7 +102,9 @@ class QualityAuditAction extends Model
 
     public function getActionTypeColorAttribute(): string
     {
-        return match ($this->action_type) {
+        $actionType = (string) $this->attributes['action_type'];
+
+        return match ($actionType) {
             'corrective' => 'danger',
             'preventive' => 'warning',
             'improvement' => 'success',

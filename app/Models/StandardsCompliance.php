@@ -66,7 +66,9 @@ class StandardsCompliance extends Model
 
     public function getComplianceStatusColorAttribute(): string
     {
-        return match ($this->compliance_status) {
+        $status = (string) $this->attributes['compliance_status'];
+
+        return match ($status) {
             'compliant' => 'success',
             'partially_compliant' => 'warning',
             'non_compliant' => 'danger',
@@ -77,7 +79,9 @@ class StandardsCompliance extends Model
 
     public function getComplianceStatusLabelAttribute(): string
     {
-        return match ($this->compliance_status) {
+        $status = (string) $this->attributes['compliance_status'];
+
+        return match ($status) {
             'compliant' => 'Compliant',
             'partially_compliant' => 'Partially Compliant',
             'non_compliant' => 'Non-Compliant',

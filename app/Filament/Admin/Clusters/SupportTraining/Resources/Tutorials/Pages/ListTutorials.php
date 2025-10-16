@@ -27,8 +27,11 @@ class ListTutorials extends ListRecords
                 ->badge(Tutorial::count()),
 
             'published' => Tab::make('Published')
-                ->modifyQueryUsing(fn (Builder $query) => $query->published())
-                ->badge(Tutorial::published()->count()),
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Tutorial> $query */
+                    return $query->published();
+                })
+                ->badge(Tutorial::query()->published()->count()),
 
             'draft' => Tab::make('Draft')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('is_published', false))
@@ -36,12 +39,18 @@ class ListTutorials extends ListRecords
                 ->badgeColor('warning'),
 
             'featured' => Tab::make('Featured')
-                ->modifyQueryUsing(fn (Builder $query) => $query->featured())
-                ->badge(Tutorial::featured()->count())
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Tutorial> $query */
+                    return $query->featured();
+                })
+                ->badge(Tutorial::query()->featured()->count())
                 ->badgeColor('success'),
 
             'popular' => Tab::make('Popular')
-                ->modifyQueryUsing(fn (Builder $query) => $query->popular())
+                ->modifyQueryUsing(function (Builder $query) {
+                    /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Tutorial> $query */
+                    return $query->popular();
+                })
                 ->badge(Tutorial::where('views_count', '>', 100)->count()),
         ];
     }

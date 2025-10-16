@@ -304,7 +304,7 @@ class Syllabus extends Model
      */
     public function getCollegeIdAttribute(): ?int
     {
-        return $this->course?->college_id;
+        return $this->course->college_id ?? null;
     }
 
     /**

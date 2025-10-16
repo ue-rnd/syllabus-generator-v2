@@ -22,6 +22,9 @@ use Filament\Support\Exceptions\Halt;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @property mixed $form
+ */
 class ProfileManagement extends Page
 {
     use InteractsWithForms;

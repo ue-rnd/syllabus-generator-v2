@@ -79,7 +79,8 @@ class SecurityAuditLogResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         $modelClass = static::getModel();
-        /** @var \App\Models\SecurityAuditLog $modelClass */
+        /** @var class-string<\App\Models\SecurityAuditLog> $modelClass */
+
         return $modelClass::bySeverity('high')->recent(7)->count() > 0
             ? (string) $modelClass::bySeverity('high')->recent(7)->count()
             : null;
@@ -88,7 +89,7 @@ class SecurityAuditLogResource extends Resource
     public static function getNavigationBadgeColor(): ?string
     {
         $modelClass = static::getModel();
-        /** @var \App\Models\SecurityAuditLog $modelClass */
+        /** @var class-string<\App\Models\SecurityAuditLog> $modelClass */
         $highSeverityCount = $modelClass::bySeverity('high')->recent(7)->count();
 
         if ($highSeverityCount > 10) {
